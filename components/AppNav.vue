@@ -1,6 +1,6 @@
 <template>
   <v-app-bar>
-    <v-btn prepend-icon="mdi-format-list-bulleted" v-if="isSmAndDown" @click="drawer = !drawer"
+    <v-btn icon="mdi-format-list-bulleted" v-if="isSmAndDown" @click="drawer = !drawer"
       class="d-flex align-center justify-center" />
 
     <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
