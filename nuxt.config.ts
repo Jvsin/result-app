@@ -23,6 +23,10 @@ export default defineNuxtConfig({
     },
   },
 
+  css: [
+    '@mdi/font/css/materialdesignicons.css', // Import the MDI font styles
+  ],
+
   plugins: ['~/plugins/vuetify.ts'],
 
   compatibilityDate: '2024-08-16',
