@@ -8,9 +8,10 @@ const router = useRouter()
 
 <template>
   <v-layout class="rounded rounded-md">
-    <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
-      <v-img src="/main.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7)" class="mt-15 text-center">
-        <div class="d-flex flex-column align-center justify-center h-50 mx-4">
+    <v-main class="d-flex align-center justify-center" style="height: 100vh;">
+      <v-img src="/main.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7)"
+        class="text-center w-100 h-100">
+        <div class="d-flex flex-column align-center justify-center h-100 w-100 mx-4">
           <span class="text-h3 font-weight-bold text-white">
             MATCH RESULTS APP
           </span>
@@ -25,6 +26,8 @@ const router = useRouter()
         </div>
       </v-img>
     </v-main>
+
+
   </v-layout>
 </template>
 
