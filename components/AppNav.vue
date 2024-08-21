@@ -1,13 +1,13 @@
 <template>
   <v-app-bar>
-    <v-btn icon="mdi-format-list-bulleted" v-if="isSmAndDown" @click="drawer = !drawer"
+    <v-btn icon="mdi-format-list-bulleted" v-if="isMdAndDown" @click="drawer = !drawer"
       class="d-flex align-center justify-center" />
 
     <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
       text="Match Results App" class="d-flex align-center justify-center" />
   </v-app-bar>
 
-  <v-navigation-drawer v-if="isSmAndDown" v-model="drawer">
+  <v-navigation-drawer v-if="isMdAndDown" v-model="drawer">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
         <v-btn :to="'/leagues/' + button.value">{{ button.title }}</v-btn>
@@ -15,7 +15,7 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-navigation-drawer v-else>
+  <v-navigation-drawer v-if="isSmAndUp">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
         <v-btn :to="'/leagues/' + button.value">{{ button.title }}</v-btn>
@@ -29,14 +29,11 @@ import { ref } from "vue";
 import { useDisplay } from "vuetify";
 
 const drawer = ref(false);
-// const { mdAndDown, lgAndUp } = useDisplay();
-const { mobile, smAndDown } = useDisplay()
-// const { mdAndDown } = useDisplay()
-const isMobile = mobile
+const { mdAndUp, smAndDown, smAndUp, mdAndDown } = useDisplay()
 const isSmAndDown = smAndDown
-
-// const isLgAndUp = lgAndUp; // To sprawdza, czy ekran jest większy lub równy rozmiarowi `lg`
-// const isMdAndDown = mdAndDown; // To sprawdza, czy ekran jest mniejszy lub równy rozmiarowi `md`
+const isMdAndUp = mdAndUp
+const isMdAndDown = mdAndDown
+const isSmAndUp = smAndUp
 
 const buttons = [
   { value: "pol-1", title: "Ekstraklasa" },
@@ -46,7 +43,8 @@ const buttons = [
   { value: "fra-1", title: "Ligue 1" },
 ];
 
-watch((mobile) => {
-  console.log(mobile.value)
+watch((mdAndUp, smAndDown) => {
+  // console.log('isSmallAndDown: ' + isSmAndDown.value)
+  // console.log('isMdAndUp: ' + isMdAndUp.value)
 })
 </script>
