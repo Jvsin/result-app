@@ -15,17 +15,20 @@
               </v-btn>
             </div>
 
-            <form class="mx-5 py-2">
+            <v-form class="mx-5 py-2" v-model="valid">
 
-              <v-text-field v-model="nickName" label="Nick"></v-text-field>
+              <v-text-field v-model="nickName" label="Nick" :rules="[requiredRule()]"></v-text-field>
 
-              <v-text-field v-model="password" label="Hasło"></v-text-field>
+              <v-text-field v-model="password" :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                label="Hasło" :type="showPassword ? 'text' : 'password'"
+                @click:append-inner="showPassword = !showPassword"
+                :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
               <v-btn class="mx-5 py-2" variant="outlined" type="submit" color="primary">
                 Zaloguj się
               </v-btn>
 
-            </form>
+            </v-form>
             <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="primary"></v-divider>
             <span class="text-h5 font-weight-bold text-white">
               Nie posiadasz konta? Dołącz już teraz
@@ -45,9 +48,18 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import formValidation from "~/composables/formValidation";
+import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from "~/composables/rules";
 
+const { form, valid, isValid } = formValidation()
+const showPassword = ref(false)
 const nickName = ref('')
 const password = ref('')
+
+function loginUser() {
+  const nickName = ''
+  const password = ''
+}
 </script>
 
 <style>

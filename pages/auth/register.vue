@@ -25,24 +25,35 @@
               </v-btn>
             </div>
 
-            <form class="mx-5 py-2">
-              <v-text-field v-model="email" label="Adres Email"></v-text-field>
+            <v-form class="mx-5 py-2" v-model="valid" ref="form">
+              <v-text-field v-model="email" label="Adres Email" :rules="[requiredRule(), emailRule()]"></v-text-field>
 
-              <v-text-field v-model="nickName" label="Nick"></v-text-field>
+              <v-text-field v-model="nickName" label="Nick"
+                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
 
-              <v-text-field v-model="name" label="Imię"></v-text-field>
-              <v-text-field v-model="surname" label="Nazwisko"></v-text-field>
-              <v-text-field v-model="password1" label="Hasło"></v-text-field>
-              <v-text-field v-model="password2" label="Powtórz hasło"></v-text-field>
+              <v-text-field v-model=" name" label="Imię"
+                :rules="[requiredRule(), lengthRuleShort(), lengthRule()] "></v-text-field>
+              <v-text-field v-model=" surname" label="Nazwisko"
+                :rules="[requiredRule(), lengthRuleShort(), surnameLengthRule()]"></v-text-field>
 
-              <v-btn class="me-4" variant="outlined" type="submit" color="primary">
+              <!-- <v-checkbox @click="showPasswords = !showPasswords" label="Pokaż hasła"></v-checkbox> -->
+              <v-text-field v-model="password1" :type="showPasswords ? 'text' : 'password'"
+                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" label="Hasło"
+                @click:append-inner="showPasswords = !showPasswords"
+                :rules="[requiredRule(), passwordRule()]"></v-text-field>
+              <v-text-field v-model="password2" :type="showPasswords ? 'text' : 'password'"
+                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" label="Powtórz hasło"
+                @click:append-inner="showPasswords = !showPasswords"
+                :rules="[requiredRule(), passwordRule()]"></v-text-field>
+
+              <v-btn class="me-4" @click="registerUser" variant="outlined" type="submit" color="primary">
                 Zarejestruj się
               </v-btn>
 
               <v-btn variant="outlined" @click="handleReset" color="error">
                 Wyczyść
               </v-btn>
-            </form>
+            </v-form>
           </div>
         </v-col>
       </v-row>
@@ -53,14 +64,24 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-
 import { storeToRefs } from 'pinia'
+import formValidation from "~/composables/formValidation";
+import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from "~/composables/rules";
+
+const { form, valid, isValid } = formValidation()
+
 const nickName = ref('')
 const email = ref('')
 const name = ref('')
 const surname = ref('')
 const password1 = ref('')
 const password2 = ref('')
+
+const showPasswords = ref(false)
+
+function comparePasswords() {
+  return password1.value === password2.value
+}
 
 function handleReset() {
   nickName.value = ''
@@ -69,6 +90,10 @@ function handleReset() {
   surname.value = ''
   password1.value = ''
   password2.value = ''
+}
+
+function registerUser() {
+  handleReset()
 }
 </script>
 
