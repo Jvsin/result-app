@@ -5,14 +5,25 @@
         <v-col cols="12" sm="12" md="6" class="d-flex justify-center align-center">
           <div class="flex-column align-center justify-center mx-2 py-5"
             style="background-color: rgba(0, 0, 0, 0.5); width: 100%; max-width: 500px;">
-            <v-spacer />
+            <span class="text-h5 font-weight-bold text-white">
+              Masz już konto? Zaloguj się
+            </span>
+            <div class="mx-5 py-2">
+              <v-btn to="/auth/login" color="primary" >
+                Logowanie
+              </v-btn>
+            </div>
+
+            <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="success"></v-divider>
             <span class="text-h3 font-weight-bold text-white">
               ZAREJESTRUJ SIĘ
             </span>
-            
-            <v-btn color="secondary" prepend-icon="mdi-google">
-              Rejestracja przez Google
-            </v-btn>
+
+            <div class="mx-5 py-2">
+              <v-btn color="secondary" prepend-icon="mdi-google">
+                Rejestracja przez Google
+              </v-btn>
+            </div>
 
             <form class="mx-5 py-2">
               <v-text-field v-model="email" label="Adres Email"></v-text-field>
