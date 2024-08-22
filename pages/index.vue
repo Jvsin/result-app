@@ -1,12 +1,37 @@
-<template>
-  <div>
-    <h1>Welcome to the homepage</h1>
-  </div>
-</template>
-
 <script lang="ts" setup>
+import { computed, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+
+const router = useRouter()
 
 </script>
+
+<template>
+  <v-layout class="rounded rounded-md">
+    <v-main class="d-flex align-center justify-center" style="height: 100vh;">
+      <v-img src="/main.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.7)"
+        class="text-center w-100 h-100">
+        <div class="d-flex flex-column align-center justify-center h-100 w-100 mx-4">
+          <span class="text-h3 font-weight-bold text-white">
+            MATCH RESULTS APP
+          </span>
+
+          <p class="mt-2 text-white">
+            Stwórz własną ligę i typuj razem ze swoimi znajomymi!
+          </p>
+
+          <v-btn class="my-4" to="auth/login" variant="elevated" color="secondary">
+            Dołącz już teraz
+          </v-btn>
+        </div>
+      </v-img>
+    </v-main>
+
+
+  </v-layout>
+</template>
+
+
 
 <style>
 
