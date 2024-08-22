@@ -9,18 +9,18 @@
               Masz już konto? Zaloguj się
             </span>
             <div class="mx-5 py-2">
-              <v-btn to="/auth/login" color="primary" >
+              <v-btn to="/auth/login" variant="outlined" color="primary">
                 Logowanie
               </v-btn>
             </div>
 
             <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="success"></v-divider>
             <span class="text-h3 font-weight-bold text-white">
-              ZAREJESTRUJ SIĘ
+              REJESTRACJA
             </span>
 
             <div class="mx-5 py-2">
-              <v-btn color="secondary" prepend-icon="mdi-google">
+              <v-btn color="secondary" variant="outlined" prepend-icon="mdi-google">
                 Rejestracja przez Google
               </v-btn>
             </div>
@@ -35,11 +35,11 @@
               <v-text-field v-model="password1" label="Hasło"></v-text-field>
               <v-text-field v-model="password2" label="Powtórz hasło"></v-text-field>
 
-              <v-btn class="me-4" type="submit" color="primary">
+              <v-btn class="me-4" variant="outlined" type="submit" color="primary">
                 Zarejestruj się
               </v-btn>
 
-              <v-btn @click="handleReset" color="error">
+              <v-btn variant="outlined" @click="handleReset" color="error">
                 Wyczyść
               </v-btn>
             </form>
