@@ -20,7 +20,7 @@ const router = useRouter()
             Stwórz własną ligę i typuj razem ze swoimi znajomymi!
           </p>
 
-          <v-btn class="my-4" to="auth/login" variant="elevated" color="secondary">
+          <v-btn class="my-4" to="auth/register" variant="elevated" color="secondary">
             Dołącz już teraz
           </v-btn>
         </div>
