@@ -25,6 +25,7 @@ export default defineNuxtConfig({
 
   css: [
     '@mdi/font/css/materialdesignicons.css', // Import the MDI font styles
+    // '@flaticon/flaticon-uicons/css/all/all.css',
   ],
 
   plugins: ['~/plugins/vuetify.ts'],
