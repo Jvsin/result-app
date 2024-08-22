@@ -27,7 +27,7 @@ importers:
         specifier: ^8.8.0
         version: 8.8.1(vue@3.4.35(typescript@5.5.4))
       firebase:
-        specifier: ^10.12.2
+        specifier: ^10.12.5
         version: 10.12.5
       firebase-tools:
         specifier: ^13.11.3
