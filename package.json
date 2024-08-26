@@ -16,6 +16,7 @@
     "@nuxtjs/i18n": "npm:@nuxtjs/i18n-edge@8.3.1-28646570.745d4a8",
     "@pinia/nuxt": "^0.5.1",
     "@vuepic/vue-datepicker": "^8.8.0",
+    "axios": "^1.7.5",
     "firebase": "^10.12.2",
     "firebase-tools": "^13.11.3",
     "nuxt": "^3.12.4",
