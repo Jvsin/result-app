@@ -4,7 +4,7 @@
       <template v-slot:title>
         <v-row cols="12" align="center">
           <v-col cols="2" class="d-flex justify-center">
-            <v-img :src="leagueData.logo" alt="League Logo" class="mb-4" max-height="50"></v-img>
+            <v-img :src="leagueData.logo" aspect-ratio="1/1" alt="League Logo"  max-height="60"></v-img>
           </v-col>
           <v-col cols="10" class="d-flex">
             <v-card flat>
