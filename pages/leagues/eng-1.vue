@@ -21,17 +21,16 @@
 
       <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="primary"></v-divider>
 
-      <v-card-text class="pt-4">
         <v-card>
           <v-row class="d-flex align-center">
             <v-col cols="1" class="d-flex justify-center align-center">
-              <p class="font-weight-thin">#</p>
+              <p class=" ml-2 font-weight-thin">#</p>
             </v-col>
 
             <v-col cols="1" class="justify-center align-center">
             </v-col>
 
-            <v-col cols="7" class="d-flex align-center">
+            <v-col cols="6" class="d-flex align-center">
               <p class="font-italic">DRUŻYNA</p>
             </v-col>
 
@@ -44,7 +43,7 @@
             </v-col>
 
             <v-col cols="1" class="d-flex justify-center align-center">
-              <p class="font-italic">PTS</p>
+              <p class="mr-1 font-italic">P</p>
             </v-col>
             <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider>
           </v-row>
@@ -52,14 +51,14 @@
         <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueData.standings[0]" :key="index">
           <v-row class="d-flex align-center">
             <v-col cols="1" class="d-flex justify-center align-center">
-              <div :style="{ color: setColor(standing.description) }" class="text-center">{{ standing.rank }}</div>
+              <div :style="{ color: setColor(standing.description) }" class=" ml-2 text-center">{{ standing.rank }}</div>
             </v-col>
 
             <v-col cols="1" class="justify-center">
               <v-img max-height="30" :src="standing.team.logo" aspect-ratio="1/1"></v-img>
             </v-col>
 
-            <v-col cols="7" class="d-flex align-center">
+            <v-col cols="6" class="d-flex align-center">
               <span class="text-center">{{ standing.team.name }}</span>
             </v-col>
 
@@ -72,13 +71,12 @@
             </v-col>
 
             <v-col cols="1" class="d-flex justify-center align-center">
-              <p class="text-center font-weight-bold">{{ standing.points }}</p>
+              <p class="mr-1 text-center font-weight-bold">{{ standing.points }}</p>
             </v-col>
           </v-row>
           <!-- <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider> -->
 
         </v-card>
-      </v-card-text>
     </v-card>
   </v-container>
   <v-alert v-else type="warning">Ładowanie...</v-alert>
