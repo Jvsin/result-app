@@ -95,7 +95,37 @@
 
       <v-tabs-window-item :value="2">
         <v-card>
-          <div>{{ nextRound }}</div>
+          <!-- {{ lastGames }} -->
+          <v-card elevation="16" class="py-1" v-for="(game, index) in lastGames" :key="index">
+            <v-row>
+              <v-col class="justify-center">
+                <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
+                  formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+              </v-col>
+            </v-row>
+            <v-row class="d-flex align-center">
+              <v-col cols="4" class="d-flex justify-center align-center">
+                <p>{{ game.teams.home.name }}</p>
+              </v-col>
+              <v-col cols="1" class="d-flex justify-center align-center">
+                <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+              </v-col>
+              <v-col cols="1" class="d-flex justify-center align-center">
+                <v-text-field :model-value="game.goals.home" variant="outlined" readonly></v-text-field>
+              </v-col>
+              <v-col cols="1" class="d-flex justify-center align-center">
+                <v-text-field :model-value="game.goals.away" variant="outlined" readonly></v-text-field>
+              </v-col>
+              <v-col cols="1" class="d-flex justify-center align-center">
+                <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+              </v-col>
+              <v-col cols="4" class="d-flex justify-center align-center">
+                <p>{{ game.teams.away.name }}</p>
+              </v-col>
+
+            </v-row>
+
+          </v-card>
           <!-- <v-pagination v-model="gameWeek" :length="matchWeeks"></v-pagination> -->
         </v-card>
       </v-tabs-window-item>
@@ -112,21 +142,23 @@ import { useLeagueStore } from '~/stores/data';
 const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
 const currentMatchWeek = ref(0)
-const fixtures = computed(() => leagueStore.fixturesData)
-const teams = computed(() => leagueStore.leagueData.standings[0].length)
-const matchWeeks = computed(() => countMatchWeeks(teams.value))
-const nextRound = computed(() => leagueStore.nextRoundData)
+const lastGames = computed(() => leagueStore.lastGamesData)
+// const nextRound = computed(() => leagueStore.nextRoundData)
 const tab = ref(0);
-const gameWeek = ref(1)
+
+// const teams = computed(() => leagueStore.leagueData.standings[0].length)
+// const gameWeek = ref(1)
+// const fixtures = computed(() => leagueStore.fixturesData)
+// const matchWeeks = computed(() => countMatchWeeks(teams.value))
 
 function countMatchWeeks(counter: number) {
   return counter * 2 - 2
 }
 
 onMounted(() => {
-  countCurrentMatchWeek()
+  setAllData()
   // leagueStore.fetchNextRound(135, 2024, currentMatchWeek.value);
-  console.log(currentMatchWeek.value)
+  // console.log(currentMatchWeek.value)
   // leagueStore.fetchFixturesData(78, 2024);
   // teams.value = leagueStore.leagueData.standings[0].length
   // console.log(teams.value)
@@ -169,10 +201,30 @@ function countDate() {
   return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
-function countCurrentMatchWeek() {
-  leagueStore.fetchLeagueData(135, 2024)
-  currentMatchWeek.value = leagueStore.nextRoundData
-  console.log(currentMatchWeek.value)
-  leagueStore.fetchNextRound(135, 2024, currentMatchWeek.value + 1)
+function setAllData() {
+  leagueStore.fetchLeagueData(78, 2024)
+  leagueStore.fetchLastFixturesData(78, 2024)
+  // currentMatchWeek.value = leagueStore.nextRoundData
+  // console.log(currentMatchWeek.value)
+  // leagueStore.fetchNextRound(78, 2024, currentMatchWeek.value + 1)
+}
+
+function formatTimestamp(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+
+  const day = date.getUTCDate().toString().padStart(2, '0');
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Miesiące są 0-indeksowane
+  const year = date.getUTCFullYear();
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  return `${day}.${month}.${year}, ${hours}:${minutes}`;
+}
+
+function setMatchWeek(input: string): string {
+  if (input.length === 0) {
+    return '';
+  }
+  return input.charAt(input.length - 1);
 }
 </script>
