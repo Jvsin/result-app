@@ -2,7 +2,8 @@
   <v-container v-if="leagueData">
     <v-tabs v-model="tab" align-tabs="start" color="primary">
       <v-tab :key="0" value="0">Tabela</v-tab>
-      <v-tab :key="1" value="1">Mecze</v-tab>
+      <v-tab :key="1" value="1">Wyniki</v-tab>
+      <v-tab :key="2" value="2">Mecze</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab">
@@ -103,27 +104,39 @@
                   formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
               </v-col>
             </v-row>
-            <v-row class="d-flex align-center">
-              <v-col cols="4" class="d-flex justify-center align-center">
-                <p>{{ game.teams.home.name }}</p>
-              </v-col>
-              <v-col cols="1" class="d-flex justify-center align-center">
-                <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
-              </v-col>
-              <v-col cols="1" class="d-flex justify-center align-center">
-                <v-text-field :model-value="game.goals.home" variant="outlined" readonly></v-text-field>
-              </v-col>
-              <v-col cols="1" class="d-flex justify-center align-center">
-                <v-text-field :model-value="game.goals.away" variant="outlined" readonly></v-text-field>
-              </v-col>
-              <v-col cols="1" class="d-flex justify-center align-center">
-                <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
-              </v-col>
-              <v-col cols="4" class="d-flex justify-center align-center">
-                <p>{{ game.teams.away.name }}</p>
-              </v-col>
+            <div v-if="!mobile">
+              <v-row class="d-flex align-center" justify="center">
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="1">
+                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                </v-col>
 
-            </v-row>
+              </v-row>
+            </div>
+            <div v-else>
+              <v-row class="d-flex align-center" justify="center">
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="4">
+                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                </v-col>
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+              </v-row>
+            </div>
 
           </v-card>
           <!-- <v-pagination v-model="gameWeek" :length="matchWeeks"></v-pagination> -->
@@ -138,6 +151,9 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue';
 import { useLeagueStore } from '~/stores/data';
+import { useDisplay } from 'vuetify'
+
+const { mobile } = useDisplay()
 
 const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
