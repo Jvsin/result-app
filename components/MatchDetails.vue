@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isShowRef" max-width="800px">
+  <v-dialog v-model="isShowRef" max-width="800px" @update:model-value="closeDialog">
     <v-card>
       <v-card-title>
         MECZ o id: {{ match.fixture.id }}
@@ -44,9 +44,6 @@ function closeDialog() {
   isShowRef.value = false;
   emit('close');
 }
-onMounted(() => {
-  useLeagueStore
-})
 </script>
 
 <style>
