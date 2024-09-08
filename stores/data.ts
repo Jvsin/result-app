@@ -43,16 +43,17 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: headers,
-        });
-        const data = await response.json();
-        if (data && data.response) {
-          this.nextGamesData = data.response;
-        } else {
-          this.nextGamesData = null;
-        }
+        // const response = await fetch(url, {
+        //   method: 'GET',
+        //   headers: headers,
+        // });
+        // const data = await response.json();
+        // if (data && data.response) {
+        //   this.nextGamesData = data.response;
+        // } else {
+        //   this.nextGamesData = null;
+        // }
+        this.nextGamesData = json3
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         this.nextGamesData = null;
@@ -92,18 +93,17 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        // const response = await fetch(url, {
-        //   method: 'GET',
-        //   headers: headers,
-        // });
-        // const data = await response.json();
-        // if (data && data.response) {
-        //   this.nextRoundData = data.response;
-        //   console.log(this.nextRoundData)
-        // } else {
-        //   this.nextRoundData = null;
-        // }
-        this.nextGamesData = json2
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          this.nextRoundData = data.response;
+          console.log(this.nextRoundData)
+        } else {
+          this.nextRoundData = null;
+        }
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         this.nextRoundData = null;

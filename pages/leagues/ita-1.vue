@@ -282,7 +282,7 @@ function setMatchWeek(input: string): string {
   if (input.length === 0) {
     return '';
   }
-  return input.charAt(input.length - 1);
+  return input.charAt(input.length - 2) + input.charAt(input.length - 1);
 }
 
 async function openMatchDetails(game: any) {
