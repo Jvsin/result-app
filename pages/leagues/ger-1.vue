@@ -91,10 +91,12 @@
             <!-- <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider> -->
 
           </v-card>
+
+          
         </v-card>
       </v-tabs-window-item>
 
-      <v-tabs-window-item :value="2">
+      <v-tabs-window-item :value="3">
         <v-card>
           <!-- {{ lastGames }} -->
           <v-card elevation="16" class="py-1" v-for="(game, index) in lastGames" :key="index">
@@ -142,8 +144,57 @@
           <!-- <v-pagination v-model="gameWeek" :length="matchWeeks"></v-pagination> -->
         </v-card>
       </v-tabs-window-item>
-    </v-tabs-window>
 
+
+      <v-tabs-window-item :value="2">
+        <v-card>
+          <!-- {{ nextGames }} -->
+          <v-card elevation="16" class="py-1" v-for="(game, index) in nextGames" :key="index">
+            <v-row>
+              <v-col class="justify-center">
+                <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
+                  formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+              </v-col>
+            </v-row>
+            <div v-if="!mobile">
+              <v-row class="d-flex align-center" justify="center">
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="1">
+                  <div no-wrap class="text-center text-h4"> - </div>
+                </v-col>
+                <v-col cols="1" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                </v-col>
+
+              </v-row>
+            </div>
+            <div v-else>
+              <v-row class="d-flex align-center" justify="center">
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+                <v-col cols="4">
+                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                </v-col>
+                <v-col cols="4" class="d-flex justify-center align-center">
+                  <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                </v-col>
+              </v-row>
+            </div>
+
+          </v-card>
+          <!-- <v-pagination v-model="gameWeek" :length="matchWeeks"></v-pagination> -->
+        </v-card>
+      </v-tabs-window-item>
+    </v-tabs-window>
   </v-container>
   <v-alert v-else type="warning">Ładowanie...</v-alert>
 </template>
@@ -159,6 +210,7 @@ const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
 const currentMatchWeek = ref(0)
 const lastGames = computed(() => leagueStore.lastGamesData)
+const nextGames = computed(() => leagueStore.nextGamesData)
 // const nextRound = computed(() => leagueStore.nextRoundData)
 const tab = ref(0);
 
@@ -220,6 +272,7 @@ function countDate() {
 function setAllData() {
   leagueStore.fetchLeagueData(78, 2024)
   leagueStore.fetchLastFixturesData(78, 2024)
+  leagueStore.fetchNextFixturesData(78, 2024)
   // currentMatchWeek.value = leagueStore.nextRoundData
   // console.log(currentMatchWeek.value)
   // leagueStore.fetchNextRound(78, 2024, currentMatchWeek.value + 1)
