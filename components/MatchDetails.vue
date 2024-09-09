@@ -184,7 +184,23 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item :value="3">
-          stats
+          <v-sheet no-gutters v-if="matchStats.length" class="overflow-y-auto no-horizontal-scroll"
+            style="max-height: 40vh; height: 100%;">
+            <div v-for="(stat, index) in matchStats" :key="index">
+              <v-row justify="center">
+                <v-col>
+                  <div class="text-center"> {{ stat.valueHome }}</div>
+                </v-col>
+                <v-col>
+                  <v-card-subtitle class="text-center">{{ stat.stat }}</v-card-subtitle>
+
+                </v-col>
+                <v-col>
+                  <div class="text-center"> {{ stat.valueAway }}</div>
+                </v-col>
+              </v-row>
+            </div>
+          </v-sheet>
         </v-tabs-window-item>
 
         <v-card-actions class="justify-center">
@@ -219,6 +235,7 @@ watch(isShow, (newValue) => {
   isShowRef.value = newValue;
   if (isShowRef.value == true) {
     setMatchDetails()
+    setStatistics()
   }
 });
 
@@ -228,14 +245,19 @@ function closeDialog() {
   awayGoals.splice(0, awayGoals.length);
   homeLineUp.splice(0, homeLineUp.length)
   awayLineUp.splice(0, awayLineUp.length)
+  matchStats.splice(0, matchStats.length)
   emit('close');
 }
 
+// stworzyć modele w przyszłości
 const homeGoals: any = []
 const awayGoals: any = []
 
 const homeLineUp: any = []
 const awayLineUp: any = []
+
+const matchStats: any = []
+
 
 function setMatchDetails() {
   console.log(match.value.events)
@@ -299,6 +321,19 @@ function setMatchDetails() {
 
   // console.log(homeGoals)
   // console.log(awayGoals)
+}
+
+function setStatistics() {
+  for (const stat of match.value.statistics[0].statistics) {
+    const awayStat = match.value.statistics[1].statistics.find((s: any) => s.type === stat.type);
+    const element: any = {
+      stat: stat.type,
+      valueHome: stat.value,
+      valueAway: awayStat.value
+    }
+    matchStats.push(element)
+  }
+  console.log(matchStats)
 }
 function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp * 1000);
