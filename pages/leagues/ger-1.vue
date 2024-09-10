@@ -92,14 +92,15 @@
 
           </v-card>
 
-          
+
         </v-card>
       </v-tabs-window-item>
 
       <v-tabs-window-item :value="3">
         <v-card>
           <!-- {{ lastGames }} -->
-          <v-card elevation="16" class="py-1" v-for="(game, index) in lastGames" :key="index">
+          <v-card elevation="16" class="py-1" v-for="(game, index) in lastGames" :key="index"
+            @click="openMatchDetails(game)">
             <v-row>
               <v-col class="justify-center">
                 <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
@@ -149,7 +150,8 @@
       <v-tabs-window-item :value="2">
         <v-card>
           <!-- {{ nextGames }} -->
-          <v-card elevation="16" class="py-1" v-for="(game, index) in nextGames" :key="index">
+          <v-card elevation="16" class="py-1" v-for="(game, index) in nextGames" :key="index"
+            @click="openMatchDetails(game)">
             <v-row>
               <v-col class="justify-center">
                 <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
@@ -182,7 +184,7 @@
                   <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                 </v-col>
                 <v-col cols="4">
-                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                  <div no-wrap class="text-center text-h4"> - </div>
                 </v-col>
                 <v-col cols="4" class="d-flex justify-center align-center">
                   <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
@@ -195,29 +197,27 @@
         </v-card>
       </v-tabs-window-item>
     </v-tabs-window>
+    <MatchDetails :match="selectedMatch" :is-show="showMatchDetails" @close="closeMatchDetails"></MatchDetails>
   </v-container>
   <v-alert v-else type="warning">Ładowanie...</v-alert>
+
 </template>
 
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue';
 import { useLeagueStore } from '~/stores/data';
 import { useDisplay } from 'vuetify'
+import MatchDetails from '~/components/MatchDetails.vue';
 
 const { mobile } = useDisplay()
 
 const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
-const currentMatchWeek = ref(0)
 const lastGames = computed(() => leagueStore.lastGamesData)
 const nextGames = computed(() => leagueStore.nextGamesData)
-// const nextRound = computed(() => leagueStore.nextRoundData)
 const tab = ref(0);
-
-// const teams = computed(() => leagueStore.leagueData.standings[0].length)
-// const gameWeek = ref(1)
-// const fixtures = computed(() => leagueStore.fixturesData)
-// const matchWeeks = computed(() => countMatchWeeks(teams.value))
+const showMatchDetails = ref(false)
+const selectedMatch = ref<any | null>(null);
 
 function countMatchWeeks(counter: number) {
   return counter * 2 - 2
@@ -225,15 +225,6 @@ function countMatchWeeks(counter: number) {
 
 onMounted(() => {
   setAllData()
-  // leagueStore.fetchNextRound(135, 2024, currentMatchWeek.value);
-  // console.log(currentMatchWeek.value)
-  // leagueStore.fetchFixturesData(78, 2024);
-  // teams.value = leagueStore.leagueData.standings[0].length
-  // console.log(teams.value)
-  // matchWeeks.value = countMatchWeeks(teams.value)
-  // console.log(matchWeeks)
-  // console.log(leagueData)
-  // console.log(fixtures)
 });
 
 function setColor(place: string) {
@@ -273,9 +264,6 @@ function setAllData() {
   leagueStore.fetchLeagueData(78, 2024)
   leagueStore.fetchLastFixturesData(78, 2024)
   leagueStore.fetchNextFixturesData(78, 2024)
-  // currentMatchWeek.value = leagueStore.nextRoundData
-  // console.log(currentMatchWeek.value)
-  // leagueStore.fetchNextRound(78, 2024, currentMatchWeek.value + 1)
 }
 
 function formatTimestamp(timestamp: number): string {
@@ -294,6 +282,17 @@ function setMatchWeek(input: string): string {
   if (input.length === 0) {
     return '';
   }
-  return input.charAt(input.length - 1);
+  return input.charAt(input.length - 2) + input.charAt(input.length - 1);
+}
+
+async function openMatchDetails(game: any) {
+  selectedMatch.value = await leagueStore.fetchMatchDetails(game.fixture.id)
+  showMatchDetails.value = true;
+  console.log(showMatchDetails.value)
+}
+
+function closeMatchDetails() {
+  showMatchDetails.value = false;
+  console.log(showMatchDetails.value)
 }
 </script>
