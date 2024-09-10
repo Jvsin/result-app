@@ -115,7 +115,8 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item :value="2">
-          <v-sheet no-gutters v-if="true" class="overflow-y-auto no-horizontal-scroll">
+          <v-sheet no-gutters v-if="true" class="overflow-y-auto no-horizontal-scroll"
+            style="max-height: 40vh; height: 100%;">
             <v-row v-if="homeLineUp.length || awayLineUp.length">
               <v-col cols="6" class="d-flex column justify-left">
                 <v-row no-gutters justify="center">
@@ -181,8 +182,6 @@
                     </v-card-subtitle>
                   </v-col>
                 </v-row>
-
-
 
                 <!-- <v-card-subtitle class="text-right py-2">
                   {{ "Trener: " + awayLineUp[1].name }}

@@ -36,12 +36,16 @@ const isMdAndDown = mdAndDown
 const isSmAndUp = smAndUp
 
 const buttons = [
+  { value: 'ucl', title: 'Champions League' },
+  { value: 'uel', title: 'Europa League' },
+  { value: 'uecl', title: 'Conference League' },
   { value: "pol-1", title: "Ekstraklasa", icon: "poland.png"},
   { value: "eng-1", title: "Premier League", icon: "england.png" },
   { value: "ita-1", title: "Serie A", icon: "italy.png" },
   { value: "spa-1", title: "La Liga", icon: "spain.png" },
   { value: "ger-1", title: "Bundesliga", icon: "germany.png" },
   { value: "fra-1", title: "Ligue 1", icon: "france.png" },
+  
 ];
 
 watch((mdAndUp, smAndDown) => {
