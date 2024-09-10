@@ -17,18 +17,18 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        // const response = await fetch(url, {
-        //   method: 'GET',
-        //   headers: headers,
-        // });
-        // const data = await response.json();
-        // if (data && data.response && data.response.length > 0) {
-        //   this.leagueData = data.response[0].league;
-        //   this.nextRoundData = this.leagueData.standings[0][0].all.played
-        // } else {
-        //   this.leagueData = null;
-        // }
-        this.leagueData = json3
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response && data.response.length > 0) {
+          this.leagueData = data.response[0].league;
+          this.nextRoundData = this.leagueData.standings[0][0].all.played
+        } else {
+          this.leagueData = null;
+        }
+        // this.leagueData = json3
       } catch (error) {
         console.error('Error fetching league data:', error);
         this.leagueData = null;
@@ -43,17 +43,17 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        // const response = await fetch(url, {
-        //   method: 'GET',
-        //   headers: headers,
-        // });
-        // const data = await response.json();
-        // if (data && data.response) {
-        //   this.nextGamesData = data.response;
-        // } else {
-        //   this.nextGamesData = null;
-        // }
-        this.nextGamesData = json3
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          this.nextGamesData = data.response;
+        } else {
+          this.nextGamesData = null;
+        }
+        // this.nextGamesData = json3
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         this.nextGamesData = null;
@@ -68,17 +68,17 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        // const response = await fetch(url, {
-        //   method: 'GET',
-        //   headers: headers,
-        // });
-        // const data = await response.json();
-        // if (data && data.response) {
-        //   this.lastGamesData = data.response;
-        // } else {
-        //   this.lastGamesData = null;
-        // }
-        this.lastGamesData = json
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          this.lastGamesData = data.response;
+        } else {
+          this.lastGamesData = null;
+        }
+        // this.lastGamesData = json
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         this.lastGamesData = null;
@@ -117,21 +117,21 @@ export const useLeagueStore = defineStore('league', {
       };
 
       try {
-        // const response = await fetch(url, {
-        //   method: 'GET',
-        //   headers: headers,
-        // });
-        // const data = await response.json();
-        // if (data && data.response) {
-        //   // this.nextRoundData = data.response;
-        //   console.log(data.response[0])
-        //   return data.response[0]
-        //   // console.log(this.nextRoundData)
-        // } else {
-        //   // this.nextRoundData = null;
-        //   return null
-        // }
-        return json4
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          // this.nextRoundData = data.response;
+          console.log(data.response[0])
+          return data.response[0]
+          // console.log(this.nextRoundData)
+        } else {
+          // this.nextRoundData = null;
+          return null
+        }
+        // return json4
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         return null

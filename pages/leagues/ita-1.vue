@@ -184,7 +184,7 @@
                   <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                 </v-col>
                 <v-col cols="4">
-                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                  <div no-wrap class="text-center text-h4"> - </div>
                 </v-col>
                 <v-col cols="4" class="d-flex justify-center align-center">
                   <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>

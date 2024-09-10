@@ -16,9 +16,12 @@
         </v-col>
         <v-col cols="2" class="d-flex justify-center align-center">
           <v-card-item>
-            <div no-wrap class="text-center text-h4">{{ match.goals.home + ' - ' + match.goals.away }}</div>
+            <div v-if="match.goals.home != null" no-wrap class="text-center text-h4">{{ match.goals.home + ' - ' +
+              match.goals.away }}</div>
+            <div v-else no-wrap class="text-center text-h4">{{ ' - ' }}</div>
             <v-card-subtitle>
-              <div no-wrap class="text-center">{{ '(' + match.score.halftime.home + ' - ' + match.score.halftime.away +
+              <div v-if="match.goals.home != null" no-wrap class="text-center">{{ '(' +
+                match.score.halftime.home + ' - ' + match.score.halftime.away +
                 ')' }}
               </div>
             </v-card-subtitle>
@@ -47,7 +50,7 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="1">
           <div v-if="!mobile">
-            <v-row class="d-flex align-center" justify="center">
+            <v-row v-if="homeGoals.length || awayGoals.length" class="d-flex align-center" justify="center">
               <v-col cols="5" class="d-flex column justify-left align-center">
                 <v-card-item prepend-icon="mdi-soccer" v-for="(goal, index) in homeGoals" :key="index">
                   {{ goal.minute + "' " + goal.scorer }}
@@ -60,6 +63,10 @@
                 </v-card-item>
               </v-col>
             </v-row>
+            <v-row v-else class="d-flex align-center" justify="center">
+              <v-card-item> Brak wydarzeń </v-card-item>
+            </v-row>
+
 
             <v-divider :thickness="1" class="border-opacity-25 mx-2 mt-2 py-1" color="primary"></v-divider>
 
@@ -75,9 +82,10 @@
                 </v-card-item>
               </v-col>
             </v-row>
+
           </div>
           <div v-else>
-            <v-row class="d-flex align-center" justify="center">
+            <v-row v-if="homeGoals.length || awayGoals.length" class="d-flex align-center" justify="center">
               <v-col cols="6" class="d-flex column justify-left align-center">
                 <v-card-item prepend-icon="mdi-soccer" v-for="(goal, index) in homeGoals" :key="index">
                   {{ goal.minute + "' " + goal.scorer }}
@@ -88,6 +96,9 @@
                   {{ goal.minute + "' " + goal.scorer }}
                 </v-card-item>
               </v-col>
+            </v-row>
+            <v-row v-else class="d-flex align-center" justify="center">
+              <v-card-item> Brak wydarzeń </v-card-item>
             </v-row>
 
             <v-divider :thickness="1" class="border-opacity-25 mx-2 mt-2 py-1" color="primary"></v-divider>
@@ -105,7 +116,7 @@
 
         <v-tabs-window-item :value="2">
           <v-sheet no-gutters v-if="true" class="overflow-y-auto no-horizontal-scroll">
-            <v-row>
+            <v-row v-if="homeLineUp.length || awayLineUp.length">
               <v-col cols="6" class="d-flex column justify-left">
                 <v-row no-gutters justify="center">
                   <v-col cols="8">
@@ -119,6 +130,7 @@
                     </v-card-subtitle>
                   </v-col>
                 </v-row>
+
 
                 <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
 
@@ -135,8 +147,6 @@
                   </v-col>
 
                 </v-row>
-
-                <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
 
                 <!-- <v-card-subtitle class="text-left py-2">
                   {{ "Trener: " + homeLineUp.slice[0].name }}
@@ -172,13 +182,17 @@
                   </v-col>
                 </v-row>
 
-                <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
+
 
                 <!-- <v-card-subtitle class="text-right py-2">
                   {{ "Trener: " + awayLineUp[1].name }}
                 </v-card-subtitle> -->
               </v-col>
             </v-row>
+            <v-row v-else no-gutters justify="center">
+              <div class="text-center">Składy dostępne są godzinę przed rozpoczęciem meczu. </div>
+            </v-row>
+            <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
           </v-sheet>
 
         </v-tabs-window-item>
@@ -201,6 +215,11 @@
               </v-row>
             </div>
           </v-sheet>
+          <v-sheet v-else>
+            <div class="text-center">Statystyki dostępne są po rozpoczęciu meczu. </div>
+          </v-sheet>
+          <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
+
         </v-tabs-window-item>
 
         <v-card-actions class="justify-center">
@@ -233,7 +252,7 @@ const tab = ref(0)
 
 watch(isShow, (newValue) => {
   isShowRef.value = newValue;
-  if (isShowRef.value == true) {
+  if (isShowRef.value == true && match.value.fixture.status.short !== "NS" ) {
     setMatchDetails()
     setStatistics()
   }
@@ -335,6 +354,8 @@ function setStatistics() {
   }
   console.log(matchStats)
 }
+
+
 function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp * 1000);
 
