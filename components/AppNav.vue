@@ -10,7 +10,7 @@
   <v-navigation-drawer v-if="isMdAndDown" v-model="drawer">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
-        <v-btn :to="'/leagues/' + button.value">{{ button.title }}</v-btn>
+        <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -18,7 +18,7 @@
   <v-navigation-drawer v-if="isSmAndUp">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
-        <v-btn :to="'/leagues/' + button.value">{{ button.title }}</v-btn>
+        <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -35,16 +35,24 @@ const isMdAndUp = mdAndUp
 const isMdAndDown = mdAndDown
 const isSmAndUp = smAndUp
 
+const router = useRouter();
+const address = computed(() => `/leagues/${buttons.value?.id}`)
+
+function getRoute(value ) {
+  console.log('Navigating to /leagues/' + value);
+  router.push(`/leagues/${value}`);
+}
+
 const buttons = [
-  { value: 'ucl', title: 'Champions League' },
-  { value: 'uel', title: 'Europa League' },
-  { value: 'uecl', title: 'Conference League' },
-  { value: "pol-1", title: "Ekstraklasa", icon: "poland.png"},
-  { value: "eng-1", title: "Premier League", icon: "england.png" },
-  { value: "ita-1", title: "Serie A", icon: "italy.png" },
-  { value: "spa-1", title: "La Liga", icon: "spain.png" },
-  { value: "ger-1", title: "Bundesliga", icon: "germany.png" },
-  { value: "fra-1", title: "Ligue 1", icon: "france.png" },
+  { value: 'ucl', title: 'Champions League', id: 2 },
+  { value: 'uel', title: 'Europa League', id: 3 },
+  { value: 'uecl', title: 'Conference League', id: 848 },
+  { value: "pol-1", title: "Ekstraklasa", id: 106},
+  { value: "eng-1", title: "Premier League", id: 39 },
+  { value: "ita-1", title: "Serie A", id: 135 },
+  { value: "spa-1", title: "La Liga", id: 140 },
+  { value: "ger-1", title: "Bundesliga", id: 78},
+  { value: "fra-1", title: "Ligue 1", id: 61},
   
 ];
 
