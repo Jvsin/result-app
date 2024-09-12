@@ -1,16 +1,19 @@
 export interface IStanding {
-    id: Number,
-    standings: any
+  id: Number,
+  nextRound: Number,
+  standings: any
 }
 
 export interface Standing {
   id: Number,
-    standings: any
+  nextRound: Number,
+  standings: any
 }
 
 export function toMapStanding(data?: Partial<Standing>): Standing {
   return {
-      id: data?.id || 0,
-      standings: data?.standings || null
+    id: data?.id || 0,
+    nextRound: data?.nextRound || 0,
+    standings: data?.standings || null
   }
 }
