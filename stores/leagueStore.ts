@@ -9,6 +9,7 @@ export const useLeagueStore = defineStore('league', {
     lastGamesData: null as any | null,
     nextRoundData: null as any | null,
 
+    leagueStanding: null as Standing | null
     // leaguesStandings: [] as Standing[]
   }),
   actions: {
@@ -27,8 +28,16 @@ export const useLeagueStore = defineStore('league', {
         const data = await response.json();
         if (data && data.response && data.response.length > 0) {
           this.leagueData = data.response[0].league;
-          this.nextRoundData = this.leagueData.standings[0][0].all.played
+          this.nextRoundData = this.leagueData?.standings[0][0].all.played
           
+          const newStands: Standing = {
+            standings: data.response[0].league,
+            id: leagueId,
+            lastUpdate: new Date(),
+            nextRound: data.response[0].league.standings[0][0].all.played // do zmiany
+          }
+          this.leagueStanding = newStands
+          console.log(this.leagueStanding)
           // const newLeagueStandings: Standing = {
           //   id: leagueId,
           //   standings: data.response[0].league

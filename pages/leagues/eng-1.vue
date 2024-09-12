@@ -205,7 +205,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue';
-import { useLeagueStore } from '~/stores/data';
+import { useLeagueStore } from '~/stores/leagueStore';
 import { useDisplay } from 'vuetify'
 import MatchDetails from '~/components/MatchDetails.vue';
 

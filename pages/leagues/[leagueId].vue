@@ -25,7 +25,7 @@
             <v-col class="d-flex">
               <v-card flat>
                 <v-card-subtitle class="text-sm-left">
-                  <div>{{ 'Sezon: ' + countSeason(leagueData.season) }}</div>
+                  <div>{{ 'Sezon: ' + countSeason(leagueStands?.standings.season) }}</div>
                   <div>{{ 'Ostatnia aktualizacja: ' + countDate() }}</div>
                 </v-card-subtitle>
               </v-card>
@@ -61,7 +61,7 @@
               <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider>
             </v-row>
           </v-card>
-          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueData.standings[0]" :key="index">
+          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueStands?.standings.standings[0]" :key="index">
             <v-row class="d-flex align-center">
               <v-col cols="1" class="d-flex justify-center align-center">
                 <div :style="{ color: setColor(standing.description) }" class=" ml-2 text-center">{{ standing.rank }}
@@ -217,6 +217,8 @@ const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
 const lastGames = computed(() => leagueStore.lastGamesData)
 const nextGames = computed(() => leagueStore.nextGamesData)
+const leagueStands = computed(() => leagueStore.leagueStanding)
+
 const tab = ref(0);
 const showMatchDetails = ref(false)
 const selectedMatch = ref<any | null>(null);
