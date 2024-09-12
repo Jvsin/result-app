@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { Standing } from '~/models/standing';
 
 export const useLeagueStore = defineStore('league', {
   state: () => ({
@@ -7,6 +8,8 @@ export const useLeagueStore = defineStore('league', {
     nextGamesData: null as any | null,
     lastGamesData: null as any | null,
     nextRoundData: null as any | null,
+
+    // leaguesStandings: [] as Standing[]
   }),
   actions: {
     async fetchLeagueData(leagueId: number, season: number) {
@@ -25,6 +28,13 @@ export const useLeagueStore = defineStore('league', {
         if (data && data.response && data.response.length > 0) {
           this.leagueData = data.response[0].league;
           this.nextRoundData = this.leagueData.standings[0][0].all.played
+          
+          // const newLeagueStandings: Standing = {
+          //   id: leagueId,
+          //   standings: data.response[0].league
+          // }
+
+          // this.leaguesStandings.push(newLeagueStandings)
         } else {
           this.leagueData = null;
         }
