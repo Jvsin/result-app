@@ -25,7 +25,7 @@
             <v-col class="d-flex">
               <v-card flat>
                 <v-card-subtitle class="text-sm-left">
-                  <div>{{ 'Sezon: ' + countSeason(leagueData.season) }}</div>
+                  <div>{{ 'Sezon: ' + countSeason(leagueStands?.standings.season) }}</div>
                   <div>{{ 'Ostatnia aktualizacja: ' + countDate() }}</div>
                 </v-card-subtitle>
               </v-card>
@@ -61,7 +61,7 @@
               <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider>
             </v-row>
           </v-card>
-          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueData.standings[0]" :key="index">
+          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueStands?.standings.standings[0]" :key="index">
             <v-row class="d-flex align-center">
               <v-col cols="1" class="d-flex justify-center align-center">
                 <div :style="{ color: setColor(standing.description) }" class=" ml-2 text-center">{{ standing.rank }}
@@ -210,18 +210,18 @@ import { useDisplay } from 'vuetify'
 import MatchDetails from '~/components/MatchDetails.vue';
 
 const { mobile } = useDisplay()
+const route = useRoute()
+const leagueId = ref(Number(route.params.leagueId) || 0)
 
 const leagueStore = useLeagueStore();
 const leagueData = computed(() => leagueStore.leagueData);
 const lastGames = computed(() => leagueStore.lastGamesData)
 const nextGames = computed(() => leagueStore.nextGamesData)
+const leagueStands = computed(() => leagueStore.leagueStanding)
+
 const tab = ref(0);
 const showMatchDetails = ref(false)
 const selectedMatch = ref<any | null>(null);
-
-function countMatchWeeks(counter: number) {
-  return counter * 2 - 2
-}
 
 onMounted(() => {
   setAllData()
@@ -261,9 +261,9 @@ function countDate() {
 }
 
 function setAllData() {
-  leagueStore.fetchLeagueData(39, 2024)
-  leagueStore.fetchLastFixturesData(39, 2024)
-  leagueStore.fetchNextFixturesData(39, 2024)
+  leagueStore.fetchLeagueData(leagueId.value, 2024)
+  leagueStore.fetchLastFixturesData(leagueId.value, 2024)
+  leagueStore.fetchNextFixturesData(leagueId.value, 2024)
 }
 
 function formatTimestamp(timestamp: number): string {

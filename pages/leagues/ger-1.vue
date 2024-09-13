@@ -261,9 +261,9 @@ function countDate() {
 }
 
 function setAllData() {
-  leagueStore.fetchLeagueData(39, 2024)
-  leagueStore.fetchLastFixturesData(39, 2024)
-  leagueStore.fetchNextFixturesData(39, 2024)
+  leagueStore.fetchLeagueData(78, 2024)
+  leagueStore.fetchLastFixturesData(78, 2024)
+  leagueStore.fetchNextFixturesData(78, 2024)
 }
 
 function formatTimestamp(timestamp: number): string {
