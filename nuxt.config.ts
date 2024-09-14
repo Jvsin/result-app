@@ -1,4 +1,8 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import i18nConfig from './i18n.config';
+import pl from './locales/pl.json';
+import en from './locales/en.json';
+
 export default defineNuxtConfig({
   //...
   build: {
@@ -13,6 +17,7 @@ export default defineNuxtConfig({
       })
     },
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
   ],
 
   vite: {
@@ -22,6 +27,13 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'pl',
+    vueI18n: './i18n.config.ts',
+  },
+  devtools: { enabled: true },
 
   css: [
     '@mdi/font/css/materialdesignicons.css', // Import the MDI font styles
