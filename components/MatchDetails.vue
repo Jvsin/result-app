@@ -25,11 +25,15 @@
                 ')' }}
               </div>
             </v-card-subtitle>
-            <v-card-subtitle>
+            <v-card-item v-if="match.fixture.status !== 'FT'">
               <div no-wrap class="text-center">
-                {{ match.fixture.status.short }}
+                {{ match.fixture.status.long }}
               </div>
-            </v-card-subtitle>
+
+            </v-card-item>
+            <div v-else style="color: red;" no-wrap class="text-center">
+              {{ match.fixture.status.elapsed }}'
+            </div>
           </v-card-item>
         </v-col>
         <v-col cols="5" class="d-flex justify-center align-center">
@@ -39,6 +43,9 @@
           </v-card-item>
         </v-col>
       </v-row>
+
+      <v-progress-linear v-if="match.fixture.status.short !== 'FT'" color="red" height="5"
+        :model-value="match.fixture.status.elapsed / 90 * 100" striped></v-progress-linear>
 
       <v-tabs v-model="tab" align-tabs="center" color="primary">
         <v-tab :key="0" value="0">Ogólne</v-tab>

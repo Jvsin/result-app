@@ -61,7 +61,8 @@
               <v-divider :thickness="1" class="border-opacity-25" color="white"></v-divider>
             </v-row>
           </v-card>
-          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueStands?.standings.standings[0]" :key="index">
+          <v-card elevation="16" class="py-1" v-for="(standing, index) in leagueStands?.standings.standings[0]"
+            :key="index">
             <v-row class="d-flex align-center">
               <v-col cols="1" class="d-flex justify-center align-center">
                 <div :style="{ color: setColor(standing.description) }" class=" ml-2 text-center">{{ standing.rank }}
@@ -116,7 +117,11 @@
                   <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                 </v-col>
                 <v-col cols="1">
-                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                  <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}
+                    <v-card-subtitle  v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{
+                      game.fixture.status.elapsed }}
+                    </v-card-subtitle>
+                  </div>
                 </v-col>
                 <v-col cols="1" class="d-flex justify-center align-center">
                   <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
@@ -124,8 +129,9 @@
                 <v-col cols="4" class="d-flex justify-center align-center">
                   <v-card-title>{{ game.teams.away.name }}</v-card-title>
                 </v-col>
-
               </v-row>
+              <v-progress-linear v-if="game.fixture.status.short !== 'FT'" color="red" height="5"
+                :model-value="game.fixture.status.elapsed/90 * 100" striped></v-progress-linear>
             </div>
             <div v-else>
               <v-row class="d-flex align-center" justify="center">
@@ -134,11 +140,16 @@
                 </v-col>
                 <v-col cols="4">
                   <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                  <v-card-subtitle v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{
+                    game.fixture.status.elapsed }}
+                  </v-card-subtitle>
                 </v-col>
                 <v-col cols="4" class="d-flex justify-center align-center">
                   <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
                 </v-col>
               </v-row>
+              <v-progress-linear v-if="game.fixture.status.short !== 'FT'" color="red" height="5"
+                :model-value="game.fixture.status.elapsed / 90 * 100" striped></v-progress-linear>
             </div>
 
           </v-card>
