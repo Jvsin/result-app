@@ -25,12 +25,12 @@
                 ')' }}
               </div>
             </v-card-subtitle>
-            <v-card-item v-if="match.fixture.status !== 'FT'">
+            <v-card-subtitle v-if="match.fixture.status.short == 'FT'">
               <div no-wrap class="text-center">
-                {{ match.fixture.status.long }}
+                {{ match.fixture.status.short }}
               </div>
 
-            </v-card-item>
+            </v-card-subtitle>
             <div v-else style="color: red;" no-wrap class="text-center">
               {{ match.fixture.status.elapsed }}'
             </div>

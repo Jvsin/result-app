@@ -119,7 +119,7 @@
                 <v-col cols="1">
                   <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}
                     <v-card-subtitle  v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{
-                      game.fixture.status.elapsed }}
+                      game.fixture.status.elapsed }}'
                     </v-card-subtitle>
                   </div>
                 </v-col>
