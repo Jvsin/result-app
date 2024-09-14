@@ -1,4 +1,35 @@
 {
   "hello": "Hello",
-  "welcome": "Welcome to Vuetify"
+  "welcome": "Welcome to Vuetify",
+  "appName": "MATCH RESULTS APP",
+  "landingPage": {
+    "description": "Create own tournament and bet with your friends!",
+    "join": "Enter now!"
+  },
+  "auth": {
+    "register": {
+      "goToLogin": "Already have an account? Log in",
+      "loginButton": "Log In",
+      "register": "Register",
+      "registerWithGoogle": "Register with Google",
+      "email": "Email",
+      "nick": "Nickname",
+      "name": "First Name",
+      "surname": "Last Name",
+      "password": "Password",
+      "repeatPassword": "Repeat Password",
+      "registerButton": "Register",
+      "clear": "Clear"
+    },
+    "login": {
+      "login": "Log In",
+      "nickOrEmail": "Nickname/Email",
+      "loginWithGoogle": "Log in with Google",
+      "password": "Password",
+      "loginButton": "Log In",
+      "goToRegister": "Don't have an account? Join now",
+      "registerButton": "Register"
+    }
+  }
+  
 }

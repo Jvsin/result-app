@@ -13,15 +13,15 @@ const router = useRouter()
         class="text-center w-100 h-100">
         <div class="d-flex flex-column align-center justify-center h-100 w-100 mx-4">
           <span class="text-h3 font-weight-bold text-white">
-            MATCH RESULTS APP
+          {{ $t("appName") }}
           </span>
 
           <p class="mt-2 text-white">
-            Stwórz własną ligę i typuj razem ze swoimi znajomymi!
+            {{ $t("landingPage.description") }}
           </p>
 
           <v-btn class="my-4" to="auth/register" variant="elevated" color="secondary">
-            Dołącz już teraz
+            {{ $t("landingPage.join") }}
           </v-btn>
         </div>
       </v-img>

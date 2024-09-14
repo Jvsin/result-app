@@ -1,4 +1,34 @@
 {
-  "hello": "Cześć",
-  "welcome": "Witamy w Vuetify"
+  "hello": "Hello",
+  "welcome": "Welcome to Vuetify",
+  "appName": "MATCH RESULTS APP",
+  "landingPage": {
+    "description": "Stwórz własną ligę i typuj razem ze swoimi znajomymi!",
+    "join": "Dołącz już teraz!"
+  },
+  "auth": {
+    "register": {
+      "goToLogin": "Masz już konto? Zaloguj się",
+      "loginButton": "Logowanie",
+      "register": "Rejestracja",
+      "registerWithGoogle": "Rejestracja przez Google",
+      "email": "Email",
+      "nick": "Nick",
+      "name": "Imię",
+      "surname": "Nazwisko",
+      "password": "Hasło",
+      "repeatPassword": "Powtórz hasło",
+      "registerButton": "Zarejestruj się",
+      "clear": "Wyczyść" 
+    },
+    "login": {
+      "login": "Logowanie",
+      "nickOrEmail": "Nick/Email",
+      "loginWithGoogle": "Zaloguj przez Google",
+      "password": "Hasło",
+      "loginButton": "Zaloguj się",
+      "goToRegister": "Nie posiadasz konta? Dołącz już teraz",
+      "registerButton": "Rejestracja"
+    }
+  }
 }

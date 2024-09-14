@@ -6,52 +6,52 @@
           <div class="flex-column align-center justify-center mx-2 py-5"
             style="background-color: rgba(0, 0, 0, 0.5); width: 100%; max-width: 500px;">
             <span class="text-h5 font-weight-bold text-white">
-              Masz już konto? Zaloguj się
+              {{ $t("auth.register.goToLogin") }}
             </span>
             <div class="mx-5 py-2">
               <v-btn to="/auth/login" variant="outlined" color="primary">
-                Logowanie
+                {{ $t("auth.register.loginButton") }}
               </v-btn>
             </div>
 
             <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="success"></v-divider>
             <span class="text-h3 font-weight-bold text-white">
-              REJESTRACJA
+              {{ $t("auth.register.register").toUpperCase() }}
             </span>
 
             <div class="mx-5 py-2">
               <v-btn color="secondary" variant="outlined" prepend-icon="mdi-google">
-                Rejestracja przez Google
+                {{ $t("auth.register.registerWithGoogle") }}
               </v-btn>
             </div>
 
             <v-form class="mx-5 py-2" v-model="valid" ref="form">
-              <v-text-field v-model="email" label="Adres Email" :rules="[requiredRule(), emailRule()]"></v-text-field>
+              <v-text-field v-model="email" :label="$t('auth.register.email')" :rules="[requiredRule(), emailRule()]"></v-text-field>
 
-              <v-text-field v-model="nickName" label="Nick"
+              <v-text-field v-model="nickName" :label="$t('auth.register.nick')"
                 :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
 
-              <v-text-field v-model=" name" label="Imię"
+              <v-text-field v-model="name" :label="$t('auth.register.name')"
                 :rules="[requiredRule(), lengthRuleShort(), lengthRule()] "></v-text-field>
-              <v-text-field v-model=" surname" label="Nazwisko"
+              <v-text-field v-model=" surname" :label="$t('auth.register.surname')"
                 :rules="[requiredRule(), lengthRuleShort(), surnameLengthRule()]"></v-text-field>
 
               <!-- <v-checkbox @click="showPasswords = !showPasswords" label="Pokaż hasła"></v-checkbox> -->
               <v-text-field v-model="password1" :type="showPasswords ? 'text' : 'password'"
-                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" label="Hasło"
+                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" :label="$t('auth.register.password')"
                 @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
               <v-text-field v-model="password2" :type="showPasswords ? 'text' : 'password'"
-                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" label="Powtórz hasło"
+                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" :label="$t('auth.register.repeatPassword')"
                 @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
               <v-btn class="me-4" @click="registerUser" variant="outlined" type="submit" color="primary">
-                Zarejestruj się
+                {{ $t("auth.register.registerButton") }}
               </v-btn>
 
               <v-btn variant="outlined" @click="handleReset" color="error">
-                Wyczyść
+                {{ $t("auth.register.clear") }}
               </v-btn>
             </v-form>
           </div>

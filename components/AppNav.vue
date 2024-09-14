@@ -5,6 +5,10 @@
 
     <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
       text="Match Results App" class="d-flex align-center justify-center" />
+
+    <v-select v-if="!isSmAndDown" v-model="locale" class="mx-2 ml-auto" variant="plain" hide-details :items="languages"
+      dense style="max-width: 120px;" />
+
   </v-app-bar>
 
   <v-navigation-drawer v-if="isMdAndDown" v-model="drawer">
@@ -13,6 +17,8 @@
         <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
       </v-list-item>
     </v-list>
+    <v-select v-if="isSmAndDown" v-model="locale" class="mx-2 my-4" variant="plain" hide-details :items="languages"
+      dense style="max-width: 120px;" />
   </v-navigation-drawer>
 
   <v-navigation-drawer v-if="isSmAndUp">
@@ -42,6 +48,13 @@ function getRoute(value ) {
   console.log('Navigating to /leagues/' + value);
   router.push(`/leagues/${value}`);
 }
+
+const { t, locale } = useI18n()
+
+const languages = [
+  { title: "Polski", value: 'pl' },
+  { title: "English", value: 'en' },
+]
 
 const buttons = [
   { value: 'ucl', title: 'Champions League', id: 2 },
