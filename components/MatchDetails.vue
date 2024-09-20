@@ -25,9 +25,9 @@
                 ')' }}
               </div>
             </v-card-subtitle>
-            <v-card-subtitle v-if="match.fixture.status.short == 'FT'">
+            <v-card-subtitle v-if="match.fixture.status.short == 'FT' || match.fixture.status.short == 'NS'">
               <div no-wrap class="text-center">
-                {{ match.fixture.status.short }}
+                {{ $t(`leaguesPage.resultsView.${setTime(match.fixture.status.short)}`) }}
               </div>
 
             </v-card-subtitle>
@@ -44,13 +44,13 @@
         </v-col>
       </v-row>
 
-      <v-progress-linear v-if="match.fixture.status.short !== 'FT'" color="red" height="5"
+      <v-progress-linear v-if="match.fixture.status.short !== 'FT' && match.fixture.status.short !== 'NS'" color="red" height="5"
         :model-value="match.fixture.status.elapsed / 90 * 100" striped></v-progress-linear>
 
       <v-tabs v-model="tab" align-tabs="center" color="primary">
-        <v-tab :key="0" value="0">Ogólne</v-tab>
-        <v-tab :key="1" value="1">Składy</v-tab>
-        <v-tab :key="2" value="2">Statystyki</v-tab>
+        <v-tab :key="0" value="0">{{ $t('leaguesPage.resultsView.basicData') }}</v-tab>
+        <v-tab :key="1" value="1">{{ $t('leaguesPage.resultsView.squads') }}</v-tab>
+        <v-tab :key="2" value="2">{{ $t('leaguesPage.resultsView.stats') }}</v-tab>
       </v-tabs>
 
       <v-divider :thickness="1" class="border-opacity-25 mx-2 mt-2 py-1" color="primary"></v-divider>
@@ -71,7 +71,7 @@
               </v-col>
             </v-row>
             <v-row v-else class="d-flex align-center" justify="center">
-              <v-card-item> Brak wydarzeń </v-card-item>
+              <v-card-item> {{ $t('leaguesPage.errors.matchNotStarted')}} </v-card-item>
             </v-row>
 
 
@@ -105,7 +105,7 @@
               </v-col>
             </v-row>
             <v-row v-else class="d-flex align-center" justify="center">
-              <v-card-item> Brak wydarzeń </v-card-item>
+              <v-card-item> {{ $t('leaguesPage.errors.matchNotStarted') }}</v-card-item>
             </v-row>
 
             <v-divider :thickness="1" class="border-opacity-25 mx-2 mt-2 py-1" color="primary"></v-divider>
@@ -196,7 +196,7 @@
               </v-col>
             </v-row>
             <v-row v-else no-gutters justify="center">
-              <div class="text-center">Składy dostępne są godzinę przed rozpoczęciem meczu. </div>
+              <div class="text-center">{{ $t('leaguesPage.errors.squadsNotAvailable') }} </div>
             </v-row>
             <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
           </v-sheet>
@@ -212,7 +212,7 @@
                   <div class="text-center"> {{ stat.valueHome }}</div>
                 </v-col>
                 <v-col>
-                  <v-card-subtitle class="text-center">{{ stat.stat }}</v-card-subtitle>
+                  <v-card-subtitle class="text-center">{{ $t(`leaguesPage.statistics.${convertStatsName(stat.stat) }`)  }}</v-card-subtitle>
 
                 </v-col>
                 <v-col>
@@ -222,7 +222,7 @@
             </div>
           </v-sheet>
           <v-sheet v-else>
-            <div class="text-center">Statystyki dostępne są po rozpoczęciu meczu. </div>
+            <div class="text-center">{{ $t('leaguesPage.errors.statsNotAvailable') }} </div>
           </v-sheet>
           <v-divider :thickness="1" class="border-opacity-25" color="primary"></v-divider>
 
@@ -374,6 +374,22 @@ function formatTimestamp(timestamp: number): string {
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
 }
 
+function setTime(time: string) {
+  switch (time) {
+    case 'FT': return 'fullTime'
+    case 'HT': return 'halfTime' 
+    case 'NS': return 'notStarted'
+  }
+}
+
+function convertStatsName(name: string) {
+  if (name == 'Passes %')
+    return 'passes'
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+(.)/g, (match, chr) => chr.toUpperCase()) 
+    .replace(/^./, match => match.toLowerCase()); 
+}
 </script>
 
 <style>

@@ -30,6 +30,50 @@
       "goToRegister": "Don't have an account? Join now",
       "registerButton": "Register"
     }
-  }
-  
+  },
+  "leaguesPage": {
+    "table": "Table",
+    "results": "Results",
+    "fixtures": "Fixtures",
+    "close": "Close",
+    "tableView": {
+      "season": "Season",
+      "lastActualization": "Last Update",
+      "teamName": "Team"
+    },
+    "resultsView": {
+      "matchDay": "Matchday",
+      "basicData": "General",
+      "squads": "Line-ups",
+      "stats": "Statistics",
+      "fullTime": "Full Time",
+      "halfTime": "Half Time",
+      "notStarted": " "
+    },
+     "statistics": {
+      "shotsOnGoal": "Shots on Goal",
+      "shotsOffGoal": "Shots off Goal",
+      "totalShots": "Total Shots",
+      "blockedShots": "Blocked Shots",
+      "shotsInsidebox": "Shots Inside Box",
+      "shotsOutsidebox": "Shots Outside Box",
+      "fouls": "Fouls",
+      "cornerKicks": "Corner Kicks",
+      "offsides": "Offsides",
+      "ballPossession": "Ball Possession",
+      "yellowCards": "Yellow Cards",
+      "redCards": "Red Cards",
+      "goalkeeperSaves": "Goalkeeper Saves",
+      "totalPasses": "Total Passes",
+      "passesAccurate": "Accurate Passes",
+      "passes": "Pass Accuracy",
+      "expectedGoals": "Expected Goals",
+      "goalsPrevented": "Goals Prevented"
+    },
+    "errors": {
+      "matchNotStarted": "No events.",
+      "squadsNotAvailable": "Squads are not yet available.",
+      "statsNotAvailable": "Statistics are available after the match starts."
+    }
+  }  
 }

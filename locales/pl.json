@@ -30,5 +30,50 @@
       "goToRegister": "Nie posiadasz konta? Dołącz już teraz",
       "registerButton": "Rejestracja"
     }
+  },
+  "leaguesPage": {
+    "table": "Tabela",
+    "results": "Wyniki",
+    "fixtures": "Mecze",
+    "close": "Zamknij",
+    "tableView": {
+      "season": "Sezon",
+      "lastActualization": "Ostatnia aktualizacja",
+      "teamName": "Drużyna"
+    },
+    "resultsView": {
+      "matchDay": "Kolejka",
+      "basicData": "Ogólne",
+      "squads": "Składy",
+      "stats": "Statystki",
+      "fullTime": "Koniec",
+      "halfTime": "Przerwa",
+      "notStarted": " "
+    },
+    "statistics": {
+      "shotsOnGoal": "Strzały celne",
+      "shotsOffGoal": "Strzały niecelne",
+      "totalShots": "Wszystkie strzały",
+      "blockedShots": "Strzały zablokowane",
+      "shotsInsidebox": "Strzały z pola karnego",
+      "shotsOutsidebox": "Strzały zza pola karnego",
+      "fouls": "Faule",
+      "cornerKicks": "Rzuty rożne",
+      "offsides": "Spalone",
+      "ballPossession": "Posiadanie piłki",
+      "yellowCards": "Żółte kartki",
+      "redCards": "Czerwone kartki",
+      "goalkeeperSaves": "Obrony bramkarza",
+      "totalPasses": "Podania",
+      "passesAccurate": "Celne podania",
+      "passes": "Celność podań",
+      "expectedGoals": "Gole przewidywane",
+      "goalsPrevented": "Gole zapobiegnięte"
+    },
+    "errors": {
+      "matchNotStarted": "Brak wydarzeń.",
+      "squadsNotAvailable": "Składy nie są jeszcze dostępne.",
+      "statsNotAvailable": "Statystyki dostępne są po rozpoczęciu meczu."
+    }
   }
 }
