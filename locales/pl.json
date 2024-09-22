@@ -1,0 +1,79 @@
+{
+  "hello": "Hello",
+  "welcome": "Welcome to Vuetify",
+  "appName": "MATCH RESULTS APP",
+  "landingPage": {
+    "description": "Stwórz własną ligę i typuj razem ze swoimi znajomymi!",
+    "join": "Dołącz już teraz!"
+  },
+  "auth": {
+    "register": {
+      "goToLogin": "Masz już konto? Zaloguj się",
+      "loginButton": "Logowanie",
+      "register": "Rejestracja",
+      "registerWithGoogle": "Rejestracja przez Google",
+      "email": "Email",
+      "nick": "Nick",
+      "name": "Imię",
+      "surname": "Nazwisko",
+      "password": "Hasło",
+      "repeatPassword": "Powtórz hasło",
+      "registerButton": "Zarejestruj się",
+      "clear": "Wyczyść" 
+    },
+    "login": {
+      "login": "Logowanie",
+      "nickOrEmail": "Nick/Email",
+      "loginWithGoogle": "Zaloguj przez Google",
+      "password": "Hasło",
+      "loginButton": "Zaloguj się",
+      "goToRegister": "Nie posiadasz konta? Dołącz już teraz",
+      "registerButton": "Rejestracja"
+    }
+  },
+  "leaguesPage": {
+    "table": "Tabela",
+    "results": "Wyniki",
+    "fixtures": "Mecze",
+    "close": "Zamknij",
+    "tableView": {
+      "season": "Sezon",
+      "lastActualization": "Ostatnia aktualizacja",
+      "teamName": "Drużyna"
+    },
+    "resultsView": {
+      "matchDay": "Kolejka",
+      "basicData": "Ogólne",
+      "squads": "Składy",
+      "stats": "Statystki",
+      "fullTime": "Koniec",
+      "halfTime": "Przerwa",
+      "notStarted": " "
+    },
+    "statistics": {
+      "shotsOnGoal": "Strzały celne",
+      "shotsOffGoal": "Strzały niecelne",
+      "totalShots": "Wszystkie strzały",
+      "blockedShots": "Strzały zablokowane",
+      "shotsInsidebox": "Strzały z pola karnego",
+      "shotsOutsidebox": "Strzały zza pola karnego",
+      "fouls": "Faule",
+      "cornerKicks": "Rzuty rożne",
+      "offsides": "Spalone",
+      "ballPossession": "Posiadanie piłki",
+      "yellowCards": "Żółte kartki",
+      "redCards": "Czerwone kartki",
+      "goalkeeperSaves": "Obrony bramkarza",
+      "totalPasses": "Podania",
+      "passesAccurate": "Celne podania",
+      "passes": "Celność podań",
+      "expectedGoals": "Gole przewidywane",
+      "goalsPrevented": "Gole zapobiegnięte"
+    },
+    "errors": {
+      "matchNotStarted": "Brak wydarzeń.",
+      "squadsNotAvailable": "Składy nie są jeszcze dostępne.",
+      "statsNotAvailable": "Statystyki dostępne są po rozpoczęciu meczu."
+    }
+  }
+}

@@ -5,6 +5,11 @@
 
     <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
       text="Match Results App" class="d-flex align-center justify-center" />
+
+    <v-spacer></v-spacer>
+
+    <!-- <v-select v-if="!isSmAndDown" v-model="locale" variant="plain" hide-details :items="languages" dense
+      style="max-width: 120px;" class="d-flex align-center justify-center" /> -->
   </v-app-bar>
 
   <v-navigation-drawer v-if="isMdAndDown" v-model="drawer">
@@ -13,6 +18,11 @@
         <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
       </v-list-item>
     </v-list>
+    <v-divider></v-divider>
+    <div class="language-selector">
+      <v-select v-model="locale" class="mx-2 my-4" variant="plain" hide-details :items="languages" dense
+        style="max-width: 120px;" />
+    </div>
   </v-navigation-drawer>
 
   <v-navigation-drawer v-if="isSmAndUp">
@@ -21,6 +31,10 @@
         <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
       </v-list-item>
     </v-list>
+    <div class="language-selector">
+      <v-select v-model="locale" class="mx-2 my-4" variant="plain" hide-details :items="languages" dense
+        style="max-width: 120px;" />
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -43,6 +57,13 @@ function getRoute(value ) {
   router.push(`/leagues/${value}`);
 }
 
+const { t, locale } = useI18n()
+
+const languages = [
+  { title: "Polski", value: 'pl' },
+  { title: "English", value: 'en' },
+]
+
 const buttons = [
   { value: 'ucl', title: 'Champions League', id: 2 },
   { value: 'uel', title: 'Europa League', id: 3 },
@@ -61,3 +82,14 @@ watch((mdAndUp, smAndDown) => {
   // console.log('isMdAndUp: ' + isMdAndUp.value)
 })
 </script>
+
+<style scoped>
+.language-selector {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

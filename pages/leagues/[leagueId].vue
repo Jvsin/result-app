@@ -1,9 +1,9 @@
 <template>
   <v-container v-if="leagueData">
     <v-tabs v-model="tab" align-tabs="start" color="primary">
-      <v-tab :key="0" value="0">Tabela</v-tab>
-      <v-tab :key="1" value="1">Wyniki</v-tab>
-      <v-tab :key="2" value="2">Mecze</v-tab>
+      <v-tab :key="0" value="0">{{ $t("leaguesPage.table") }}</v-tab>
+      <v-tab :key="1" value="1">{{ $t("leaguesPage.results") }}</v-tab>
+      <v-tab :key="2" value="2">{{ $t("leaguesPage.fixtures") }}</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab">
@@ -25,8 +25,8 @@
             <v-col class="d-flex">
               <v-card flat>
                 <v-card-subtitle class="text-sm-left">
-                  <div>{{ 'Sezon: ' + countSeason(leagueStands?.standings.season) }}</div>
-                  <div>{{ 'Ostatnia aktualizacja: ' + countDate() }}</div>
+                  <div>{{ $t('leaguesPage.tableView.season') + ': ' + countSeason(leagueStands?.standings.season) }}</div>
+                  <div>{{ $t('leaguesPage.tableView.lastActualization') +': ' + countDate() }}</div>
                 </v-card-subtitle>
               </v-card>
             </v-col>
@@ -44,7 +44,7 @@
               </v-col>
 
               <v-col cols="6" class="d-flex align-center">
-                <p class="font-italic ">DRUŻYNA</p>
+                <p class="font-italic ">{{ $t('leaguesPage.tableView.teamName') }}</p>
               </v-col>
 
               <v-col cols="1" class="d-flex justify-center align-center">
@@ -104,7 +104,7 @@
             @click="openMatchDetails(game)">
             <v-row>
               <v-col class="justify-center">
-                <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
+                <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase() + ' ' + setMatchWeek(game.league.round) + ' | ' +
                   formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
               </v-col>
             </v-row>
@@ -165,7 +165,7 @@
             @click="openMatchDetails(game)">
             <v-row>
               <v-col class="justify-center">
-                <v-card-subtitle class="text-center ">{{ 'KOLEJKA ' + setMatchWeek(game.league.round) + ' | ' +
+                <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase() + ' ' + setMatchWeek(game.league.round) + ' | ' +
                   formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
               </v-col>
             </v-row>

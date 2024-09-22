@@ -6,36 +6,36 @@
           <div class="flex-column align-center justify-center mx-2 py-5"
             style="background-color: rgba(0, 0, 0, 0.5); width: 100%; max-width: 500px;">
             <span class="text-h3 font-weight-bold text-white">
-              LOGOWANIE
+              {{ $t("auth.login.login").toUpperCase() }}
             </span>
 
             <div class="mx-5 py-2">
               <v-btn color="secondary" variant="outlined" prepend-icon="mdi-google">
-                Zaloguj przez Google
+                {{ $t('auth.login.loginWithGoogle') }}
               </v-btn>
             </div>
 
             <v-form class="mx-5 py-2" v-model="valid">
 
-              <v-text-field v-model="nickName" label="Nick" :rules="[requiredRule()]"></v-text-field>
+              <v-text-field v-model="nickName" :label="$t('auth.login.nickOrEmail')" :rules="[requiredRule()]"></v-text-field>
 
               <v-text-field v-model="password" :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                label="Hasło" :type="showPassword ? 'text' : 'password'"
+                :label="$t('auth.login.password')" :type="showPassword ? 'text' : 'password'"
                 @click:append-inner="showPassword = !showPassword"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
               <v-btn class="mx-5 py-2" variant="outlined" type="submit" color="primary">
-                Zaloguj się
+                {{ $t('auth.login.loginButton') }}
               </v-btn>
 
             </v-form>
             <v-divider :thickness="4" class="border-opacity-75 mx-5 py-1" color="primary"></v-divider>
             <span class="text-h5 font-weight-bold text-white">
-              Nie posiadasz konta? Dołącz już teraz
+              {{ $t('auth.login.goToRegister') }}
             </span>
             <div class="mx-5 py-2">
               <v-btn to="/auth/register" variant="outlined" color="primary">
-                Rejestracja
+                {{ $t('auth.login.registerButton') }}
               </v-btn>
             </div>
           </div>
