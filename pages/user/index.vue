@@ -18,6 +18,58 @@
               </v-tabs>
             </v-col>
           </v-row>
+
+          <v-container>
+            <v-tabs-window v-model="tab">
+              <v-tabs-window-item :value="1">
+                <v-row>
+                  <v-col cols="4">
+                    <v-card class="mx-auto" max-width="400">
+                      <v-card-title>
+                        PREMIER LEAGUE
+                      </v-card-title>
+                      <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
+
+                      <v-card-actions>
+                        <v-btn color="primary">Typuj</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-card class="mx-auto" max-width="400">
+                      <v-card-title>
+                        EKSTRAKLASA
+                      </v-card-title>
+                      <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
+
+                      <v-card-actions>
+                        <v-btn color="primary">Typuj</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-card class="mx-auto" max-width="400">
+                      <v-card-title>
+                        CHAMPIONS LEAGUE
+                      </v-card-title>
+                      <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
+
+                      <v-card-actions>
+                        <v-btn color="primary">Typuj</v-btn>
+
+                      </v-card-actions>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-tabs-window-item>
+              <v-tabs-window-item :value="2">ligi</v-tabs-window-item>
+              <v-tabs-window-item :value="3">profil</v-tabs-window-item>
+
+            </v-tabs-window>
+          </v-container>
+
         </v-sheet>
       </v-img>
     </v-main>
