@@ -75,5 +75,11 @@
       "squadsNotAvailable": "Squads are not yet available.",
       "statsNotAvailable": "Statistics are available after the match starts."
     }
+  },
+  "user": {
+    "welcome": "Welcome, ",
+    "betMatchesView": "Bet games",
+    "leaguesView": "Leagues",
+    "profile": "Profile"
   }  
 }
