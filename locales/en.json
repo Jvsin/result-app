@@ -80,6 +80,7 @@
     "welcome": "Welcome, ",
     "betMatchesView": "Bet games",
     "leaguesView": "Leagues",
-    "profile": "Profile"
+    "profile": "Profile",
+    "betButton": "Bet"
   }  
 }

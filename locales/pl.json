@@ -80,6 +80,7 @@
     "welcome": "Witaj, ",
     "betMatchesView": "Typuj mecze",
     "leaguesView": "Ligi Typerów",
-    "profile": "Profil"
+    "profile": "Profil",
+    "betButton": "Typuj"
   }
 }
