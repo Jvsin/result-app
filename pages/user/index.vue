@@ -24,47 +24,63 @@
               <v-tabs-window-item :value="1">
                 <v-row>
                   <v-col cols="4">
-                    <v-card class="mx-auto" max-width="400">
-                      <v-card-title>
-                        PREMIER LEAGUE
-                      </v-card-title>
-                      <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
+                    <v-hover>
+                      <template v-slot:default="{ isHovering, props }">
+                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
+                          <v-card-title>
+                            PREMIER LEAGUE
+                          </v-card-title>
+                          <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
 
-                      <v-card-actions>
-                        <v-btn color="primary">Typuj</v-btn>
+                          <v-card-actions>
+                            <v-btn block border color="primary">Typuj</v-btn>
 
-                      </v-card-actions>
-                    </v-card>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-hover>
                   </v-col>
                   <v-col cols="4">
-                    <v-card class="mx-auto" max-width="400">
-                      <v-card-title>
-                        EKSTRAKLASA
-                      </v-card-title>
-                      <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
+                    <v-hover>
+                      <template v-slot:default="{ isHovering, props }">
+                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
+                          <v-card-title>
+                            EKSTRAKLASA
+                          </v-card-title>
+                          <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
 
-                      <v-card-actions>
-                        <v-btn color="primary">Typuj</v-btn>
+                          <v-card-actions>
+                            <v-btn block border color="primary">Typuj</v-btn>
 
-                      </v-card-actions>
-                    </v-card>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-hover>
                   </v-col>
                   <v-col cols="4">
-                    <v-card class="mx-auto" max-width="400">
-                      <v-card-title>
-                        CHAMPIONS LEAGUE
-                      </v-card-title>
-                      <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
+                    <v-hover>
+                      <template v-slot:default="{ isHovering, props }">
+                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
+                          <v-card-title>
+                            CHAMPIONS LEAGUE
+                          </v-card-title>
+                          <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
 
-                      <v-card-actions>
-                        <v-btn color="primary">Typuj</v-btn>
+                          <v-card-actions>
+                            <v-btn block border color="primary">Typuj</v-btn>
 
-                      </v-card-actions>
-                    </v-card>
+                          </v-card-actions>
+                        </v-card>
+                      </template>
+                    </v-hover>
                   </v-col>
                 </v-row>
               </v-tabs-window-item>
-              <v-tabs-window-item :value="2">ligi</v-tabs-window-item>
+              <v-tabs-window-item :value="2">
+                <v-container>
+                  ligi
+                </v-container>
+              </v-tabs-window-item>
               <v-tabs-window-item :value="3">profil</v-tabs-window-item>
 
             </v-tabs-window>
