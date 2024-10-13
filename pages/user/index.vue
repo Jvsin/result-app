@@ -73,28 +73,51 @@
                   </v-row>
                 </v-container>
               </v-tabs-window-item>
+
               <v-tabs-window-item :value="1">
+
                 <v-container>
-                  <v-card class="mb-3" v-for="card in leagues">
-                    <v-card-title>
-                      {{ card.name }}
-                    </v-card-title>
-                    <v-card-subtitle>
-                      {{ card.league }}
-                    </v-card-subtitle>
-                  </v-card>
+                  <div v-for="card in leagues">
+                    <v-hover>
+                      <template v-slot:default="{ isHovering, props }">
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3">
+                          <v-row class="d-flex flex-wrap" justify="center">
+                            <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
+                              <v-card-title>
+                                {{ card.name }}
+                              </v-card-title>
+                            </v-col>
+                            <v-col cols="12" sm="3"
+                              class="d-flex flex-column align-center align-sm-start justify-center">
+                              <v-card-subtitle>
+                                {{ card.league }}
+                              </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="12" sm="3"
+                              class="d-flex flex-column align-center align-sm-start justify-center">
+                              <v-card-subtitle>
+                                {{ 'Pozycja: ' + card.position + '/' + card.players }}
+                              </v-card-subtitle>
+                            </v-col>
+                          </v-row>
+                        </v-card>
+                      </template>
+                    </v-hover>
+                  </div>
+
                 </v-container>
               </v-tabs-window-item>
+
               <v-tabs-window-item :value="2">
                 <v-container>
 
                   <v-avatar color="grey" size="80">J</v-avatar>
-                  
+
                   <v-card-title>
                     <div class="text-h2">Jasin</div>
                     <span class="text-h5">Piotr Jasiński</span>
                   </v-card-title>
-                  
+
                   <v-card-subtitle>
                     p.jasina16@gmail.com
                   </v-card-subtitle>
@@ -121,7 +144,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  
+
                   <v-card-actions class="justify-center">
                     <v-btn variant="elevated" color="secondary">
                       Edytuj dane
