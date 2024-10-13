@@ -20,61 +20,114 @@
           <v-container style="height: calc(100% - 150px); overflow-y: auto;">
             <v-tabs-window v-model="tab">
               <v-tabs-window-item :value="0">
-                <v-row>
-                  <v-col cols="12" md="4">
-                    <v-hover>
-                      <template v-slot:default="{ isHovering, props }">
-                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
-                          <v-card-title>
-                            PREMIER LEAGUE
-                          </v-card-title>
-                          <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
-                          <v-card-actions>
-                            <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </template>
-                    </v-hover>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-hover>
-                      <template v-slot:default="{ isHovering, props }">
-                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
-                          <v-card-title>
-                            EKSTRAKLASA
-                          </v-card-title>
-                          <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
-                          <v-card-actions>
-                            <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </template>
-                    </v-hover>
-                  </v-col>
-                  <v-col cols="12" md="4">
-                    <v-hover>
-                      <template v-slot:default="{ isHovering, props }">
-                        <v-card class="mx-auto" max-width="400" v-bind="props" :color="isHovering ? 'grey' : undefined">
-                          <v-card-title>
-                            CHAMPIONS LEAGUE
-                          </v-card-title>
-                          <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
-                          <v-card-actions>
-                            <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </template>
-                    </v-hover>
-                  </v-col>
-                </v-row>
+                <v-container>
+                  <v-row align="center">
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined">
+                            <v-card-title>
+                              PREMIER LEAGUE
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined">
+                            <v-card-title>
+                              EKSTRAKLASA
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined">
+                            <v-card-title>
+                              CHAMPIONS LEAGUE
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                  </v-row>
+                </v-container>
               </v-tabs-window-item>
               <v-tabs-window-item :value="1">
                 <v-container>
-                  ligi
+                  <v-card class="mb-3" v-for="card in leagues">
+                    <v-card-title>
+                      {{ card.name }}
+                    </v-card-title>
+                    <v-card-subtitle>
+                      {{ card.league }}
+                    </v-card-subtitle>
+                  </v-card>
                 </v-container>
               </v-tabs-window-item>
               <v-tabs-window-item :value="2">
-                profil
+                <v-container>
+
+                  <v-avatar color="grey" size="80">J</v-avatar>
+                  
+                  <v-card-title>
+                    <div class="text-h2">Jasin</div>
+                    <span class="text-h5">Piotr Jasiński</span>
+                  </v-card-title>
+                  
+                  <v-card-subtitle>
+                    p.jasina16@gmail.com
+                  </v-card-subtitle>
+
+                  <div class="py-5">
+                    <v-row justify="center">
+                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                        <div>
+                          <v-avatar color="white" image="/public/pl.png"></v-avatar>
+                          <div class="mt-2">8</div>
+                        </div>
+                      </v-col>
+                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                        <div>
+                          <v-avatar image="/public/ekstraklasa.png"></v-avatar>
+                          <div class="mt-2">23</div>
+                        </div>
+                      </v-col>
+                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                        <div>
+                          <v-avatar color="white" image="/public/ucl.png"></v-avatar>
+                          <div class="mt-2">10</div>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </div>
+                  
+                  <v-card-actions class="justify-center">
+                    <v-btn variant="elevated" color="secondary">
+                      Edytuj dane
+                    </v-btn>
+                  </v-card-actions>
+                </v-container>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-container>
@@ -87,6 +140,11 @@
 <script lang="ts" setup>
 
 const tab = ref(0)
+
+const leagues = [
+  { name: "Moja liga testowa", position: 12, players: 24, league: "Premier League", icon: "/public/pl.png" },
+  { name: "Liga graczy", position: 2, players: 10, league: "Ekstraklasa", icon: "/public/ekstraklasa.png" },
+]
 
 </script>
 
