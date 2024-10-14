@@ -80,7 +80,7 @@
                   <div v-for="card in leagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
-                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3">
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3" @click="getRoute()">
                           <v-row class="d-flex flex-wrap" justify="center">
                             <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
                               <v-card-title>
@@ -165,9 +165,17 @@
 const tab = ref(0)
 
 const leagues = [
-  { name: "Moja liga testowa", position: 12, players: 24, league: "Premier League", icon: "/public/pl.png" },
-  { name: "Liga graczy", position: 2, players: 10, league: "Ekstraklasa", icon: "/public/ekstraklasa.png" },
+  { name: "Moja liga testowa", position: 12, players: 24, league: "english-league", icon: "/public/pl.png" },
+  { name: "Liga graczy", position: 2, players: 10, league: "polish-league", icon: "/public/ekstraklasa.png" },
 ]
+
+const router = useRouter();
+
+function getRoute() {
+  // console.log('Navigating to /user/' + value);
+  // router.push(`/user/${value}`);
+  router.push('/user/table')
+}
 
 </script>
 
