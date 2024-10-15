@@ -81,6 +81,7 @@
     "betMatchesView": "Typuj mecze",
     "leaguesView": "Tabele lig",
     "profile": "Profil",
-    "betButton": "Typuj"
+    "betButton": "Typuj",
+    "editProfile": "Edytuj profil"
   }
 }

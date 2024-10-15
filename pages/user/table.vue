@@ -1,5 +1,4 @@
 <template>
-  <div>
     <v-layout class="rounded rounded-md">
       <v-main class="d-flex align-center justify-center" style="height: 100vh; overflow: hidden;">
         <v-img src="/public/english-league.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.6)"
@@ -26,16 +25,13 @@
                     </v-col>
                   </v-row>
                 </v-card>
-                
               </div>
-
             </v-col>
 
           </v-sheet>
         </v-img>
       </v-main>
     </v-layout>
-  </div>
 </template>
 
 <script lang="ts" setup>

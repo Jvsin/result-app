@@ -26,13 +26,14 @@
                       <v-hover>
                         <template v-slot:default="{ isHovering, props }">
                           <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined">
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('eng')">
                             <v-card-title>
                               PREMIER LEAGUE
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                              <v-btn block border color="primary" @click="getBettingRoute('eng')">{{ $t('user.betButton')
+                                }}</v-btn>
                             </v-card-actions>
                           </v-card>
                         </template>
@@ -42,13 +43,14 @@
                       <v-hover>
                         <template v-slot:default="{ isHovering, props }">
                           <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined">
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('pol')">
                             <v-card-title>
                               EKSTRAKLASA
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                              <v-btn block border color="primary" @click="getBettingRoute('pol')">{{ $t('user.betButton')
+                                }}</v-btn>
                             </v-card-actions>
                           </v-card>
                         </template>
@@ -58,13 +60,14 @@
                       <v-hover>
                         <template v-slot:default="{ isHovering, props }">
                           <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined">
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('ucl')">
                             <v-card-title>
                               CHAMPIONS LEAGUE
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary">{{ $t('user.betButton') }}</v-btn>
+                              <v-btn block border color="primary" @click="getBettingRoute('ucl')">{{ $t('user.betButton')
+                                }}</v-btn>
                             </v-card-actions>
                           </v-card>
                         </template>
@@ -80,7 +83,8 @@
                   <div v-for="card in leagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
-                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3" @click="getRoute()">
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
+                          @click="getLeagueRoute()">
                           <v-row class="d-flex flex-wrap" justify="center">
                             <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
                               <v-card-title>
@@ -147,7 +151,7 @@
 
                   <v-card-actions class="justify-center">
                     <v-btn variant="elevated" color="secondary">
-                      Edytuj dane
+                      {{ $t('user.editProfile') }}
                     </v-btn>
                   </v-card-actions>
                 </v-container>
@@ -171,10 +175,16 @@ const leagues = [
 
 const router = useRouter();
 
-function getRoute() {
+function getLeagueRoute() {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
   router.push('/user/table')
+}
+
+function getBettingRoute(league: string) {
+  // console.log('Navigating to /user/' + value);
+  // router.push(`/user/${value}`);
+  router.push(`/user/bet-sites/${league}`)
 }
 
 </script>
