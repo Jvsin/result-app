@@ -4,12 +4,12 @@
       <v-img src="/public/english-league.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.6)"
         class="text-center w-100 h-100">
 
-        <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
+        <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10" elevation="4"
           style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
           <v-row>
             <v-col cols="12">
-              <v-avatar image="/public/england.png"></v-avatar>
-              <v-card-title>
+              <v-card-title class="my-2">
+                <v-avatar image="/public/england.png"></v-avatar>
                 Premier League
               </v-card-title>
               <v-tabs v-model="tab" color="primary" class="px-5" grow>
@@ -24,53 +24,62 @@
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="1">
-                  <v-container class="scrollable-container">
-                    <v-card variant="text" elevation="16" class="py-1" v-for="(game, index) in nextGames" :key="index">
-                      <v-row>
-                        <v-col class="justify-center">
-                          <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
-                            + ' ' + setMatchWeek(game.league.round) + ' | ' +
-                            formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
-                        </v-col>
-                      </v-row>
-                      <div v-if="!mobile">
-                        <v-row class="d-flex align-center" justify="center">
-                          <v-col cols="1" class="d-flex justify-center align-center">
+                  <div class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index">
+                    <v-row>
+                      <v-col class="justify-center">
+                        <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
+                          + ' ' + setMatchWeek(game.league.round) + ' | ' +
+                          formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+                      </v-col>
+                    </v-row>
+                    <!-- <div v-if="!mobile"> -->
+                    <v-row class="d-flex align-center" justify="center">
+                      <v-col cols="2" md="1" class="d-flex justify-center align-center">
+                        <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                      </v-col>
+                      <v-col cols="2" class="d-none d-md-flex justify-center align-center">
+                        <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                      </v-col>
+
+                      <v-col cols="auto">
+                        <v-number-input reverse controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                          variant="outlined"></v-number-input>
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-number-input controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                          variant="outlined"></v-number-input>
+                      </v-col>
+
+                      <v-col cols="2" class="d-none d-md-flex justify-center align-center">
+                        <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                      </v-col>
+                      <v-col cols="2" md="1" class="d-flex justify-center align-center">
+                        <v-img :max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                      </v-col>
+                    </v-row>
+
+                    <!-- </div> -->
+                    <!-- <div v-else> -->
+                    <!-- <v-row class="d-flex align-center" justify="center">
+                          <v-col cols="2" class="d-flex justify-center align-center">
                             <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                           </v-col>
                           <v-col cols="4" class="d-flex justify-center align-center">
-                            <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                            <v-number-input reverse controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                              variant="outlined"></v-number-input>
                           </v-col>
-
-                          <v-col cols="1">
-                            <v-number-input control-variant="default" inset></v-number-input>
-                            <v-number-input control-variant="default" inset></v-number-input>
-                          </v-col>
-
                           <v-col cols="4" class="d-flex justify-center align-center">
-                            <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                            <v-number-input controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                              variant="outlined"></v-number-input>
                           </v-col>
-                          <v-col cols="1" class="d-flex justify-center align-center">
+                          <v-col cols="2" class="d-flex justify-center align-center">
                             <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
                           </v-col>
-                        </v-row>
-                      </div>
-                      <div v-else>
-                        <v-row class="d-flex align-center" justify="center">
-                          <v-col cols="4" class="d-flex justify-center align-center">
-                            <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
-                          </v-col>
-                          <v-col cols="4">
-                            <div no-wrap class="text-center text-h4"> - </div>
-                          </v-col>
-                          <v-col cols="4" class="d-flex justify-center align-center">
-                            <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
-                          </v-col>
-                        </v-row>
-                      </div>
-
-                    </v-card>
-                  </v-container>
+                        </v-row> -->
+                    <!-- </div> -->
+                  </v-card>
+                  </div>
                 </v-tabs-window-item>
               </v-tabs-window>
             </v-col>

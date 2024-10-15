@@ -1,6 +1,7 @@
 import { createVuetify } from 'vuetify';
 import 'vuetify/styles'; // Global CSS has to be imported
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
+import { VNumberInput } from 'vuetify/labs/VNumberInput'
 
 export default defineNuxtPlugin(nuxtApp => {
   const vuetify = createVuetify({
@@ -28,6 +29,9 @@ export default defineNuxtPlugin(nuxtApp => {
           },
       },
     },
+    components: {
+      VNumberInput,
+    }
   });
   
 
