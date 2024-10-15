@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="leagueData">
-    <v-tabs v-model="tab" align-tabs="start" color="primary">
+    <v-tabs v-model="tab" align-tabs="start" color="primary" grow>
       <v-tab :key="0" value="0">{{ $t("leaguesPage.table") }}</v-tab>
       <v-tab :key="1" value="1">{{ $t("leaguesPage.results") }}</v-tab>
       <v-tab :key="2" value="2">{{ $t("leaguesPage.fixtures") }}</v-tab>
