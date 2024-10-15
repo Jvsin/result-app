@@ -36,24 +36,24 @@ export const useBetStore = defineStore('bets', {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
       };
-
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: headers,
-        });
-        const data = await response.json();
-        if (data && data.response) {
-          this.nextGames = data.response;
-          console.log(this.nextGames)
-        } else {
-          this.nextGames = null;
-        }
-        // this.nextGamesData = json3
-      } catch (error) {
-        console.error('Error fetching fixtures data:', error);
-        this.nextGames = null;
-      }
+      this.nextGames = json
+      // try {
+      //   const response = await fetch(url, {
+      //     method: 'GET',
+      //     headers: headers,
+      //   });
+      //   const data = await response.json();
+      //   if (data && data.response) {
+      //     this.nextGames = data.response;
+      //     console.log(this.nextGames)
+      //   } else {
+      //     this.nextGames = null;
+      //   }
+      //   // this.nextGamesData = json3
+      // } catch (error) {
+      //   console.error('Error fetching fixtures data:', error);
+      //   this.nextGames = null;
+      // }
     },
   }
 })
