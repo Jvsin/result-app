@@ -82,6 +82,9 @@
     "leaguesView": "Leagues table",
     "profile": "Profile",
     "betButton": "Bet",
-    "editProfile": "Edit profile"
+    "editProfile": "Edit profile",
+    "yourBets": "Your bets",
+    "bet": "Bet games",
+    "saveBets": "Save your bets"
   }  
 }
