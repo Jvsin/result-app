@@ -28,37 +28,37 @@
                         </v-col>
                       </v-row>
                       <v-row>
-                          <v-col cols="8">
-                            
+                          <v-col cols="7">
                             <v-row justify="center">
-                              <v-col cols="4" class="d-flex justify-end align-center">
+                              <v-col cols="3" class="d-flex justify-end align-center">
                                 <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                               </v-col>
-                              <v-col cols="4" class="d-flex flex-column justify-center align-center">
+                              <v-col cols="5" class="d-flex flex-column justify-center align-center">
                                 <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
                                 <v-card-subtitle v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{ game.fixture.status.elapsed }}
                               </v-card-subtitle>
                               </v-col>
-                              <v-col cols="4" class="d-flex justify-start align-center">
+                              <v-col cols="3" class="d-flex justify-start align-center">
                                 <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
                               </v-col>
                             </v-row>
                           </v-col>
-                          <v-col cols="4" class="d-flex align-center justify-center">
-                            <v-row justify="space-around">
-                              <v-col cols="6" class="d-flex flex-column justify-center align-center">
-                                <v-card-subtitle>
-                                  Twój typ:
-                                </v-card-subtitle>
-                                <div class="text-h4">0-0</div>
-                              </v-col>
-                              <v-col cols="6" class="d-flex flex-column justify-center align-center">
-                                <v-card-subtitle>
-                                  Punkty:
-                                </v-card-subtitle>
-                                <div >3 pkt</div>
-                              </v-col> 
-                            </v-row>  
+                          <v-col cols="5">
+                            <v-row justify="center">
+                            <v-col cols="6" class="d-flex justify-center align-center">
+                              <v-card-subtitle class="d-none d-md-flex">
+                                Twój typ:
+                              </v-card-subtitle>
+                              <div class="text-h4">0-0</div>
+                            </v-col>
+                            <v-col cols="6" class="d-flex justify-center align-center">
+                              <v-card-subtitle class="d-none d-md-flex">
+                                Punkty:
+                              </v-card-subtitle>
+                              <div class="text-h4">+3</div>
+                            </v-col>
+                          </v-row>
+ 
                           </v-col>
                       </v-row>
                     </v-card>
