@@ -29,14 +29,20 @@
                       </v-row>
                       <v-row>
                           <v-col cols="7">
-                            <v-row justify="center">
+                            <v-row justify="space-around">
                               <v-col cols="3" class="d-flex justify-end align-center">
                                 <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                               </v-col>
-                              <v-col cols="5" class="d-flex flex-column justify-center align-center">
+                              <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
+                                <v-card-title >{{ makeShortName(game.teams.home.name) }}</v-card-title>
+                              </v-col>
+                              <v-col cols="4" md="auto" class="d-flex flex-column justify-center align-center">
                                 <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
                                 <v-card-subtitle v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{ game.fixture.status.elapsed }}
                               </v-card-subtitle>
+                              </v-col>
+                              <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
+                                <v-card-title >{{ makeShortName(game.teams.away.name) }}</v-card-title>
                               </v-col>
                               <v-col cols="3" class="d-flex justify-start align-center">
                                 <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
@@ -156,7 +162,18 @@ function setColor(bet: any) {
   }
 }
 
+function makeShortName(name: string) {
+  const space = name.indexOf(' ')
+  if (space !== -1) {
+    return (name.substring(0,1) + name.substring(space + 1, space + 3)).toUpperCase()
+  }
+  else {
+    return name.substring(0,3).toUpperCase()
+  }
+}
+
 onMounted(() => {
+  console.log("liverpool".indexOf(' '))
   betStore.fetchNextGames(39, 2024)
   betStore.fetchLastFixturesData(39,2024)
 })
@@ -166,5 +183,11 @@ onMounted(() => {
 .scrollable-container {
   max-height: 75vh;
   overflow-y: auto;
+}
+.truncate-text {
+  overflow: hidden;           /* Ukryj nadmiar tekstu */
+  white-space: nowrap;       /* Nie łam tekstu do nowej linii */
+  text-overflow: ellipsis;   /* Dodaj wielokropek na końcu nadmiaru tekstu */
+  max-width: 12ch;   
 }
 </style>
