@@ -18,66 +18,69 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-                  <div class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <v-card :color="setColor(0)" variant="text" elevation="16" v-for="(game, index) in lastGames" :key="index">
+                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-card :color="setColor(0)" variant="text" elevation="16" v-for="(game, index) in lastGames"
+                      :key="index" class="my-5 px-4">
                       <v-row>
                         <v-col class="justify-center">
                           <v-card-subtitle class="text-center">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
                             + ' ' + setMatchWeek(game.league.round) + ' | ' +
-                            formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>      
+                            formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
                         </v-col>
                       </v-row>
                       <v-row>
-                          <v-col cols="7">
-                            <v-row justify="space-around">
-                              <v-col cols="3" class="d-flex justify-end align-center">
-                                <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
-                              </v-col>
-                              <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
-                                <v-card-title >{{ makeShortName(game.teams.home.name) }}</v-card-title>
-                              </v-col>
-                              <v-col cols="4" md="auto" class="d-flex flex-column justify-center align-center">
-                                <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
-                                <v-card-subtitle v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{ game.fixture.status.elapsed }}
-                              </v-card-subtitle>
-                              </v-col>
-                              <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
-                                <v-card-title >{{ makeShortName(game.teams.away.name) }}</v-card-title>
-                              </v-col>
-                              <v-col cols="3" class="d-flex justify-start align-center">
-                                <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
-                              </v-col>
-                            </v-row>
-                          </v-col>
-                          <v-col cols="5">
-                            <v-row justify="center">
-                            <v-col cols="6" class="d-flex justify-center align-center">
-                              <v-card-subtitle class="d-none d-md-flex">
-                                Twój typ:
-                              </v-card-subtitle>
-                              <div class="text-h4">0-0</div>
+                        <v-col cols="7">
+                          <v-row justify="space-around" no-gutters>
+                            <v-col cols="3" class="d-flex justify-end align-center">
+                              <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
                             </v-col>
-                            <v-col cols="6" class="d-flex justify-center align-center">
-                              <v-card-subtitle class="d-none d-md-flex">
+                            <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
+                              <v-card-title>{{ makeShortName(game.teams.home.name) }}</v-card-title>
+                            </v-col>
+                            <v-col cols="4" class="d-flex flex-column justify-center align-center">
+                              <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}
+                              </div>
+                            </v-col>
+                            <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
+                              <v-card-title>{{ makeShortName(game.teams.away.name) }}</v-card-title>
+                            </v-col>
+                            <v-col cols="3" class="d-flex justify-start align-center">
+                              <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                            </v-col>
+                          </v-row>
+                        </v-col>
+                        <v-col cols="5" class="d-flex align-center">
+                          <v-row justify="center">
+                            <v-col cols="6" class="d-flex flex-column justify-center align-center">
+                              <div>
+                                <v-card-subtitle>
+                                  Twój typ:
+                                </v-card-subtitle>
+                                <div class="text-h4">0-0</div>
+                              </div>
+                            </v-col>
+                            <v-col cols="6" class="d-flex flex-column justify-center align-center">
+                              <v-card-subtitle>
                                 Punkty:
                               </v-card-subtitle>
                               <div class="text-h4">+3</div>
                             </v-col>
                           </v-row>
- 
-                          </v-col>
+
+                        </v-col>
                       </v-row>
                     </v-card>
-                  </div>
+                  </v-container>
 
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="1">
-                  <div class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
                     <v-card-actions class="justify-center">
                       <v-btn color="primary" variant="tonal" size="large">{{ $t('user.saveBets') }}</v-btn>
                     </v-card-actions>
-                    <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index">
+                    <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index"
+                      class="my-10 px-4">
                       <v-row>
                         <v-col class="justify-center">
                           <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
@@ -85,7 +88,6 @@
                             formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
                         </v-col>
                       </v-row>
-                      <v-row></v-row>
                       <v-row class="d-flex align-center" justify="center">
                         <v-col cols="2" md="1" class="d-flex justify-center align-center">
                           <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
@@ -94,11 +96,9 @@
                           <v-card-title>{{ game.teams.home.name }}</v-card-title>
                         </v-col>
 
-                        <v-col cols="auto">
+                        <v-col cols="auto" class="d-flex justify-center align-center mt-3">
                           <v-number-input :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                             :inset="false" variant="outlined"></v-number-input>
-                        </v-col>
-                        <v-col cols="auto">
                           <v-number-input :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
                             variant="outlined"></v-number-input>
                         </v-col>
@@ -111,7 +111,7 @@
                         </v-col>
                       </v-row>
                     </v-card>
-                  </div>
+                  </v-container>
                 </v-tabs-window-item>
               </v-tabs-window>
             </v-col>
@@ -179,15 +179,9 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .scrollable-container {
   max-height: 75vh;
   overflow-y: auto;
-}
-.truncate-text {
-  overflow: hidden;           /* Ukryj nadmiar tekstu */
-  white-space: nowrap;       /* Nie łam tekstu do nowej linii */
-  text-overflow: ellipsis;   /* Dodaj wielokropek na końcu nadmiaru tekstu */
-  max-width: 12ch;   
 }
 </style>
