@@ -18,9 +18,52 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-                  <v-container>
-                    tu beda wyniki
-                  </v-container>
+                  <div class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-card :color="setColor(0)" variant="text" elevation="16" v-for="(game, index) in lastGames" :key="index">
+                      <v-row>
+                        <v-col class="justify-center">
+                          <v-card-subtitle class="text-center">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
+                            + ' ' + setMatchWeek(game.league.round) + ' | ' +
+                            formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>      
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                          <v-col cols="8">
+                            
+                            <v-row justify="center">
+                              <v-col cols="4" class="d-flex justify-end align-center">
+                                <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                              </v-col>
+                              <v-col cols="4" class="d-flex flex-column justify-center align-center">
+                                <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}</div>
+                                <v-card-subtitle v-if="game.fixture.status.short !== 'FT'" no-wrap class="text-center">{{ game.fixture.status.elapsed }}
+                              </v-card-subtitle>
+                              </v-col>
+                              <v-col cols="4" class="d-flex justify-start align-center">
+                                <v-img max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                          <v-col cols="4" class="d-flex align-center justify-center">
+                            <v-row justify="space-around">
+                              <v-col cols="6" class="d-flex flex-column justify-center align-center">
+                                <v-card-subtitle>
+                                  Twój typ:
+                                </v-card-subtitle>
+                                <div class="text-h4">0-0</div>
+                              </v-col>
+                              <v-col cols="6" class="d-flex flex-column justify-center align-center">
+                                <v-card-subtitle>
+                                  Punkty:
+                                </v-card-subtitle>
+                                <div >3 pkt</div>
+                              </v-col> 
+                            </v-row>  
+                          </v-col>
+                      </v-row>
+                    </v-card>
+                  </div>
+
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="1">
@@ -81,6 +124,7 @@ const { mobile } = useDisplay()
 
 const betStore = useBetStore()
 const nextGames = computed(() => betStore.nextGames);
+const lastGames = computed(() => betStore.pastGames)
 
 function setMatchWeek(input: string): string {
   if (input.length === 0) {
@@ -100,14 +144,27 @@ function formatTimestamp(timestamp: number): string {
 
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
 }
+
+function setColor(bet: any) {
+  switch (bet) {
+    case 3:
+      return 'green'
+    case 1:
+      return "orange";
+    case 0:
+      return "red";
+  }
+}
+
 onMounted(() => {
   betStore.fetchNextGames(39, 2024)
+  betStore.fetchLastFixturesData(39,2024)
 })
 </script>
 
 <style>
 .scrollable-container {
-  max-height: 700px;
+  max-height: 75vh;
   overflow-y: auto;
 }
 </style>
