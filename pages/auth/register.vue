@@ -26,14 +26,15 @@
             </div>
 
             <v-form class="mx-5 py-2" v-model="valid" ref="form">
-              <v-text-field v-model="email" :label="$t('auth.register.email')" :rules="[requiredRule(), emailRule()]"></v-text-field>
+              <v-text-field v-model="email" :label="$t('auth.register.email')"
+                :rules="[requiredRule(), emailRule()]"></v-text-field>
 
               <v-text-field v-model="nickName" :label="$t('auth.register.nick')"
                 :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
 
               <v-text-field v-model="name" :label="$t('auth.register.name')"
-                :rules="[requiredRule(), lengthRuleShort(), lengthRule()] "></v-text-field>
-              <v-text-field v-model=" surname" :label="$t('auth.register.surname')"
+                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
+              <v-text-field v-model="surname" :label="$t('auth.register.surname')"
                 :rules="[requiredRule(), lengthRuleShort(), surnameLengthRule()]"></v-text-field>
 
               <!-- <v-checkbox @click="showPasswords = !showPasswords" label="Pokaż hasła"></v-checkbox> -->
@@ -42,8 +43,8 @@
                 @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
               <v-text-field v-model="password2" :type="showPasswords ? 'text' : 'password'"
-                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" :label="$t('auth.register.repeatPassword')"
-                @click:append-inner="showPasswords = !showPasswords"
+                :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'"
+                :label="$t('auth.register.repeatPassword')" @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
               <v-btn class="me-4" @click="registerUser" variant="outlined" type="submit" color="primary">
@@ -59,44 +60,70 @@
       </v-row>
     </v-img>
   </v-layout>
-
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import formValidation from "~/composables/formValidation";
-import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from "~/composables/rules";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
+import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from '~/composables/rules';
+import formValidation from '~/composables/formValidation';
+import { type IUser, UserModel } from '~/models/user';
 
-const { form, valid, isValid } = formValidation()
+const { valid } = formValidation();
 
-const nickName = ref('')
-const email = ref('')
-const name = ref('')
-const surname = ref('')
-const password1 = ref('')
-const password2 = ref('')
+const router = useRouter();
+const authStore = useAuthStore();
 
-const showPasswords = ref(false)
+const nickName = ref('');
+const email = ref('');
+const name = ref('');
+const surname = ref('');
+const password1 = ref('');
+const password2 = ref('');
+
+const showPasswords = ref(false);
 
 function comparePasswords() {
-  return password1.value === password2.value
+  return password1.value === password2.value;
 }
 
 function handleReset() {
-  nickName.value = ''
-  email.value = ''
-  name.value = ''
-  surname.value = ''
-  password1.value = ''
-  password2.value = ''
+  nickName.value = '';
+  email.value = '';
+  name.value = '';
+  surname.value = '';
+  password1.value = '';
+  password2.value = '';
 }
 
-function registerUser() {
-  handleReset()
+async function registerUser() {
+  if (!comparePasswords()) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  const userData: IUser = {
+    email: email.value,
+    nick: nickName.value,
+    name: name.value,
+    surname: surname.value,
+    favLeagues: [],
+    photo: '',
+    role: 'user',
+    leagues: []
+  };
+
+  try {
+    await authStore.registerWithPassword(email.value, password1.value, userData);
+    handleReset();
+    router.push('/user');  
+  } catch (error) {
+    console.error('Error registering user:', error);
+  }
 }
 </script>
 
 <style>
-
+/* Your styles here */
 </style>
