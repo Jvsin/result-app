@@ -1,6 +1,6 @@
 <template>
   <v-app-bar>
-    <v-btn icon="mdi-format-list-bulleted" v-if="isMdAndDown" @click="drawer = !drawer"
+    <v-btn icon="mdi-format-list-bulleted" @click="drawer = !drawer"
       class="d-flex align-center justify-center" />
 
     <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
@@ -12,7 +12,7 @@
       style="max-width: 120px;" class="d-flex align-center justify-center" /> -->
   </v-app-bar>
 
-  <v-navigation-drawer v-if="isMdAndDown" v-model="drawer">
+  <v-navigation-drawer v-model="drawer">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
         <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
@@ -25,7 +25,7 @@
     </div>
   </v-navigation-drawer>
 
-  <v-navigation-drawer v-if="isSmAndUp">
+  <!-- <v-navigation-drawer v-if="isSmAndUp">
     <v-list>
       <v-list-item v-for="button in buttons" :key="button.value">
         <v-btn @click="getRoute(button.id)">{{ button.title }}</v-btn>
@@ -35,7 +35,7 @@
       <v-select v-model="locale" class="mx-2 my-4" variant="plain" hide-details :items="languages" dense
         style="max-width: 120px;" />
     </div>
-  </v-navigation-drawer>
+  </v-navigation-drawer> -->
 </template>
 
 <script setup>

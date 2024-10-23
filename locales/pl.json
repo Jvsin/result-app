@@ -75,5 +75,17 @@
       "squadsNotAvailable": "Składy nie są jeszcze dostępne.",
       "statsNotAvailable": "Statystyki dostępne są po rozpoczęciu meczu."
     }
+  },
+  "user": {
+    "welcome": "Witaj, ",
+    "betMatchesView": "Typuj mecze",
+    "leaguesView": "Tabele lig",
+    "profile": "Profil",
+    "betButton": "Typuj",
+    "editProfile": "Edytuj profil",
+    "yourBets": "Twoje wyniki",
+    "bet": "Typuj",
+    "saveBets": "Zapisz swoje typy"
+
   }
 }
