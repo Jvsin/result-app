@@ -40,7 +40,19 @@ export default defineNuxtConfig({
     // '@flaticon/flaticon-uicons/css/all/all.css',
   ],
 
-  plugins: ['~/plugins/vuetify.ts'],
+  plugins: ['~/plugins/vuetify.ts', '~/plugins/firebase.ts'],
 
   compatibilityDate: '2024-08-16',
+
+  runtimeConfig: {
+    public: {
+      firebaseApiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+      firebaseAuthDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+      firebaseProjectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+      firebaseStorageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+      firebaseMessagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+      firebaseAppId: process.env.VUE_APP_FIREBASE_APP_ID,
+      firebaseMeasurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
+    }
+  }
 })

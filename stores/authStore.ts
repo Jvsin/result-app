@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
 import { DocumentReference, getFirestore, doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '@/firebaseConfig';
+// import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
   const auth = getAuth();
@@ -21,12 +21,17 @@ export const useAuthStore = defineStore('auth', () => {
     let createdUserRef: DocumentReference | null
 
     try {
+     console.log("Registering user with email:", email);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       user.value = userCredential.user;
+      console.log("User registered:", user.value);
 
-      await setDoc(doc(db, "users", userCredential.user.uid), userData);
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+      await setDoc(userDocRef, userData);
+      console.log("User data saved to Firestore:", userData);
 
     } catch (err: any) {
+      console.log("tutaj sie wywala")
       error.value = err.message;
     } finally {
       loading.value = false;

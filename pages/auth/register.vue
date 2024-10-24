@@ -25,7 +25,7 @@
               </v-btn>
             </div>
 
-            <v-form class="mx-5 py-2" v-model="valid" ref="form">
+            <v-form class="mx-5 py-2" v-model="valid" ref="form" @submit.prevent="registerUser">
               <v-text-field v-model="email" :label="$t('auth.register.email')"
                 :rules="[requiredRule(), emailRule()]"></v-text-field>
 
@@ -47,7 +47,7 @@
                 :label="$t('auth.register.repeatPassword')" @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
-              <v-btn class="me-4" @click="registerUser" variant="outlined" type="submit" color="primary">
+              <v-btn class="me-4" variant="outlined" type="submit" color="primary">
                 {{ $t("auth.register.registerButton") }}
               </v-btn>
 
@@ -98,11 +98,11 @@ function handleReset() {
 }
 
 async function registerUser() {
+  console.log("wszedłem w funkcję po przycisku")
   if (!comparePasswords()) {
     alert("Passwords do not match");
-    return;
+    // return;
   }
-
   const userData: IUser = {
     email: email.value,
     nick: nickName.value,
@@ -113,6 +113,7 @@ async function registerUser() {
     role: 'user',
     leagues: []
   };
+  console.log("dane " + userData)
 
   try {
     await authStore.registerWithPassword(email.value, password1.value, userData);
