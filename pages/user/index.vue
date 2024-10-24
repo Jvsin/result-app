@@ -32,7 +32,8 @@
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('eng')">{{ $t('user.betButton')
+                              <v-btn block border color="primary" @click="getBettingRoute('eng')">{{
+                                $t('user.betButton')
                                 }}</v-btn>
                             </v-card-actions>
                           </v-card>
@@ -49,7 +50,8 @@
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('pol')">{{ $t('user.betButton')
+                              <v-btn block border color="primary" @click="getBettingRoute('pol')">{{
+                                $t('user.betButton')
                                 }}</v-btn>
                             </v-card-actions>
                           </v-card>
@@ -66,7 +68,8 @@
                             </v-card-title>
                             <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
                             <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('ucl')">{{ $t('user.betButton')
+                              <v-btn block border color="primary" @click="getBettingRoute('ucl')">{{
+                                $t('user.betButton')
                                 }}</v-btn>
                             </v-card-actions>
                           </v-card>
@@ -153,6 +156,9 @@
                     <v-btn variant="elevated" color="secondary">
                       {{ $t('user.editProfile') }}
                     </v-btn>
+                    <v-btn variant="elevated" color="error" @click="handleLogout">
+                      {{ $t('user.logout') }}
+                    </v-btn>
                   </v-card-actions>
                 </v-container>
               </v-tabs-window-item>
@@ -188,6 +194,16 @@ function getBettingRoute(league: string) {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
   router.push(`/user/bet-sites/${league}`)
+}
+
+async function handleLogout() {
+  try {
+    await authStore.logout()
+    router.push('/')
+  }
+  catch (err: any) {
+    console.log(err)
+  }
 }
 
 </script>

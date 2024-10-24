@@ -4,7 +4,8 @@
   "appName": "MATCH RESULTS APP",
   "landingPage": {
     "description": "Create own tournament and bet with your friends!",
-    "join": "Enter now!"
+    "join": "Enter now!",
+    "login": "Login"
   },
   "auth": {
     "register": {
@@ -85,6 +86,7 @@
     "editProfile": "Edit profile",
     "yourBets": "Your bets",
     "bet": "Bet games",
-    "saveBets": "Save your bets"
+    "saveBets": "Save your bets",
+    "logout": "Logout"
   }  
 }

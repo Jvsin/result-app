@@ -70,8 +70,11 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await signOut(auth);
       user.value = null;
+      loggedUserData.value = null
+      console.log(loggedUserData.value + ' ' + user.value)
     } catch (err: any) {
       error.value = err.message;
+      console.log(error.value)
     } finally {
       loading.value = false;
     }
