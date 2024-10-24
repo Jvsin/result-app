@@ -9,6 +9,7 @@ import { DocumentReference, getFirestore, doc, setDoc } from 'firebase/firestore
 export const useAuthStore = defineStore('auth', () => {
   const auth = getAuth();
   const user = ref(null);
+  const loggedUserData = ref(null)
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -49,7 +50,12 @@ export const useAuthStore = defineStore('auth', () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       user.value = userCredential.user;
     } catch (err: any) {
-      error.value = err.message;
+      console.log("Error during registration:", err);
+      if (err.code === 'auth/invalid-credential') {
+        error.value = 'loginErrorInvalidCredential';
+      } else {
+        error.value = 'loginErrorBasic';
+      }
     } finally {
       loading.value = false;
     }

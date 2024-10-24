@@ -15,14 +15,19 @@
               </v-btn>
             </div>
 
-            <v-form class="mx-5 py-2" v-model="valid">
+            <v-form class="mx-5 py-2" v-model="valid" @submit.prevent="loginUser">
 
-              <v-text-field v-model="nickName" :label="$t('auth.login.nickOrEmail')" :rules="[requiredRule()]"></v-text-field>
+              <v-text-field v-model="email" :label="$t('auth.login.nickOrEmail')"
+                :rules="[requiredRule(), emailRule()]"></v-text-field>
 
               <v-text-field v-model="password" :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$t('auth.login.password')" :type="showPassword ? 'text' : 'password'"
                 @click:append-inner="showPassword = !showPassword"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
+
+              <v-alert v-if="error" type="error" class="my-2">
+                {{ error }}
+              </v-alert>
 
               <v-btn class="mx-5 py-2" variant="outlined" type="submit" color="primary">
                 {{ $t('auth.login.loginButton') }}
@@ -46,22 +51,44 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-import formValidation from "~/composables/formValidation";
-import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from "~/composables/rules";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import formValidation from "~/composables/formValidation"
+import { emailRule, passwordRule, requiredRule } from "~/composables/rules"
 
-const { form, valid, isValid } = formValidation()
+const { valid } = formValidation()
+
 const showPassword = ref(false)
-const nickName = ref('')
+const email = ref('')
 const password = ref('')
+const error = ref<string | null>(null)
+const loading = ref(false)
 
-function loginUser() {
-  const nickName = ''
-  const password = ''
+const router = useRouter()
+
+const authStore = useAuthStore()
+
+async function loginUser() {
+  loading.value = true
+  error.value = null
+  try {
+    await authStore.login(email.value, password.value)
+    if (authStore.error) {
+      error.value = authStore.error
+      console.log(error.value)
+    }
+    else { 
+      router.push('/user')
+    }
+  } catch (err: any) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
 <style>
-
+/* Your styles here */
 </style>
