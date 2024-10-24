@@ -26,7 +26,7 @@
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
               <v-alert v-if="error" type="error" class="my-2">
-                {{ error }}
+                {{ $t(`errors.login.${error}`) }}
               </v-alert>
 
               <v-btn class="mx-5 py-2" variant="outlined" type="submit" color="primary">

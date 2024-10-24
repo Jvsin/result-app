@@ -88,5 +88,15 @@
     "bet": "Typuj",
     "saveBets": "Zapisz swoje typy",
     "logout": "Wyloguj się"
+  },
+  "errors": {
+    "register": {
+      "registerErrorBasic": "Błąd podczas tworzenia konta. Spróbuj ponownie później.",
+      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!"
+    },
+    "login": {
+      "loginErrorBasic": "Błąd podczas logowania. Spróbuj ponownie później.",
+      "loginErrorInvalidCredential": "Błędny email, nick lub hasło!"
+    }
   }
 }

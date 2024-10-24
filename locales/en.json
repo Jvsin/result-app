@@ -88,5 +88,15 @@
     "bet": "Bet games",
     "saveBets": "Save your bets",
     "logout": "Logout"
+  },
+  "errors":{
+    "register": {
+      "registerErrorBasic": "Error while creating account. Try agan later.",
+      "registerErrorEmailInUse": "Email in use!"
+    },
+    "login": {
+      "loginErrorBasic": "Error while login. Try again later.",
+      "loginErrorInvalidCredential": "Invalid email, nickname or password!"
+    }
   }  
 }
