@@ -47,6 +47,10 @@
                 :label="$t('auth.register.repeatPassword')" @click:append-inner="showPasswords = !showPasswords"
                 :rules="[requiredRule(), passwordRule()]"></v-text-field>
 
+              <v-alert v-if="error" type="error" class="my-2">
+                {{ error }}
+              </v-alert>
+
               <v-btn class="me-4" variant="outlined" type="submit" color="primary">
                 {{ $t("auth.register.registerButton") }}
               </v-btn>
@@ -83,6 +87,7 @@ const password1 = ref('');
 const password2 = ref('');
 
 const showPasswords = ref(false);
+const error = ref<string | null>(null);
 
 function comparePasswords() {
   return password1.value === password2.value;
@@ -98,7 +103,6 @@ function handleReset() {
 }
 
 async function registerUser() {
-  console.log("wszedłem w funkcję po przycisku")
   if (!comparePasswords()) {
     alert("Passwords do not match");
     // return;
@@ -113,14 +117,18 @@ async function registerUser() {
     role: 'user',
     leagues: []
   };
-  console.log("dane " + userData)
 
   try {
     await authStore.registerWithPassword(email.value, password1.value, userData);
-    handleReset();
-    router.push('/user');  
-  } catch (error) {
-    console.error('Error registering user:', error);
+    if (authStore.error) {
+      error.value = authStore.error;
+      console.log(error.value)
+    } else {
+      handleReset();
+      router.push('/user');
+    }
+  } catch (err) {
+    console.error('Error registering user:', err);
   }
 }
 </script>
