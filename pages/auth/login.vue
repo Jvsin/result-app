@@ -73,7 +73,7 @@ async function loginUser() {
   loading.value = true
   error.value = null
   try {
-    await authStore.login(email.value, password.value)
+    await authStore.loginWithPassword(email.value, password.value)
     if (authStore.error) {
       error.value = authStore.error
       console.log(error.value)

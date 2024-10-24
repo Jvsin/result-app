@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const loginWithPassword = async (email: string, password: string) => {
     loading.value = true;
     error.value = null;
     try {
@@ -74,5 +74,5 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  return { user, loading, error, registerWithPassword, login, logout };
+  return { user, loading, error, registerWithPassword, loginWithPassword, logout };
 });
