@@ -7,7 +7,7 @@
           style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
           <v-row class="d-flex align-center flex-wrap" style="height: 150px;">
             <v-col cols="12" sm="4" md="6" class="d-flex justify-center justify-sm-start align-center mb-2 mb-sm-0">
-              <span class="text-h4 text-center text-sm-left px-5">{{ $t('user.welcome') + "Jasin!" }}</span>
+              <span class="text-h4 text-center text-sm-left px-5">{{ $t('user.welcome') + userData?.nick + '!' }}</span>
             </v-col>
             <v-col cols="12" sm="8" md="6" class="d-flex justify-center justify-sm-end justify-md-end align-center">
               <v-tabs v-model="tab" align-tabs="start" color="primary" class="px-5">
@@ -118,12 +118,12 @@
                   <v-avatar color="grey" size="80">J</v-avatar>
 
                   <v-card-title>
-                    <div class="text-h2">Jasin</div>
-                    <span class="text-h5">Piotr Jasiński</span>
+                    <div class="text-h2">{{ userData?.nick }}</div>
+                    <span class="text-h5">{{ userData?.name + ' ' + userData?.surname }}</span>
                   </v-card-title>
 
                   <v-card-subtitle>
-                    p.jasina16@gmail.com
+                    {{ userData?.email }}
                   </v-card-subtitle>
 
                   <div class="py-5">
@@ -174,6 +174,9 @@ const leagues = [
 ]
 
 const router = useRouter();
+
+const authStore = useAuthStore()
+const userData = authStore.loggedUserData
 
 function getLeagueRoute() {
   // console.log('Navigating to /user/' + value);

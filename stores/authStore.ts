@@ -3,13 +3,13 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
   const auth = getAuth();
   const user = ref(null);
-  const loggedUserData = ref(null)
+  const loggedUserData = ref<UserModel | null>(null)
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -49,6 +49,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       user.value = userCredential.user;
+      console.log(userCredential.user.uid)
+      await fetchUserData(userCredential.user.uid)
+
     } catch (err: any) {
       console.log("Error during registration:", err);
       if (err.code === 'auth/invalid-credential') {
@@ -74,5 +77,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  return { user, loading, error, registerWithPassword, loginWithPassword, logout };
+  const fetchUserData = async (uid: string) => { 
+    loading.value = true;
+    error.value = null;
+    try {
+      const userDocRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as IUser;
+        loggedUserData.value = new UserModel(userData, userDocRef);
+      } else {
+        error.value = "User data not found";
+        loggedUserData.value = null;
+      }
+    } catch (err: any) {
+      error.value = err.message;
+      loggedUserData.value = null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  return { user, loading, error, loggedUserData, registerWithPassword, loginWithPassword, logout };
 });
