@@ -115,7 +115,10 @@ async function registerUser() {
     favLeagues: [],
     photo: '',
     role: 'user',
-    leagues: []
+    leagues: [],
+    polPoints: 0,
+    engPoints: 0,
+    uclPoints: 0
   };
 
   try {

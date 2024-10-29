@@ -31,6 +31,11 @@ export const useAuthStore = defineStore('auth', () => {
       await setDoc(userDocRef, userData);
       console.log("User data saved to Firestore:", userData);
 
+      if (userCredential) {
+        console.log("wszedłem")
+        await fetchUserData(userCredential.user.uid)
+      }
+
     } catch (err: any) {
       console.log("Error during registration:", err);
       if (err.code === 'auth/email-already-in-use') {

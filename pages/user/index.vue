@@ -134,19 +134,19 @@
                       <v-col cols="auto" class="d-flex flex-column align-center justify-center">
                         <div>
                           <v-avatar color="white" image="/public/pl.png"></v-avatar>
-                          <div class="mt-2">8</div>
+                          <div class="mt-2">{{ userData?.engPoints }}</div>
                         </div>
                       </v-col>
                       <v-col cols="auto" class="d-flex flex-column align-center justify-center">
                         <div>
                           <v-avatar image="/public/ekstraklasa.png"></v-avatar>
-                          <div class="mt-2">23</div>
+                          <div class="mt-2">{{ userData?.polPoints }}</div>
                         </div>
                       </v-col>
                       <v-col cols="auto" class="d-flex flex-column align-center justify-center">
                         <div>
                           <v-avatar color="white" image="/public/ucl.png"></v-avatar>
-                          <div class="mt-2">10</div>
+                          <div class="mt-2">{{ userData?.uclPoints }}</div>
                         </div>
                       </v-col>
                     </v-row>
