@@ -12,7 +12,9 @@ export interface IUser {
     leagues: String[],
     polPoints: Number,
     engPoints: Number,
-    uclPoints: Number
+    uclPoints: Number,
+    betAcc: Number,
+    established: Date
 }
 
 export class UserModel implements IUser {
@@ -27,6 +29,8 @@ export class UserModel implements IUser {
     polPoints: Number
     engPoints: Number
     uclPoints: Number
+    betAcc: Number
+    established: Date
 
     reference: DocumentReference | null
     
@@ -42,6 +46,8 @@ export class UserModel implements IUser {
         this.polPoints = data.polPoints || 0
         this.engPoints = data.engPoints || 0
         this.uclPoints = data.uclPoints || 0
+        this.betAcc = data.betAcc || 0
+        this.established = data.established || new Date()
 
         this.reference = reference
     }
@@ -59,6 +65,8 @@ export function toMapUser(data?: Partial<IUser>): IUser {
         leagues: data?.leagues || [],
         polPoints: data?.polPoints || 0,
         engPoints: data?.engPoints || 0,
-        uclPoints: data?.uclPoints || 0
+        uclPoints: data?.uclPoints || 0,
+        betAcc: data?.betAcc || 0,
+        established: data?.established || new Date()
     }
 }

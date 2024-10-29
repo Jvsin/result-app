@@ -118,49 +118,84 @@
               <v-tabs-window-item :value="2">
                 <v-container>
 
-                  <v-avatar color="grey" size="80">J</v-avatar>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-card variant="flat" color="rgba(0, 0, 0, 0)">
+                        <v-avatar color="secondary" size="80">J</v-avatar>
 
-                  <v-card-title>
-                    <div class="text-h2">{{ userData?.nick }}</div>
-                    <span class="text-h5">{{ userData?.name + ' ' + userData?.surname }}</span>
-                  </v-card-title>
+                        <v-card-title>
+                          <div class="text-h1">{{ userData?.nick }}</div>
+                          <div class="text-h4 pa-3">{{ userData?.name + ' ' + userData?.surname }}</div>
+                          <!-- <v-card-subtitle> {{ convertTimestamp(userData?.established) }}</v-card-subtitle> -->
+                        </v-card-title>
 
-                  <v-card-subtitle>
-                    {{ userData?.email }}
-                  </v-card-subtitle>
+                        <v-card-subtitle>
+                          {{ userData?.email }}
+                        </v-card-subtitle>
 
-                  <div class="py-5">
-                    <v-row justify="center">
-                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
-                        <div>
-                          <v-avatar color="white" image="/public/pl.png"></v-avatar>
-                          <div class="mt-2">{{ userData?.engPoints }}</div>
+
+                        <div class="px-2 py-2">
+                          <v-btn variant="outlined" color="secondary">
+                            {{ $t('user.editProfile') }}
+                          </v-btn>
                         </div>
-                      </v-col>
-                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
-                        <div>
-                          <v-avatar image="/public/ekstraklasa.png"></v-avatar>
-                          <div class="mt-2">{{ userData?.polPoints }}</div>
-                        </div>
-                      </v-col>
-                      <v-col cols="auto" class="d-flex flex-column align-center justify-center">
-                        <div>
-                          <v-avatar color="white" image="/public/ucl.png"></v-avatar>
-                          <div class="mt-2">{{ userData?.uclPoints }}</div>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </div>
+                      </v-card>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-card-actions class="justify-center">
+                        <v-col>
+                          <div class="py-5">
+                            <v-card-subtitle class="py-2 mb-2">PUNKTY LIGOWE</v-card-subtitle>
+                            <v-row justify="center">
+                              <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                                <div>
+                                  <v-avatar color="white" image="/public/pl.png" size="60"></v-avatar>
+                                  <div class="text-h5 mt-2">{{ userData?.engPoints }}</div>
+                                </div>
+                              </v-col>
+                              <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                                <div>
+                                  <v-avatar image="/public/ekstraklasa.png" size="60"></v-avatar>
+                                  <div class="text-h5 mt-2">{{ userData?.polPoints }}
+                                  </div>
+                                </div>
+                              </v-col>
+                              <v-col cols="auto" class="d-flex flex-column align-center justify-center">
+                                <div>
+                                  <v-avatar color="white" image="/public/ucl.png" size="60"></v-avatar>
+                                  <div class="text-h5 mt-2">{{ userData?.uclPoints }}</div>
+                                </div>
+                              </v-col>
+                            </v-row>
+                            <div class="py-5">
+                              <v-card-subtitle class="py-2">SKUTECZNOŚĆ TYPERA</v-card-subtitle>
+                              <v-progress-circular :rotate="360" :size="100" :width="15" :value="betAccuracy"
+                                color="primary">
+                                {{ userData?.betAcc + '%' }}
+                              </v-progress-circular>
+                            </div>
+                          </div>
+                          <v-row justify="center" class="pa-5">
 
-                  <v-card-actions class="justify-center">
-                    <v-btn variant="elevated" color="secondary">
-                      {{ $t('user.editProfile') }}
-                    </v-btn>
-                    <v-btn variant="elevated" color="error" @click="handleLogout">
-                      {{ $t('user.logout') }}
-                    </v-btn>
-                  </v-card-actions>
+                            <div class="px-2 py-2">
+                              <v-btn variant="outlined" color="primary">
+                                Zdefiniuj ligi
+                              </v-btn>
+                            </div>
+
+                          </v-row>
+                          <v-row>
+                            <v-btn variant="elevated" class="pa-2" color="error" @click="handleLogout">
+                              {{ $t('user.logout') }}
+                            </v-btn>
+                          </v-row>
+                        </v-col>
+                      </v-card-actions>
+                    </v-col>
+                  </v-row>
+
                 </v-container>
+
               </v-tabs-window-item>
             </v-tabs-window>
           </v-container>
@@ -183,6 +218,7 @@ const router = useRouter();
 
 const authStore = useAuthStore()
 const userData = authStore.loggedUserData
+const betAccuracy = computed(() => userData?.betAcc)
 
 function getLeagueRoute() {
   // console.log('Navigating to /user/' + value);
@@ -195,6 +231,9 @@ function getBettingRoute(league: string) {
   // router.push(`/user/${value}`);
   router.push(`/user/bet-sites/${league}`)
 }
+
+
+
 
 async function handleLogout() {
   try {

@@ -73,6 +73,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { emailRule, lengthRule, lengthRuleShort, passwordRule, requiredRule, surnameLengthRule } from '~/composables/rules';
 import formValidation from '~/composables/formValidation';
 import { type IUser, UserModel } from '~/models/user';
+import { Timestamp } from 'firebase/firestore';
 
 const { valid } = formValidation();
 
@@ -118,7 +119,9 @@ async function registerUser() {
     leagues: [],
     polPoints: 0,
     engPoints: 0,
-    uclPoints: 0
+    uclPoints: 0,
+    betAcc: 0,
+    established: new Date()
   };
 
   try {
