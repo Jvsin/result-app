@@ -87,7 +87,12 @@
     "yourBets": "Twoje wyniki",
     "bet": "Typuj",
     "saveBets": "Zapisz swoje typy",
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "nameAndSurname": "Imię i nazwisko",
+    "established": "Założono",
+    "pointsGained": "Punkty zdobyte",
+    "bettingAccuracy": "Skuteczność typera",
+    "followLeagues": "Obserwuj ligi"
   },
   "errors": {
     "register": {

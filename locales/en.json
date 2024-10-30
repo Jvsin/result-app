@@ -87,7 +87,12 @@
     "yourBets": "Your bets",
     "bet": "Bet games",
     "saveBets": "Save your bets",
-    "logout": "Logout"
+    "logout": "Logout",
+    "nameAndSurname": "Name and surname",
+    "established": "Established",
+    "pointsGained": "League points",
+    "bettingAccuracy": "Bet accuracy",
+    "followLeagues": "Follow leagues"
   },
   "errors":{
     "register": {
