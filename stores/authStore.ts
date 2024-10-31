@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -106,5 +106,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, loggedUserData, registerWithPassword, loginWithPassword, logout };
+  const editProfile = async (data: any) => {
+    try {
+    const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id);
+    await updateDoc(userDocRef, data);
+      console.log('User profile updated successfully');
+      await fetchUserData(data.uid)
+      console.log(loggedUserData)
+  } catch (error) { 
+    console.error('Error updating user profile:', error);
+  }
+  }
+
+  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile };
 });

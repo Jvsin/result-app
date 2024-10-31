@@ -133,7 +133,7 @@
 
                         <v-row justify="center" class="py-2">
                           <div class="px-2 py-2">
-                            <v-btn variant="outlined" color="secondary">
+                            <v-btn variant="outlined" color="secondary" @click="changeDialogFlag()">
                               {{ $t('user.editProfile') }}
                             </v-btn>
                           </div>
@@ -191,9 +191,9 @@
                       </v-card-actions>
                     </v-col>
                   </v-row>
-
+                  
                 </v-container>
-
+                <EditProfileDialog :user="userData" :is-show="showDialogFlag" @on-close="changeDialogFlag"/>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-container>
@@ -205,6 +205,8 @@
 
 <script lang="ts" setup>
 import type { Timestamp } from 'firebase/firestore';
+import EditProfileDialog from '~/components/user/editProfileDialog.vue';
+import { useAuthStore } from '~/stores/authStore';
 
 
 const tab = ref(0)
@@ -217,8 +219,33 @@ const leagues = [
 const router = useRouter();
 
 const authStore = useAuthStore()
-const userData = authStore.loggedUserData
-const betAccuracy = computed(() => userData?.betAcc)
+// const userData = authStore.loggedUserData
+// const betAccuracy = computed(() => userData?.betAcc)
+
+// const nameAndSurname = computed(() => userData?.name + ' ' + userData?.surname)
+// const email = computed(() => userData?.email)
+// const established = computed(() => formatTimestampToDate(userData?.established))
+const userData = computed(() => authStore.loggedUserData)
+
+const nameAndSurname = computed(() => {
+  if (!userData.value) return ''
+  return `${userData.value?.name} ${userData.value?.surname}`
+})
+
+const email = computed(() => {
+  if (!userData.value) return ''
+  return userData.value.email
+})
+
+const betAccuracy = computed(() => {
+  if (!userData.value) return 0
+  return userData.value.betAcc
+})
+
+const established = computed(() => {
+  if(!userData.value) return 'data'
+  return formatTimestampToDate(userData.value.established)
+})
 
 function getLeagueRoute() {
   // console.log('Navigating to /user/' + value);
@@ -232,10 +259,12 @@ function getBettingRoute(league: string) {
   router.push(`/user/bet-sites/${league}`)
 }
 
-const nameAndSurname = computed(() => userData?.name + ' ' + userData?.surname)
-const email = computed(() => userData?.email)
-const established = computed(() => formatTimestampToDate(userData?.established))
 
+const showDialogFlag = ref(false)
+
+function changeDialogFlag() {
+  showDialogFlag.value = !showDialogFlag.value
+}
 
 async function handleLogout() {
   try {
@@ -265,6 +294,11 @@ function formatTimestampToDate(timestamp: any) {
     return 'data zalozenia'
   }
 }
+
+watch(userData, async(oldUser, newUser) => {
+  console.log('wchodzę')
+  userData.value = authStore.loggedUserData
+})
 
 </script>
 
