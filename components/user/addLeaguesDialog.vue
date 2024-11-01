@@ -9,9 +9,9 @@
         Będzie ona dostępna w nawigacji po lewej stronie ekranu.
       </v-card-text>
 
-      <v-row justify="center" align="center" class="px-1">
+      <v-row justify="center" align="center" class="px-5">
         <v-col cols="12" sm="10">
-          <v-combobox class="px-5" :items="countries"
+          <v-combobox :items="countries"
           label="Select a country"
           v-model="selectedCountry"
           filterable>
@@ -23,8 +23,14 @@
       </v-row>
       
       <div v-if="leaguesFound.length">
-        <v-select :items="leaguesFound.name"
-        label="Wybierz ligę"
+        <v-select
+          v-model="selectedLeague"
+          item-title="name"
+          item-value="id"
+          class="px-5" 
+          :items="leaguesFound"
+          label="Wybierz ligę"
+          return-object
         ></v-select>  
       </div>
       <v-card-actions>
@@ -54,6 +60,7 @@ const leagueStore = useLeagueStore()
 const selectedCountry = ref<string>('')
 const countryToSearch = ref<string>('')
 const leaguesFound = ref<any>([])
+const selectedLeague = ref<any>()
 
 const props = defineProps<{
   user: UserModel | null,
@@ -78,7 +85,13 @@ function resetState() {
   leaguesFound.value = []
 }
 
+function saveData() {
+  
+}
+
 async function fetchLeagues() {
+  if (leaguesFound.value.length)
+    leaguesFound.value = []
   try {
     await leagueStore.fetchLeaguesFromCountry(countryToSearch.value)
     for (const item in leagueStore.searchedLeagues) {
