@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :model-value="isShowRef" max-width="700" scrollable @update:model-value="close" >
+  <v-dialog :model-value="isShowRef" max-width="700" @update:model-value="close" >
     <v-card>
       <v-card-title class="px-5">
         Edytuj własne ligi
@@ -8,14 +8,30 @@
         Aby szybko przeglądać wyniki swoich ulubionych lig, wybierz kraj z listy, a następnie zainteresowaną ligę. 
         Będzie ona dostępna w nawigacji po lewej stronie ekranu.
       </v-card-text>
-  
-      <v-combobox class="px-5" :items="countries"
+
+      <v-row justify="center" align="center" class="px-1">
+        <v-col cols="12" sm="10">
+          <v-combobox class="px-5" :items="countries"
           label="Select a country"
           v-model="selectedCountry"
           filterable>
-      </v-combobox>
-
+          </v-combobox>
+        </v-col>
+        <v-col cols="12" sm="2">
+          <v-btn color="primary" variant="outlined" class="mb-5" size="large" @click="fetchLeagues">Szukaj</v-btn> 
+        </v-col>
+      </v-row>
       
+      <div v-if="leaguesFound.length">
+        <v-select :items="leaguesFound.name"
+        label="Wybierz ligę"
+        ></v-select>  
+      </div>
+      <v-card-actions>
+        <v-btn color="error" @click="close">Anuluj</v-btn>
+        <v-btn color="primary" @click="close">Zapisz</v-btn>
+      </v-card-actions>
+      <!-- <div>{{ leaguesFound }}</div> -->
     </v-card>
   </v-dialog>
 </template>
@@ -23,8 +39,6 @@
 <script lang="ts" setup>
 import type { UserModel } from '~/models/user';
 import { useAuthStore } from '~/stores/authStore';
-import englishCountries from '~/composables/countries_en.json'
-import polishCountries from '~/composables/countries_pl.json'
 import allCountries from '~/composables/countries.json'
 import { useI18n } from 'vue-i18n'
 
@@ -35,9 +49,11 @@ const countries = computed(() => {
     });
 
 const authStore = useAuthStore()
+const leagueStore = useLeagueStore()
 
 const selectedCountry = ref<string>('')
 const countryToSearch = ref<string>('')
+const leaguesFound = ref<any>([])
 
 const props = defineProps<{
   user: UserModel | null,
@@ -56,14 +72,29 @@ function close() {
 const { user, isShow } = toRefs(props)
 const isShowRef = ref<boolean>()
 
-setData()
-
 function resetState() {
-  
+  selectedCountry.value = ''
+  countryToSearch.value = ''
+  leaguesFound.value = []
 }
 
-function setData() {
-
+async function fetchLeagues() {
+  try {
+    await leagueStore.fetchLeaguesFromCountry(countryToSearch.value)
+    for (const item in leagueStore.searchedLeagues) {
+      const leagueData = leagueStore.searchedLeagues[item] as any;
+      const league = {
+        id: leagueData.league.id,
+        name: leagueData.league.name.toString(),
+        logo: leagueData.league.logo
+      }
+      leaguesFound.value.push(league)
+    }
+    console.log(leaguesFound.value)
+  }
+  catch (e) {
+    console.log(e)
+  }
 }
 
 watch(selectedCountry, (newValue) => {
@@ -76,7 +107,6 @@ watch(selectedCountry, (newValue) => {
 watch(isShow, (newVal) => {
   isShowRef.value = newVal;
   if (newVal) {
-    setData();
   }
 });
 </script>
