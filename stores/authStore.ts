@@ -96,13 +96,14 @@ export const useAuthStore = defineStore('auth', () => {
         loggedUserData.value = new UserModel(userData, userDocRef);
       } else {
         error.value = "User data not found";
-        loggedUserData.value = null;
+        // loggedUserData.value = null;
       }
     } catch (err: any) {
       error.value = err.message;
-      loggedUserData.value = null;
+      console.log(err)
+      // loggedUserData.value = null;
     } finally {
-      loading.value = false;
+      // loading.value = false;
     }
   }
 
@@ -113,10 +114,22 @@ export const useAuthStore = defineStore('auth', () => {
       console.log('User profile updated successfully');
       await fetchUserData(data.uid)
       console.log(loggedUserData)
-  } catch (error) { 
-    console.error('Error updating user profile:', error);
-  }
+    } catch (error) { 
+      console.error('Error updating user profile:', error);
+    }
   }
 
-  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile };
+  const setFavLeagues = async (data: any) => {
+    try {
+      const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id);
+      await updateDoc(userDocRef, data);
+      console.log('User profile updated successfully');
+      await fetchUserData(data.uid)
+      console.log(loggedUserData)
+    } catch (error) { 
+      console.error('Error updating user profile:', error);
+    }
+  }
+
+  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, setFavLeagues };
 });
