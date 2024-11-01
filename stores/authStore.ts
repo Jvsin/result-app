@@ -109,8 +109,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const editProfile = async (data: any) => {
     try {
-    const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id);
-    await updateDoc(userDocRef, data);
+      const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id);
+      await updateDoc(userDocRef, data);
       console.log('User profile updated successfully');
       await fetchUserData(data.uid)
       console.log(loggedUserData)
@@ -119,7 +119,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const setFavLeagues = async (data: any) => {
+  const deleteFavLeague = async (data: any) => {
     try {
       const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id);
       await updateDoc(userDocRef, data);
@@ -131,5 +131,5 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, setFavLeagues };
+  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague };
 });

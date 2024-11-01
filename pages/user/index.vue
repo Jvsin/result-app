@@ -228,7 +228,9 @@ const authStore = useAuthStore()
 // const email = computed(() => userData?.email)
 // const established = computed(() => formatTimestampToDate(userData?.established))
 const userData = computed(() => authStore.loggedUserData)
-
+watch(userData, (olddata, newdata) => {
+  console.log(userData.value?.favLeagues)
+})
 const nameAndSurname = computed(() => {
   if (!userData.value) return ''
   return `${userData.value?.name} ${userData.value?.surname}`
