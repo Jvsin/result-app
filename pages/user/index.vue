@@ -133,12 +133,12 @@
 
                         <v-row justify="center" class="py-2">
                           <div class="px-2 py-2">
-                            <v-btn variant="outlined" color="secondary" @click="changeDialogFlag()">
+                            <v-btn variant="outlined" color="secondary" @click="changeProfileDialogFlag()">
                               {{ $t('user.editProfile') }}
                             </v-btn>
                           </div>
                           <div class="px-2 py-2">
-                            <v-btn variant="outlined" color="primary">
+                            <v-btn variant="outlined" color="primary" @click="changeAddLeaguesFlag()">
                               {{ $t('user.followLeagues')}}
                             </v-btn>
                           </div>
@@ -193,7 +193,8 @@
                   </v-row>
                   
                 </v-container>
-                <EditProfileDialog :user="userData" :is-show="showDialogFlag" @on-close="changeDialogFlag"/>
+                <EditProfileDialog :user="userData" :is-show="showEditProfileFlag" @on-close="changeProfileDialogFlag"/>
+                <AddLeaguesDialog :user="userData" :is-show="showAddLeaguesFlag" @on-close="changeAddLeaguesFlag"/>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-container>
@@ -205,6 +206,7 @@
 
 <script lang="ts" setup>
 import type { Timestamp } from 'firebase/firestore';
+import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
 
@@ -260,10 +262,15 @@ function getBettingRoute(league: string) {
 }
 
 
-const showDialogFlag = ref(false)
+const showEditProfileFlag = ref(false)
+const showAddLeaguesFlag = ref(false)
 
-function changeDialogFlag() {
-  showDialogFlag.value = !showDialogFlag.value
+function changeProfileDialogFlag() {
+  showEditProfileFlag.value = !showEditProfileFlag.value
+}
+
+function changeAddLeaguesFlag( ) {
+  showAddLeaguesFlag.value = !showAddLeaguesFlag.value
 }
 
 async function handleLogout() {
@@ -294,12 +301,6 @@ function formatTimestampToDate(timestamp: any) {
     return 'data zalozenia'
   }
 }
-
-watch(userData, async(oldUser, newUser) => {
-  console.log('wchodzę')
-  userData.value = authStore.loggedUserData
-})
-
 </script>
 
 <style scoped>
