@@ -6,7 +6,7 @@ export interface IUser {
     nick: String,
     name: String,
     surname: String,
-    favLeagues: Number[],
+    favLeagues: [],
     photo: String,
     role: TRole,
     leagues: String[],
@@ -22,7 +22,7 @@ export class UserModel implements IUser {
     nick: String
     name: String
     surname: String
-    favLeagues: Number[]
+    favLeagues: []
     photo: String
     role: TRole
     leagues: String[]

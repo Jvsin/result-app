@@ -127,7 +127,11 @@ const { user, isShow } = toRefs(props)
 const isShowRef = ref<boolean>()
 const userId = ref<string | undefined>()
 
-const favLeagues = user.value?.favLeagues || [];
+// const favLeagues = user.value?.favLeagues || [];
+const favLeagues = computed<any[]>(() => {
+   if (!user.value) return []
+  return user.value.favLeagues
+})
 
 
 function resetState() {
@@ -142,16 +146,17 @@ async function saveData() {
     userId.value = user.value.reference?.id
 
   // const favLeagues = user.value?.favLeagues || [];
-  const leagueExists = favLeagues.some((league: any) => league.id === selectedLeague.value.id);
-  if (!leagueExists) {
-    const updatedFavLeagues = [...favLeagues, {id: selectedLeague.value.id, name: selectedLeague.value.name}]
+  if(user.value?.favLeagues){
+    const leagueExists = favLeagues.value.find((league: any) => league.id === selectedLeague.value.id)
+    if (!leagueExists) {
+    const updatedFavLeagues = [...favLeagues.value, {id: selectedLeague.value.id, name: selectedLeague.value.name}]
     const newData = {
       uid: userId.value,
       favLeagues: updatedFavLeagues
     }
     try {
       await authStore.editProfile(newData)
-      favLeagues.push({id: selectedLeague.value.id, name: selectedLeague.value.name})
+      // favLeagues.value.push({id: selectedLeague.value.id, name: selectedLeague.value.name})
       close()
     } catch (e) {
       console.log(e)
@@ -160,6 +165,8 @@ async function saveData() {
   } else {
     error.value = 'leagueAlreadyExist'
   }
+  }
+  
 }
 
 async function fetchLeagues() {
@@ -191,7 +198,7 @@ async function deleteLeague(leagueId: Number) {
   if (user.value != null)
     userId.value = user.value.reference?.id
   try {
-    const afterDeleteLeagues = favLeagues.filter((league: any) => league.id !== leagueId);
+    const afterDeleteLeagues = favLeagues.value.filter((league: any) => league.id !== leagueId);
     console.log(afterDeleteLeagues)
     const newData = {
       uid: userId.value,
@@ -199,10 +206,10 @@ async function deleteLeague(leagueId: Number) {
     }
     await authStore.editProfile(newData)
     
-    const indexToRemove = favLeagues.findIndex(league => league.id === leagueId);
-    if (indexToRemove !== -1) {
-      favLeagues.splice(indexToRemove, 1);
-    }
+    // const indexToRemove = favLeagues.value.findIndex(league => league.id === leagueId);
+    // if (indexToRemove !== -1) {
+    //   favLeagues.value.splice(indexToRemove, 1);
+    // }
   } catch (e) {
     console.log(e)
   }
