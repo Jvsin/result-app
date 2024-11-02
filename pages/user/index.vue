@@ -12,111 +12,16 @@
             
             <v-col cols="12" sm="8" md="6" class="d-flex justify-center justify-sm-end justify-md-end align-center">
               <v-tabs v-model="tab" align-tabs="start" color="primary" class="px-5">
-                <v-tab :key="0" value="0">{{ $t("user.betMatchesView") }}</v-tab>
-                <v-tab :key="1" value="1">{{ $t("user.leaguesView") }}</v-tab>
-                <v-tab :key="2" value="2">{{ $t("user.profile") }}</v-tab>
+                <v-tab :key="0" value="0">{{ $t("user.profile") }}</v-tab>
+                <v-tab :key="1" value="1">{{ $t("user.betMatchesView") }}</v-tab>
+                <v-tab :key="2" value="2">{{ $t("user.leaguesView") }}</v-tab>
+                
               </v-tabs>
             </v-col>
           </v-row>
           <v-container style="height: calc(100% - 150px); overflow-y: auto;">
             <v-tabs-window v-model="tab">
               <v-tabs-window-item :value="0">
-                <v-container>
-                  <v-row align="center">
-                    <v-col cols="12" md="4">
-                      <v-hover>
-                        <template v-slot:default="{ isHovering, props }">
-                          <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('eng')">
-                            <v-card-title>
-                              PREMIER LEAGUE
-                            </v-card-title>
-                            <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
-                            <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('eng')">{{
-                                $t('user.betButton')
-                                }}</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </template>
-                      </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <v-hover>
-                        <template v-slot:default="{ isHovering, props }">
-                          <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('pol')">
-                            <v-card-title>
-                              EKSTRAKLASA
-                            </v-card-title>
-                            <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
-                            <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('pol')">{{
-                                $t('user.betButton')
-                                }}</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </template>
-                      </v-hover>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <v-hover>
-                        <template v-slot:default="{ isHovering, props }">
-                          <v-card class="mx-auto" max-width="400" v-bind="props"
-                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('ucl')">
-                            <v-card-title>
-                              CHAMPIONS LEAGUE
-                            </v-card-title>
-                            <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
-                            <v-card-actions>
-                              <v-btn block border color="primary" @click="getBettingRoute('ucl')">{{
-                                $t('user.betButton')
-                                }}</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </template>
-                      </v-hover>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-tabs-window-item>
-
-              <v-tabs-window-item :value="1">
-
-                <v-container>
-                  <div v-for="card in leagues">
-                    <v-hover>
-                      <template v-slot:default="{ isHovering, props }">
-                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
-                          @click="getLeagueRoute()">
-                          <v-row class="d-flex flex-wrap" justify="center">
-                            <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
-                              <v-card-title>
-                                {{ card.name }}
-                              </v-card-title>
-                            </v-col>
-                            <v-col cols="12" sm="3"
-                              class="d-flex flex-column align-center align-sm-start justify-center">
-                              <v-card-subtitle>
-                                {{ card.league }}
-                              </v-card-subtitle>
-                            </v-col>
-                            <v-col cols="12" sm="3"
-                              class="d-flex flex-column align-center align-sm-start justify-center">
-                              <v-card-subtitle>
-                                {{ 'Pozycja: ' + card.position + '/' + card.players }}
-                              </v-card-subtitle>
-                            </v-col>
-                          </v-row>
-                        </v-card>
-                      </template>
-                    </v-hover>
-                  </div>
-
-                </v-container>
-              </v-tabs-window-item>
-
-              <v-tabs-window-item :value="2">
                 <v-container>
 
                   <v-row>
@@ -191,6 +96,102 @@
                 </v-container>
                 <EditProfileDialog :user="userData" :is-show="showEditProfileFlag" @on-close="changeProfileDialogFlag"/>
                 <AddLeaguesDialog :user="userData" :is-show="showAddLeaguesFlag" @on-close="changeAddLeaguesFlag"/>
+              </v-tabs-window-item>
+
+              <v-tabs-window-item :value="1">
+                <v-container>
+                  <v-row align="center">
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('eng')">
+                            <v-card-title>
+                              PREMIER LEAGUE
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/pl.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary" @click="getBettingRoute('eng')">{{
+                                $t('user.betButton')
+                                }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('pol')">
+                            <v-card-title>
+                              EKSTRAKLASA
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/ekstraklasa.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary" @click="getBettingRoute('pol')">{{
+                                $t('user.betButton')
+                                }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-hover>
+                        <template v-slot:default="{ isHovering, props }">
+                          <v-card class="mx-auto" max-width="400" v-bind="props"
+                            :color="isHovering ? 'grey' : undefined" @click="getBettingRoute('ucl')">
+                            <v-card-title>
+                              CHAMPIONS LEAGUE
+                            </v-card-title>
+                            <v-img class="align-end text-white" height="200" src="/public/ucl.png"></v-img>
+                            <v-card-actions>
+                              <v-btn block border color="primary" @click="getBettingRoute('ucl')">{{
+                                $t('user.betButton')
+                                }}</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-hover>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-tabs-window-item>
+
+              <v-tabs-window-item :value="2">
+
+                <v-container>
+                  <div v-for="card in leagues">
+                    <v-hover>
+                      <template v-slot:default="{ isHovering, props }">
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
+                          @click="getLeagueRoute()">
+                          <v-row class="d-flex flex-wrap" justify="center">
+                            <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
+                              <v-card-title>
+                                {{ card.name }}
+                              </v-card-title>
+                            </v-col>
+                            <v-col cols="12" sm="3"
+                              class="d-flex flex-column align-center align-sm-start justify-center">
+                              <v-card-subtitle>
+                                {{ card.league }}
+                              </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="12" sm="3"
+                              class="d-flex flex-column align-center align-sm-start justify-center">
+                              <v-card-subtitle>
+                                {{ 'Pozycja: ' + card.position + '/' + card.players }}
+                              </v-card-subtitle>
+                            </v-col>
+                          </v-row>
+                        </v-card>
+                      </template>
+                    </v-hover>
+                  </div>
+
+                </v-container>
               </v-tabs-window-item>
             </v-tabs-window>
           </v-container>

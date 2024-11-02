@@ -3,8 +3,10 @@
     <v-btn icon="mdi-format-list-bulleted" @click="drawer = !drawer"
       class="d-flex align-center justify-center" />
 
-    <v-btn :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
+    <v-btn v-if="!user" :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/"
       text="Match Results App" class="d-flex align-center justify-center" />
+    <v-btn v-else :class="isSmAndDown ? '' : 'ml-2'" variant="text" color="primary" :active="false" to="/user"
+      text="Match Results App" class="d-flex align-center justify-center" />  
 
     <v-spacer></v-spacer>
   
