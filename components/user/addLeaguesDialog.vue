@@ -2,30 +2,29 @@
   <v-dialog :model-value="isShowRef" max-width="1000" @update:model-value="close" >
     <v-card>   
       <v-card-title class="px-5">
-        Ulubione ligi
+        {{ $t('user.profileDialogs.favoritesLeagues') }}
       </v-card-title>
       <v-tabs v-model="tab" align-tabs="start" color="primary" grow>
-        <v-tab :key="0" value="0">Dodaj ligi</v-tab>
-        <v-tab :key="1" value="1">Obserwowane ligi</v-tab>
+        <v-tab :key="0" value="0">{{ $t('user.profileDialogs.addLeague') }}</v-tab>
+        <v-tab :key="1" value="1">{{ $t('user.profileDialogs.followedLeagues') }}</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="0">
           <v-card-text class="px-5" justify="center">
-            Aby szybko przeglądać wyniki swoich ulubionych lig, wybierz kraj z listy, a następnie zainteresowaną ligę. 
-            Będzie ona dostępna w nawigacji po lewej stronie ekranu.
+            {{ $t('user.profileDialogs.favLeaguesDescription') }}
           </v-card-text>
 
           <v-row justify="center" align="center" class="px-5">
             <v-col cols="12" sm="10">
               <v-combobox :items="countries"
-              label="Select a country"
+              :label="$t('user.profileDialogs.chooseCountry')"
               v-model="selectedCountry"
               filterable>
               </v-combobox>
             </v-col>
             <v-col cols="12" sm="2"  class="d-flex justify-center align-center">
-              <v-btn color="primary" variant="outlined" class="mb-5" size="large" @click="fetchLeagues">Szukaj</v-btn> 
+              <v-btn color="primary" variant="outlined" class="mb-5" size="large" @click="fetchLeagues">{{ $t('user.profileDialogs.search') }}</v-btn> 
             </v-col>
           </v-row>
       
@@ -36,7 +35,7 @@
               item-value="id"
               class="px-5" 
               :items="leaguesFound"
-              label="Wybierz ligę"
+              :label="$t('user.profileDialogs.chooseLeague')"
               return-object
             ></v-select>  
           </div>
@@ -46,8 +45,8 @@
           </v-alert>
 
           <v-card-actions>
-            <v-btn color="error" @click="close">Anuluj</v-btn>
-            <v-btn color="primary" @click="saveData">Zapisz</v-btn>
+            <v-btn color="error" @click="close">{{ $t('user.profileDialogs.cancel') }}</v-btn>
+            <v-btn color="primary" @click="saveData">{{ $t('user.profileDialogs.save') }}</v-btn>
           </v-card-actions>
         </v-tabs-window-item>
 
@@ -76,7 +75,7 @@
               <v-col cols="auto" class=" d-flex align-center justify-center">
                 <v-icon left>mdi-close</v-icon>
                 <v-card-text class="text-h5">
-                  Nie obserwujesz żadnych lig
+                  {{ $t('user.profileDialogs.noLeaguesInfo') }}
                 </v-card-text>
              </v-col>
             </v-row>
@@ -139,6 +138,7 @@ function resetState() {
   countryToSearch.value = ''
   leaguesFound.value = []
   error.value = ''
+  selectedLeague.value = ''
 }
 
 async function saveData() {

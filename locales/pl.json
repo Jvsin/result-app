@@ -92,7 +92,19 @@
     "established": "Założono",
     "pointsGained": "Punkty zdobyte",
     "bettingAccuracy": "Skuteczność typera",
-    "followLeagues": "Obserwuj ligi"
+    "followLeagues": "Obserwuj ligi",
+    "profileDialogs": {
+      "favoritesLeagues": "Twoje ulubione ligi",
+      "addLeague": "Dodaj ligi",
+      "followedLeagues": "Obserwowane ligi",
+      "favLeaguesDescription": "Aby szybko przeglądać wyniki swoich ulubionych lig, wybierz kraj z listy, a następnie zainteresowaną ligę. Będzie ona dostępna w nawigacji po lewej stronie ekranu.",
+      "search": "Szukaj",
+      "chooseCountry": "Wybierz kraj",
+      "chooseLeague": "Wybierz ligę",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "noLeaguesInfo": "Nie obserwujesz żadnej ligi"
+    }
   },
   "errors": {
     "register": {

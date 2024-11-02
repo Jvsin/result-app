@@ -92,7 +92,19 @@
     "established": "Established",
     "pointsGained": "League points",
     "bettingAccuracy": "Bet accuracy",
-    "followLeagues": "Follow leagues"
+    "followLeagues": "Follow leagues",
+    "profileDialogs": {
+      "favoritesLeagues": "Your favorite leagues",
+      "addLeague": "Add leagues",
+      "followedLeagues": "Your followed leagues",
+      "favLeaguesDescription": "To quickly browse the results of your favorite leagues, select a country from the list and then the league you are interested in. It will be available in the navigation on the left side of the screen.",
+      "chooseCountry": "Choose country",
+      "search": "Search",
+      "chooseLeague": "Choose league",
+      "cancel": "Cancel",
+      "save": "Save",
+      "noLeaguesInfo": "You don't follow any league"
+    }
   },
   "errors":{
     "register": {
