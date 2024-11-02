@@ -9,6 +9,7 @@
             <v-col cols="12" sm="4" md="6" class="d-flex justify-center justify-sm-start align-center mb-2 mb-sm-0">
               <span class="text-h4 text-center text-sm-left px-5">{{ $t('user.welcome') + userData?.nick + '!' }}</span>
             </v-col>
+            
             <v-col cols="12" sm="8" md="6" class="d-flex justify-center justify-sm-end justify-md-end align-center">
               <v-tabs v-model="tab" align-tabs="start" color="primary" class="px-5">
                 <v-tab :key="0" value="0">{{ $t("user.betMatchesView") }}</v-tab>
@@ -181,11 +182,6 @@
                           </div>
                           <v-row justify="center" class="pa-5">
 
-                          </v-row>
-                          <v-row>
-                            <v-btn variant="elevated" class="pa-2" color="error" @click="handleLogout">
-                              {{ $t('user.logout') }}
-                            </v-btn>
                           </v-row>
                         </v-col>
                       </v-card-actions>
