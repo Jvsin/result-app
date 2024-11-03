@@ -4,7 +4,8 @@
   "appName": "MATCH RESULTS APP",
   "landingPage": {
     "description": "Stwórz własną ligę i typuj razem ze swoimi znajomymi!",
-    "join": "Dołącz już teraz!"
+    "join": "Dołącz już teraz!",
+    "login": "Zaloguj się"
   },
   "auth": {
     "register": {
@@ -85,7 +86,39 @@
     "editProfile": "Edytuj profil",
     "yourBets": "Twoje wyniki",
     "bet": "Typuj",
-    "saveBets": "Zapisz swoje typy"
-
+    "saveBets": "Zapisz swoje typy",
+    "logout": "Wyloguj",
+    "nameAndSurname": "Imię i nazwisko",
+    "established": "Założono",
+    "pointsGained": "Punkty zdobyte",
+    "bettingAccuracy": "Skuteczność typera",
+    "followLeagues": "Obserwuj ligi",
+    "profileDialogs": {
+      "favoritesLeagues": "Twoje ulubione ligi",
+      "addLeague": "Dodaj ligi",
+      "followedLeagues": "Obserwowane ligi",
+      "favLeaguesDescription": "Aby szybko przeglądać wyniki swoich ulubionych lig, wybierz kraj z listy, a następnie zainteresowaną ligę. Będzie ona dostępna w nawigacji po lewej stronie ekranu.",
+      "search": "Szukaj",
+      "chooseCountry": "Wybierz kraj",
+      "chooseLeague": "Wybierz ligę",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "noLeaguesInfo": "Nie obserwujesz żadnej ligi"
+    }
+  },
+  "errors": {
+    "register": {
+      "registerErrorBasic": "Błąd podczas tworzenia konta. Spróbuj ponownie później.",
+      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!"
+    },
+    "login": {
+      "loginErrorBasic": "Błąd podczas logowania. Spróbuj ponownie później.",
+      "loginErrorInvalidCredential": "Błędny email, nick lub hasło!"
+    },
+    "profile": {
+      "errorLeagueAlreadyExist": "Obserwujesz już wybraną ligę",
+      "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
+      "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
+    }
   }
 }

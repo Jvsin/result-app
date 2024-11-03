@@ -4,7 +4,8 @@
   "appName": "MATCH RESULTS APP",
   "landingPage": {
     "description": "Create own tournament and bet with your friends!",
-    "join": "Enter now!"
+    "join": "Enter now!",
+    "login": "Login"
   },
   "auth": {
     "register": {
@@ -72,8 +73,8 @@
     },
     "errors": {
       "matchNotStarted": "No events.",
-      "squadsNotAvailable": "Squads are not yet available.",
-      "statsNotAvailable": "Statistics are available after the match starts."
+      "squadsNotAvailable": "Squads are not available yet.",
+      "statsNotAvailable": "Statistics will be available after match begins."
     }
   },
   "user": {
@@ -85,6 +86,39 @@
     "editProfile": "Edit profile",
     "yourBets": "Your bets",
     "bet": "Bet games",
-    "saveBets": "Save your bets"
+    "saveBets": "Save your bets",
+    "logout": "Logout",
+    "nameAndSurname": "Name and surname",
+    "established": "Established",
+    "pointsGained": "League points",
+    "bettingAccuracy": "Bet accuracy",
+    "followLeagues": "Follow leagues",
+    "profileDialogs": {
+      "favoritesLeagues": "Your favorite leagues",
+      "addLeague": "Add leagues",
+      "followedLeagues": "Your followed leagues",
+      "favLeaguesDescription": "To quickly browse the results of your favorite leagues, select a country from the list and then the league you are interested in. It will be available in the navigation on the left side of the screen.",
+      "chooseCountry": "Choose country",
+      "search": "Search",
+      "chooseLeague": "Choose league",
+      "cancel": "Cancel",
+      "save": "Save",
+      "noLeaguesInfo": "You don't follow any league"
+    }
+  },
+  "errors":{
+    "register": {
+      "registerErrorBasic": "Error while creating account. Try agan later.",
+      "registerErrorEmailInUse": "Email in use!"
+    },
+    "login": {
+      "loginErrorBasic": "Error while login. Try again later.",
+      "loginErrorInvalidCredential": "Invalid email, nickname or password!"
+    },
+    "profile": {
+      "errorLeagueAlreadyExist": "You have already follow this league.",
+      "errorWhileEditingProfile": "Error while editing profile, try again later",
+      "errorLeaguesNotFound": "No leagues founded."
+    }
   }  
 }

@@ -8,6 +8,7 @@ export const useLeagueStore = defineStore('league', {
     nextGamesData: null as any | null,
     lastGamesData: null as any | null,
     // nextRoundData: null as any | null,
+    searchedLeagues: null as any | null,
 
     leagueStanding: null as Standing | null
     // leaguesStandings: [] as Standing[]
@@ -124,6 +125,33 @@ export const useLeagueStore = defineStore('league', {
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
         return null
+      }
+    },
+
+    async fetchLeaguesFromCountry(country: string) {
+      const url = `https://api-football-v1.p.rapidapi.com/v3/leagues?country=${country}`;
+      const headers = {
+        'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
+        'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          console.log(data.response)
+          this.searchedLeagues = data.response.filter((item: any) => item.league.type === "League")
+          console.log(this.searchedLeagues)
+        } else {
+          this.searchedLeagues = null
+        }
+        // return json4
+      } catch (error) {
+        console.error('Error fetching fixtures data:', error);
+        this.searchedLeagues = null
       }
     }
   },
