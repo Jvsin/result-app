@@ -5,7 +5,7 @@
         {{ $t('user.editProfile') }}
       </v-card-title>
       <v-form ref="form" v-model="valid" class="px-5" @submit.prevent="editProfile">
-        <v-text-field :label="$t('auth.register.nick')" v-model="newNick" variant="outlined" :rules="[requiredRule(), lengthRuleShort()]"></v-text-field>
+        <v-text-field :label="$t('auth.register.nick')" v-model="newNick" variant="outlined" :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
         <v-text-field :label="$t('auth.register.name')" v-model="newName" variant="outlined" :rules="[requiredRule(), lengthRule()]"></v-text-field>
         <v-text-field :label="$t('auth.register.surname')" v-model="newSurname" variant="outlined" :rules="[requiredRule(), lengthRule()]"></v-text-field>
       </v-form>
