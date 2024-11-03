@@ -40,7 +40,7 @@
     <div v-if="user">
       <v-list>
         <v-list-item v-for="league in favLeagues" :key="league.value">
-          <v-btn @click="getRoute(league.id)">{{ league.name }}</v-btn>
+          <v-btn @click="getRoute(league.id)">{{ truncateText(league.name, 15) }}</v-btn>
         </v-list-item>
       </v-list>
     </div>
@@ -119,6 +119,14 @@ async function logOut() {
   await authStore.logout()
   router.push('/')
 }
+
+function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    } else {
+      return text;
+    }
+  }
 </script>
 
 <style scoped>

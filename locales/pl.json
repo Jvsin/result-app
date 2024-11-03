@@ -114,6 +114,11 @@
     "login": {
       "loginErrorBasic": "Błąd podczas logowania. Spróbuj ponownie później.",
       "loginErrorInvalidCredential": "Błędny email, nick lub hasło!"
+    },
+    "profile": {
+      "errorLeagueAlreadyExist": "Obserwujesz już wybraną ligę",
+      "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
+      "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
     }
   }
 }

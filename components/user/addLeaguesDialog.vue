@@ -41,7 +41,7 @@
           </div>
 
           <v-alert v-if="error" type="error" class="px-5" :timeout="5000">
-            {{ $t(`errors.login.${error}`) }}
+            {{ $t(`errors.profile.${error}`) }}
           </v-alert>
 
           <v-card-actions>
@@ -163,7 +163,7 @@ async function saveData() {
       error.value = 'errorWhileEditingProfile'
     }
   } else {
-    error.value = 'leagueAlreadyExist'
+    error.value = 'errorLeagueAlreadyExist'
   }
   }
   
@@ -187,7 +187,7 @@ async function fetchLeagues() {
     }
     console.log(leaguesFound.value)
     if (!leaguesFound.value.length)
-      error.value = 'leaguesNotFound'
+      error.value = 'errorLeaguesNotFound'
   }
   catch (e) {
     console.log(e)

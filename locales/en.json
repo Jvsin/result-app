@@ -73,8 +73,8 @@
     },
     "errors": {
       "matchNotStarted": "No events.",
-      "squadsNotAvailable": "Squads are not yet available.",
-      "statsNotAvailable": "Statistics are available after the match starts."
+      "squadsNotAvailable": "Squads are not available yet.",
+      "statsNotAvailable": "Statistics will be available after match begins."
     }
   },
   "user": {
@@ -114,6 +114,11 @@
     "login": {
       "loginErrorBasic": "Error while login. Try again later.",
       "loginErrorInvalidCredential": "Invalid email, nickname or password!"
+    },
+    "profile": {
+      "errorLeagueAlreadyExist": "You have already follow this league.",
+      "errorWhileEditingProfile": "Error while editing profile, try again later",
+      "errorLeaguesNotFound": "No leagues founded."
     }
   }  
 }

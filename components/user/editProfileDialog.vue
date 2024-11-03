@@ -5,7 +5,7 @@
         {{ $t('user.editProfile') }}
       </v-card-title>
       <v-form ref="form" v-model="valid" class="px-5" @submit.prevent="editProfile">
-        <v-text-field :label="$t('auth.register.nick')" v-model="newNick" variant="outlined" :rules="[requiredRule(), lengthRule()]"></v-text-field>
+        <v-text-field :label="$t('auth.register.nick')" v-model="newNick" variant="outlined" :rules="[requiredRule(), lengthRuleShort()]"></v-text-field>
         <v-text-field :label="$t('auth.register.name')" v-model="newName" variant="outlined" :rules="[requiredRule(), lengthRule()]"></v-text-field>
         <v-text-field :label="$t('auth.register.surname')" v-model="newSurname" variant="outlined" :rules="[requiredRule(), lengthRule()]"></v-text-field>
       </v-form>
@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 import type { UserModel } from '~/models/user';
 import formValidation from '~/composables/formValidation'
-import { lengthRule, requiredRule } from '~/composables/rules'
+import { lengthRuleShort, lengthRule, requiredRule } from '~/composables/rules'
 import { useAuthStore } from '~/stores/authStore';
 
 const authStore = useAuthStore()
