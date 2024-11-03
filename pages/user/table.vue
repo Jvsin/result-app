@@ -35,6 +35,9 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  middleware: 'auth'
+})
 
 const players = [
   { name: "player20", points: 24, position: 1 },

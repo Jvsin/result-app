@@ -208,6 +208,9 @@ import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
 
+definePageMeta({
+  middleware: 'auth'
+})
 
 const tab = ref(0)
 

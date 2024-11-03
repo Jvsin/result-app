@@ -74,6 +74,11 @@
 
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
+import { useBetStore } from '~/stores/betStore';
+
+definePageMeta({
+  middleware: 'auth'
+})
 
 const tab = ref(0)
 const { mobile } = useDisplay()
