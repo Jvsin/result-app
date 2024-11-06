@@ -109,7 +109,8 @@
   "errors": {
     "register": {
       "registerErrorBasic": "Błąd podczas tworzenia konta. Spróbuj ponownie później.",
-      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!"
+      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!",
+      "errorPasswordsMismatch": "Wprowadzone hasła się różnią!"
     },
     "login": {
       "loginErrorBasic": "Błąd podczas logowania. Spróbuj ponownie później.",

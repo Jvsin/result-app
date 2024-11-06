@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -32,9 +32,11 @@ export const useAuthStore = defineStore('auth', () => {
       console.log("User data saved to Firestore:", userData);
 
       if (userCredential) {
-        console.log("wszedłem")
         await fetchUserData(userCredential.user.uid)
       }
+
+      // const betsCollectionRef = collection(userDocRef, "bets");
+      // await addDoc(betsCollectionRef, {})
 
     } catch (err: any) {
       console.log("Error during registration:", err);

@@ -27,25 +27,25 @@
 
             <v-form class="mx-5 py-2" v-model="valid" ref="form" @submit.prevent="registerUser">
               <v-text-field v-model="email" :label="$t('auth.register.email')"
-                :rules="[requiredRule(), emailRule()]"></v-text-field>
+                :rules="[requiredRule(), emailRule()]" @keyup.enter="registerUser"></v-text-field>
 
               <v-text-field v-model="nickName" :label="$t('auth.register.nick')"
-                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
+                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]" @keyup.enter="registerUser"></v-text-field>
 
               <v-text-field v-model="name" :label="$t('auth.register.name')"
-                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]"></v-text-field>
+                :rules="[requiredRule(), lengthRuleShort(), lengthRule()]" @keyup.enter="registerUser"></v-text-field>
               <v-text-field v-model="surname" :label="$t('auth.register.surname')"
-                :rules="[requiredRule(), lengthRuleShort(), surnameLengthRule()]"></v-text-field>
+                :rules="[requiredRule(), lengthRuleShort(), surnameLengthRule()]" @keyup.enter="registerUser"></v-text-field>
 
               <!-- <v-checkbox @click="showPasswords = !showPasswords" label="Pokaż hasła"></v-checkbox> -->
               <v-text-field v-model="password1" :type="showPasswords ? 'text' : 'password'"
                 :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'" :label="$t('auth.register.password')"
                 @click:append-inner="showPasswords = !showPasswords"
-                :rules="[requiredRule(), passwordRule()]"></v-text-field>
+                :rules="[requiredRule(), passwordRule()]" @keyup.enter="registerUser"></v-text-field>
               <v-text-field v-model="password2" :type="showPasswords ? 'text' : 'password'"
                 :append-inner-icon="showPasswords ? 'mdi-eye' : 'mdi-eye-off'"
                 :label="$t('auth.register.repeatPassword')" @click:append-inner="showPasswords = !showPasswords"
-                :rules="[requiredRule(), passwordRule()]"></v-text-field>
+                :rules="[requiredRule(), passwordRule()]" @keyup.enter="registerUser"></v-text-field>
 
               <v-alert v-if="error" type="error" class="my-2">
                 {{ $t(`errors.register.${error}`) }}
@@ -75,7 +75,7 @@ import formValidation from '~/composables/formValidation';
 import { type IUser, UserModel } from '~/models/user';
 import { Timestamp } from 'firebase/firestore';
 
-const { valid } = formValidation();
+const { form, valid, isValid } = formValidation();
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -105,36 +105,39 @@ function handleReset() {
 
 async function registerUser() {
   if (!comparePasswords()) {
-    alert("Passwords do not match");
-    // return;
+    error.value = 'errorPasswordsMismatch';
+    return;
   }
-  const userData: IUser = {
-    email: email.value,
-    nick: nickName.value,
-    name: name.value,
-    surname: surname.value,
-    favLeagues: [],
-    photo: '',
-    role: 'user',
-    leagues: [],
-    polPoints: 0,
-    engPoints: 0,
-    uclPoints: 0,
-    betAcc: 0,
-    established: new Date()
-  };
-
-  try {
-    await authStore.registerWithPassword(email.value, password1.value, userData);
-    if (authStore.error) {
-      error.value = authStore.error;
-      console.log(error.value)
-    } else {
-      handleReset();
-      router.push('/user');
+  
+  console.log(await isValid())
+  if (await isValid()) {
+    const userData: IUser = {
+      email: email.value,
+      nick: nickName.value,
+      name: name.value,
+      surname: surname.value,
+      favLeagues: [],
+      photo: '',
+      role: 'user',
+      leagues: [],
+      polPoints: 0,
+      engPoints: 0,
+      uclPoints: 0,
+      betAcc: 0,
+      established: new Date()
+    };
+    try {
+      await authStore.registerWithPassword(email.value, password1.value, userData);
+      if (authStore.error) {
+        error.value = authStore.error;
+        console.log(error.value)
+      } else {
+        handleReset();
+        router.push('/user');
+      }
+    } catch (err) {
+      console.error('Error registering user:', err);
     }
-  } catch (err) {
-    console.error('Error registering user:', err);
   }
 }
 </script>

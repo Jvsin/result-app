@@ -109,7 +109,8 @@
   "errors":{
     "register": {
       "registerErrorBasic": "Error while creating account. Try agan later.",
-      "registerErrorEmailInUse": "Email in use!"
+      "registerErrorEmailInUse": "Email in use!",
+      "errorPasswordsMismatch": "Passwords do not match!"
     },
     "login": {
       "loginErrorBasic": "Error while login. Try again later.",
