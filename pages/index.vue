@@ -1,8 +1,17 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useAuthStore } from '~/stores/authStore';
 
 const router = useRouter()
+
+// const authStore = useAuthStore()
+// authStore.loadUserDataFromLocalStorage()
+// const user = computed(() => authStore.loggedUserData)
+
+// watch(user, (oldUser) => {
+//   console.log(user)
+// })
 
 </script>
 

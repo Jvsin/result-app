@@ -1,7 +1,7 @@
 // src/stores/authStore.ts
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
 import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 // import { auth, db } from '@/firebaseConfig';
@@ -34,6 +34,10 @@ export const useAuthStore = defineStore('auth', () => {
       if (userCredential) {
         console.log("wszedłem")
         await fetchUserData(userCredential.user.uid)
+
+        if (process.client && loggedUserData.value) {
+          localStorage.setItem('loggedUserData', JSON.stringify(loggedUserData.value));
+        }
       }
 
     } catch (err: any) {
@@ -57,6 +61,17 @@ export const useAuthStore = defineStore('auth', () => {
       console.log(userCredential.user.uid)
       await fetchUserData(userCredential.user.uid)
 
+      if (process.client && loggedUserData.value) {
+        console.log("zapisuje dane do local storage")
+        const dataToStore = {
+          userData: loggedUserData.value,
+          timestamp: new Date().getTime()
+        };
+
+        localStorage.setItem('loggedUserData', JSON.stringify(dataToStore));
+        console.log(localStorage.getItem('loggedUserData'))
+      }
+
     } catch (err: any) {
       console.log("Error during registration:", err);
       if (err.code === 'auth/invalid-credential') {
@@ -77,6 +92,10 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = null;
       loggedUserData.value = null
       console.log(loggedUserData.value + ' ' + user.value)
+
+      if (process.client) {
+        localStorage.removeItem('loggedUserData');
+      }
     } catch (err: any) {
       error.value = err.message;
       console.log(error.value)
@@ -131,5 +150,53 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague };
+  const loadUserDataFromLocalStorage = async () => {
+    if (process.client) {
+      console.log("wchodze tak")
+      const savedUserData = localStorage.getItem('loggedUserData');
+      // if (savedUserData) {
+      //   const parsedData = JSON.parse(savedUserData)
+      //   loggedUserData.value = parsedData.userData;
+      // }
+      console.log(savedUserData)
+      if (savedUserData) {
+        const parsedData = JSON.parse(savedUserData);
+        const currentTime = new Date().getTime();
+        const dataAge = currentTime - parsedData.timestamp;
+        const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        if (dataAge < maxAge) {
+          loggedUserData.value = parsedData.userData;
+          console.log("Loaded user data from local storage", loggedUserData.value);
+        } else {
+          localStorage.removeItem('loggedUserData');
+          console.log("User data expired and was removed from local storage");
+        }
+      }
+    }
+  };
+
+   const initializeAuth = async () => {
+    return new Promise<void>((resolve) => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          user.value = user;
+          await fetchUserData(user.uid);
+        } else {
+          user = null;
+          loggedUserData.value = null;
+        }
+        resolve();
+      });
+    });
+  };
+
+  loadUserDataFromLocalStorage();
+
+  return {
+    user, loading, error, loggedUserData,
+    fetchUserData, registerWithPassword,
+    loginWithPassword, logout, editProfile, deleteFavLeague,
+    loadUserDataFromLocalStorage, initializeAuth
+  };
 });
