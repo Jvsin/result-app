@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 export const useBetStore = defineStore('bets', {
   state: () => ({ 
     nextGames: null as any | null,
-    pastGames: null as any | null
+    pastGames: null as any | null,
+
+    
   }),
   actions: {
     convertDateToString() {

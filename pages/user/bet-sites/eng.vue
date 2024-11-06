@@ -23,6 +23,7 @@
                       :key="index" class="my-5 px-4">
                       <v-row>
                         <v-col class="justify-center">
+                          <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
                           <v-card-subtitle class="text-center">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
                             + ' ' + setMatchWeek(game.league.round) + ' | ' +
                             formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
@@ -83,6 +84,7 @@
                       class="my-10 px-4">
                       <v-row>
                         <v-col class="justify-center">
+                          <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
                           <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
                             + ' ' + setMatchWeek(game.league.round) + ' | ' +
                             formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
@@ -97,9 +99,9 @@
                         </v-col>
 
                         <v-col cols="auto" class="d-flex justify-center align-center mt-3">
-                          <v-number-input :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
+                          <v-number-input v-model="betsToSave[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                             :inset="false" variant="outlined"></v-number-input>
-                          <v-number-input :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                          <v-number-input v-model="betsToSave[game.fixture.id].away" :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
                             variant="outlined"></v-number-input>
                         </v-col>
 
@@ -110,6 +112,8 @@
                           <v-img :max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
                         </v-col>
                       </v-row>
+                      <v-btn color="primary" variant="tonal" size="small" @click="saveBet(game.fixture.id)">
+                        {{ $t('user.save') }}<v-icon>mdi-check</v-icon></v-btn>
                     </v-card>
                   </v-container>
                 </v-tabs-window-item>
@@ -124,6 +128,7 @@
 
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
+import type { BetModel } from '~/models/bet';
 import { useBetStore } from '~/stores/betStore';
 
 definePageMeta({
@@ -136,6 +141,33 @@ const { mobile } = useDisplay()
 const betStore = useBetStore()
 const nextGames = computed(() => betStore.nextGames);
 const lastGames = computed(() => betStore.pastGames)
+
+const homeGoals = ref<Number>()
+const awayGoals = ref<Number>()
+
+const betsToSave = ref<{ [key: number]: BetModel }>({});
+
+function setBetsToSave() {
+  console.log(nextGames.value)
+  nextGames.value.forEach((game : any) => {
+  console.log(game);
+  const bet: BetModel = {
+    matchID: game.fixture.id,
+    matchDate: game.fixture.date,
+    home: -1,
+    away: -1,
+    points: 0,
+    counted: false
+  };
+  console.log(bet);
+  betsToSave.value[game.fixture.id] = bet
+});
+}
+
+function saveBet(matchID: number) {
+  const bet = betsToSave.value[matchID]
+  console.log(bet)
+}
 
 function setMatchWeek(input: string): string {
   if (input.length === 0) {
@@ -180,7 +212,9 @@ function makeShortName(name: string) {
 onMounted(() => {
   console.log("liverpool".indexOf(' '))
   betStore.fetchNextGames(39, 2024)
-  betStore.fetchLastFixturesData(39,2024)
+  betStore.fetchLastFixturesData(39, 2024)
+
+  setBetsToSave()
 })
 </script>
 
