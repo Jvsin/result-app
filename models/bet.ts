@@ -1,3 +1,5 @@
+import type { DocumentReference } from "firebase/firestore"
+
 export interface IBet {
     matchID: Number,
     matchDate: Date,
@@ -16,8 +18,10 @@ export class BetModel implements IBet {
     points: Number
     counted: Boolean
     league: String
+
+    reference: DocumentReference
     
-    constructor(data: IBet) {
+    constructor(data: IBet, reference: DocumentReference) {
         this.matchID = data?.matchID || -1
         this.matchDate = data?.matchDate || new Date()
         this.home = data?.home || -1
@@ -25,6 +29,8 @@ export class BetModel implements IBet {
         this.points = data?.points || 0
         this.counted = data?.counted || false
         this.league = data?.league || ''
+
+        this.reference = reference
     }
 }
 

@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where, type DocumentReference } from 'firebase/firestore';
 import { defineStore } from 'pinia';
-import type { BetModel } from '~/models/bet'
+import { BetModel, type IBet } from '~/models/bet'
 
 export const useBetStore = defineStore('bets', () => {
   const auth = getAuth();
@@ -91,7 +91,7 @@ export const useBetStore = defineStore('bets', () => {
       // }
     }
 
-    const saveUserBet = async (userRef: DocumentReference, bet: BetModel) => {
+    const saveUserBet = async (userRef: DocumentReference, bet: IBet) => {
       const user = auth.currentUser;
       if (!user) {
         throw new Error('User not authenticated');
@@ -99,12 +99,12 @@ export const useBetStore = defineStore('bets', () => {
 
       try {
         const userBetsCollection = collection(db, 'users', userRef.id, 'bets');
-        // const isBetExist = userBets.value.find(b => b.matchID === bet.matchID)
-        const existingBetQuery = query(userBetsCollection, where('matchID', '==', bet.matchID));
-        const querySnapshot = await getDocs(existingBetQuery);
-
-        if (!querySnapshot.empty) {
-          const existingBetDoc = querySnapshot.docs[0]
+        const isBetExist = userBets.value.find(b => b.matchID === bet.matchID)
+      
+        
+        if (isBetExist) {
+          console.log(isBetExist.reference.id)
+          const betDocRef = doc(userBetsCollection, isBetExist.reference.id);
           const betUpdate = {
             matchID: bet.matchID,
             matchDate: bet.matchDate,
@@ -114,20 +114,27 @@ export const useBetStore = defineStore('bets', () => {
             counted: bet.counted,
             league: bet.league
           };
-          await updateDoc(existingBetDoc.ref, betUpdate)
-          const betIndex = userBets.value.findIndex(b => b.matchID === betUpdate.matchID)
+          await updateDoc(betDocRef, betUpdate);
+          const betIndex = userBets.value.findIndex(b => b.matchID === isBetExist.matchID);
           if (betIndex !== -1) {
-            userBets.value[betIndex] = bet;
+            const newBet = new BetModel(bet, isBetExist.reference)
+            userBets.value[betIndex] = newBet;
           }
-          console.log('Bet edited with ID: ', bet.matchID)
-        }
-        else {
+          console.log('Bet updated with ID: ', isBetExist.matchID);
+        } else {
           const docRef = await addDoc(userBetsCollection, bet);
           console.log('Bet saved with ID: ', docRef.id);
+          userBets.value.push(new BetModel(bet, docRef))
         }
       } catch (e) {
-        console.error('Error adding document: ', e);
+        console.error('Error adding or updating document: ', e);
       }
+
+      // const existingBetQuery = query(userBetsCollection, where('matchID', '==', bet.matchID));
+      // const querySnapshot = await getDocs(existingBetQuery);
+      //   if (!querySnapshot.empty) {
+      //     const existingBetDoc = querySnapshot.docs[0]
+
     }
     
     const fetchUserBets = async (userRef: DocumentReference) => {
@@ -141,7 +148,9 @@ export const useBetStore = defineStore('bets', () => {
         const bets: BetModel[] = [];
 
         querySnapshot.forEach((doc) => {
-          bets.push(doc.data() as BetModel);
+          const betData = doc.data() as IBet;
+          const betModel = new BetModel(betData, doc.ref);
+          bets.push(betModel);
         });
 
         userBets.value = bets;
@@ -151,7 +160,7 @@ export const useBetStore = defineStore('bets', () => {
       }
     }
   
-    return { pastGames, nextGames, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets }
+    return { pastGames, nextGames, userBets, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets }
 })
 
 

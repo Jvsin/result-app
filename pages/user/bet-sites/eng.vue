@@ -155,8 +155,8 @@ function setBetsToSave() {
   const bet: IBet = {
     matchID: game.fixture.id,
     matchDate: game.fixture.date,
-    home: -1,
-    away: -1,
+    home: 0,
+    away: 0,
     points: 0,
     counted: false,
     league: "eng"
