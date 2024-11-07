@@ -13,13 +13,14 @@
                 Premier League
               </v-card-title>
               <v-tabs v-model="tab" color="primary" class="px-5" grow>
-                <v-tab :key="0" value="0">{{ $t('user.yourBets') }}</v-tab>
-                <v-tab :key="1" value="1">{{ $t('user.bet') }}</v-tab>
+                <v-tab :key="0" value="0">{{ $t('user.yourPoints') }}</v-tab>
+                <v-tab :key="1" value="1">{{ $t('user.yourBets') }}</v-tab>
+                <v-tab :key="2" value="2">{{ $t('user.bet') }}</v-tab>
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <v-card :color="setColor(0)" variant="text" elevation="16" v-for="(game, index) in lastGames"
+                    <v-card :color="setColor(game.fixture.id)" variant="text" elevation="16" v-for="(game, index) in lastGames"
                       :key="index" class="my-5 px-4">
                       <v-row>
                         <v-col class="justify-center">
@@ -55,31 +56,37 @@
                             <v-col cols="6" class="d-flex flex-column justify-center align-center">
                               <div>
                                 <v-card-subtitle>
-                                  Twój typ:
+                                  {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
-                                <div class="text-h4">0-0</div>
+                                <div class="text-h4">{{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
+                                  userBets.find(bet => bet.matchID === game.fixture.id)?.home + '-' + userBets.find(bet => bet.matchID === game.fixture.id)?.away : `-` }}</div>
                               </div>
                             </v-col>
                             <v-col cols="6" class="d-flex flex-column justify-center align-center">
                               <v-card-subtitle>
-                                Punkty:
+                                {{ $t('user.points') + ":" }}
                               </v-card-subtitle>
-                              <div class="text-h4">+3</div>
+                              <div class="text-h4">
+                                {{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
+                                  userBets.find(bet => bet.matchID === game.fixture.id)?.points : '-' }}
+                              </div>
                             </v-col>
                           </v-row>
-
                         </v-col>
                       </v-row>
                     </v-card>
                   </v-container>
 
                 </v-tabs-window-item>
-
                 <v-tabs-window-item :value="1">
+                  tu bedą się wyświetlać typy niezakończonych meczów
+                </v-tabs-window-item>
+
+                <v-tabs-window-item :value="2">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <v-card-actions class="justify-center">
+                    <!-- <v-card-actions class="justify-center">
                       <v-btn color="primary" variant="tonal" size="large">{{ $t('user.saveBets') }}</v-btn>
-                    </v-card-actions>
+                    </v-card-actions> -->
                     <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index"
                       class="my-10 px-4">
                       <v-row>
@@ -194,14 +201,17 @@ function formatTimestamp(timestamp: number): string {
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
 }
 
-function setColor(bet: any) {
-  switch (bet) {
+function setColor(matchID: Number) {
+  const userBet = userBets.value.find(bet => bet.matchID === matchID);
+  if (userBet != undefined) {
+    switch (userBet.points) {
     case 3:
       return 'green'
     case 1:
       return "orange";
     case 0:
       return "red";
+    }
   }
 }
 
@@ -221,7 +231,7 @@ onMounted(() => {
   betStore.fetchLastFixturesData(39, 2024)
   if (user.value?.reference) {
     betStore.fetchUserBets(user.value.reference)
-    console.log()
+    console.log(userBets.value)
   }
   setBetsToSave()
 })
