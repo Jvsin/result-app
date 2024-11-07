@@ -1,49 +1,51 @@
+import { getAuth } from 'firebase/auth';
+import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where, type DocumentReference } from 'firebase/firestore';
 import { defineStore } from 'pinia';
+import type { BetModel } from '~/models/bet'
 
-export const useBetStore = defineStore('bets', {
-  state: () => ({ 
-    nextGames: null as any | null,
-    pastGames: null as any | null,
+export const useBetStore = defineStore('bets', () => {
+  const auth = getAuth();
+  const db = getFirestore();
+  const nextGames = ref<any>()
+  const pastGames = ref<any>()
+  const userBets = ref<BetModel[]>([])
 
-    
-  }),
-  actions: {
-    convertDateToString() {
-      const today = new Date();
+  const convertDateToString = () => {
+    const today = new Date();
 
-      const formatDate = (date: Date): string => {
-          const year = date.getFullYear();
-          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-          const day = date.getDate().toString().padStart(2, '0');
-          return `${year}-${month}-${day}`;
-      };
+    const formatDate = (date: Date): string => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
-      const nextWeek = new Date(today);
-      nextWeek.setDate(today.getDate() + 7);
-      const lastTwoWeeks = new Date(today)
-      lastTwoWeeks.setDate(today.getDate() - 14)
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7);
+    const lastTwoWeeks = new Date(today)
+    lastTwoWeeks.setDate(today.getDate() - 14)
 
-      const todayFormatted = formatDate(today);
-      const nextWeekFormatted = formatDate(nextWeek);
-      const lastTwoWeeksFormatted = formatDate(lastTwoWeeks)
+    const todayFormatted = formatDate(today);
+    const nextWeekFormatted = formatDate(nextWeek);
+    const lastTwoWeeksFormatted = formatDate(lastTwoWeeks)
 
-      console.log(todayFormatted, nextWeekFormatted, lastTwoWeeksFormatted)
-      return {
-          today: todayFormatted,
-          nextWeek: nextWeekFormatted,
-          lastTwoWeeks: lastTwoWeeksFormatted
-      };
-    },
+    console.log(todayFormatted, nextWeekFormatted, lastTwoWeeksFormatted)
+    return {
+      today: todayFormatted,
+      nextWeek: nextWeekFormatted,
+      lastTwoWeeks: lastTwoWeeksFormatted
+    };
+  }
 
-    async fetchNextGames(leagueId: number, count: number) {
-      const dates = this.convertDateToString()
+  const fetchNextFixturesData = async (leagueId: number, count: number) => {
+    const dates = convertDateToString()
       // const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&next=${count}`;
       const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.today}&to=${dates.nextWeek}`
       const headers = {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
       };
-      this.nextGames = json
+      nextGames.value = json
       // try {
       //   const response = await fetch(url, {
       //     method: 'GET',
@@ -61,16 +63,16 @@ export const useBetStore = defineStore('bets', {
       //   console.error('Error fetching fixtures data:', error);
       //   this.nextGames = null;
       // }
-    },
+    }
 
-    async fetchLastFixturesData(leagueId: number, season: number) {
-      const dates = this.convertDateToString()
+    const fetchLastFixturesData =  async (leagueId: number, season: number) => {
+      const dates = convertDateToString()
       const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.lastTwoWeeks}&to=${dates.today}`
       const headers = {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
       }; 
-      this.pastGames = json2
+      pastGames.value = json2
       // try {
       //   const response = await fetch(url, {
       //     method: 'GET',
@@ -87,8 +89,69 @@ export const useBetStore = defineStore('bets', {
       //   console.error('Error fetching fixtures data:', error);
       //   this.pastGames = null;
       // }
-    },
-  }
+    }
+
+    const saveUserBet = async (userRef: DocumentReference, bet: BetModel) => {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      try {
+        const userBetsCollection = collection(db, 'users', userRef.id, 'bets');
+        // const isBetExist = userBets.value.find(b => b.matchID === bet.matchID)
+        const existingBetQuery = query(userBetsCollection, where('matchID', '==', bet.matchID));
+        const querySnapshot = await getDocs(existingBetQuery);
+
+        if (!querySnapshot.empty) {
+          const existingBetDoc = querySnapshot.docs[0]
+          const betUpdate = {
+            matchID: bet.matchID,
+            matchDate: bet.matchDate,
+            home: bet.home,
+            away: bet.away,
+            points: bet.points,
+            counted: bet.counted,
+            league: bet.league
+          };
+          await updateDoc(existingBetDoc.ref, betUpdate)
+          const betIndex = userBets.value.findIndex(b => b.matchID === betUpdate.matchID)
+          if (betIndex !== -1) {
+            userBets.value[betIndex] = bet;
+          }
+          console.log('Bet edited with ID: ', bet.matchID)
+        }
+        else {
+          const docRef = await addDoc(userBetsCollection, bet);
+          console.log('Bet saved with ID: ', docRef.id);
+        }
+      } catch (e) {
+        console.error('Error adding document: ', e);
+      }
+    }
+    
+    const fetchUserBets = async (userRef: DocumentReference) => {
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+      try {
+        const userBetsCollection = collection(db, 'users', userRef.id, 'bets');
+        const querySnapshot = await getDocs(userBetsCollection);
+        const bets: BetModel[] = [];
+
+        querySnapshot.forEach((doc) => {
+          bets.push(doc.data() as BetModel);
+        });
+
+        userBets.value = bets;
+        console.log('User bets fetched: ', userBets.value);
+      } catch (e) {
+        console.error('Error fetching user bets: ', e);
+      }
+    }
+  
+    return { pastGames, nextGames, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets }
 })
 
 

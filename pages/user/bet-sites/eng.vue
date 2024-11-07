@@ -128,8 +128,9 @@
 
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify'
-import type { BetModel } from '~/models/bet';
+import type { BetModel, IBet } from '~/models/bet';
 import { useBetStore } from '~/stores/betStore';
+import { useAuthStore } from '~/stores/authStore';
 
 definePageMeta({
   middleware: 'auth'
@@ -139,34 +140,39 @@ const tab = ref(0)
 const { mobile } = useDisplay()
 
 const betStore = useBetStore()
+const authStore = useAuthStore()
 const nextGames = computed(() => betStore.nextGames);
 const lastGames = computed(() => betStore.pastGames)
+const user = computed(() => authStore.loggedUserData)
+const userBets = computed(() => betStore.userBets)
 
-const homeGoals = ref<Number>()
-const awayGoals = ref<Number>()
-
-const betsToSave = ref<{ [key: number]: BetModel }>({});
+const betsToSave = ref<{ [key: number]: IBet }>({});
 
 function setBetsToSave() {
   console.log(nextGames.value)
   nextGames.value.forEach((game : any) => {
   console.log(game);
-  const bet: BetModel = {
+  const bet: IBet = {
     matchID: game.fixture.id,
     matchDate: game.fixture.date,
     home: -1,
     away: -1,
     points: 0,
-    counted: false
+    counted: false,
+    league: "eng"
   };
   console.log(bet);
   betsToSave.value[game.fixture.id] = bet
 });
 }
 
-function saveBet(matchID: number) {
+async function saveBet(matchID: number) {
   const bet = betsToSave.value[matchID]
   console.log(bet)
+
+  if (user.value?.reference) {
+    await betStore.saveUserBet(user.value.reference, bet)
+  }
 }
 
 function setMatchWeek(input: string): string {
@@ -180,7 +186,7 @@ function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp * 1000);
 
   const day = date.getUTCDate().toString().padStart(2, '0');
-  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Miesiące są 0-indeksowane
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
   const year = date.getUTCFullYear();
   const hours = date.getUTCHours().toString().padStart(2, '0');
   const minutes = date.getUTCMinutes().toString().padStart(2, '0');
@@ -211,9 +217,12 @@ function makeShortName(name: string) {
 
 onMounted(() => {
   console.log("liverpool".indexOf(' '))
-  betStore.fetchNextGames(39, 2024)
+  betStore.fetchNextFixturesData(39, 2024)
   betStore.fetchLastFixturesData(39, 2024)
-
+  if (user.value?.reference) {
+    betStore.fetchUserBets(user.value.reference)
+    console.log()
+  }
   setBetsToSave()
 })
 </script>

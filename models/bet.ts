@@ -4,7 +4,8 @@ export interface IBet {
     home: Number,
     away: Number,
     points: Number,
-    counted: Boolean
+    counted: Boolean,
+    league: String
 }
 
 export class BetModel implements IBet {
@@ -14,6 +15,7 @@ export class BetModel implements IBet {
     away: Number
     points: Number
     counted: Boolean
+    league: String
     
     constructor(data: IBet) {
         this.matchID = data?.matchID || -1
@@ -22,7 +24,7 @@ export class BetModel implements IBet {
         this.away = data?.away || -1
         this.points = data?.points || 0
         this.counted = data?.counted || false
-
+        this.league = data?.league || ''
     }
 }
 
@@ -33,6 +35,7 @@ export function toMapUser(data?: Partial<IBet>): IBet {
         home: data?.home || -1,
         away: data?.away || -1,
         points: data?.points || 0,
-        counted: data?.counted || false
+        counted: data?.counted || false,
+        league: data?.league || ''
     }
 }
