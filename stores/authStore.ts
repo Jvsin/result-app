@@ -90,6 +90,7 @@ export const useAuthStore = defineStore('auth', () => {
   const fetchUserData = async (uid: string) => { 
     loading.value = true;
     error.value = null;
+
     try {
       const userDocRef = doc(db, "users", uid);
       const userDoc = await getDoc(userDocRef);
@@ -107,6 +108,35 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       // loading.value = false;
     }
+  }
+
+  const actualizeUserData = async () => {
+    try {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      const uid = currentUser.uid;
+      const userDocRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as IUser;
+        loggedUserData.value = new UserModel(userData, userDocRef);
+      } else {
+        error.value = "User data not found";
+        loggedUserData.value = null;
+      }
+    } else {
+      error.value = "No authenticated user found";
+      loggedUserData.value = null;
+    }
+  } catch (err: any) {
+    error.value = err.message;
+    console.log(err);
+    loggedUserData.value = null;
+  } finally {
+    loading.value = false;
+  }
   }
 
   const editProfile = async (data: any) => {
@@ -133,5 +163,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague };
+  return {
+    user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
+    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague
+  };
 });

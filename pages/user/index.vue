@@ -304,6 +304,10 @@ function formatTimestampToDate(timestamp: any) {
     return 'data zalozenia'
   }
 }
+
+onMounted(async () => {
+  await authStore.actualizeUserData()
+})
 </script>
 
 <style scoped>
