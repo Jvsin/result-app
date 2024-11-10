@@ -40,7 +40,7 @@ export const useBetStore = defineStore('bets', () => {
   const fetchNextFixturesData = async (leagueId: number, count: number) => {
     const dates = convertDateToString()
       // const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&next=${count}`;
-      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.today}&to=${dates.nextWeek}`
+      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.today}&to=${dates.nextWeek}&status=NS`
       const headers = {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',

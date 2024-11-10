@@ -97,7 +97,7 @@
                     </v-card-actions> -->
                     <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index"
                       class="my-10 px-4">
-                      <div v-if="game.fixture.status.short == 'NS'">
+                      <!-- <div v-if="game.fixture.status.short == 'NS'"> -->
                         <v-row>
                         <v-col class="justify-center">
                           <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
@@ -130,7 +130,7 @@
                       </v-row>
                       <v-btn color="primary" variant="tonal" size="small" @click="saveBet(game.fixture.id)">
                         {{ $t('user.save') }}<v-icon>mdi-check</v-icon></v-btn>
-                      </div>
+                      <!-- </div> -->
                     </v-card>
                   </v-container>
                 </v-tabs-window-item>
