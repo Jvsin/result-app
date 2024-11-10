@@ -161,7 +161,7 @@ const authStore = useAuthStore()
 const nextGames = computed(() => betStore.nextGames);
 const lastGames = computed(() => betStore.pastGames)
 const user = computed(() => authStore.loggedUserData)
-const userBets = computed(() => betStore.userBets)
+const userBets = computed(() => betStore.allUserBets)
 
 const betsToSave = ref<{ [key: number]: IBet }>({});
 

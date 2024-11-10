@@ -92,7 +92,7 @@
                       <v-col cols="auto">
                         <v-select
                           :label="$t('user.show')"
-                          :items="[10, 20, 30]"
+                          :items="[10, 15, 20]"
                           v-model="matchesNumber"
                         ></v-select>
                       </v-col>
@@ -141,9 +141,49 @@
                 <v-tabs-window-item :value="2">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
                     <div>
-                      <v-btn color="primary" variant="outlined">Pobierz dane</v-btn>
+                      <v-btn color="primary" variant="outlined" @click="fetchLastUserBets">Pobierz dane</v-btn>
                     </div>
+                    <v-container v-if="lastBetsGames" style="background-color: rgba(0, 0, 0, 0);">
+                      <v-card variant="text" elevation="16" v-for="(game, index) in lastBetsGames" :key="index"
+                        class="mb-5 px-4">
+                        <v-row>
+                          <v-col class="justify-center">
+                            <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
+                            <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
+                              + ' ' + setMatchWeek(game.league.round) + ' | ' +
+                              formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+                          </v-col>
+                        </v-row>
+                        <v-row class="d-flex align-center" justify="center">
+                          <v-col cols="2" md="1" class="d-flex justify-center align-center">
+                            <v-img max-height="50" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                          </v-col>
+                          <v-col cols="3" class="d-none d-sm-flex justify-center align-center">
+                            <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                          </v-col>
+
+                          <v-col cols="auto" class="d-flex justify-center align-center">
+                            <div no-wrap class="text-center text-h4">{{ lastUserBets[game.fixture.id]?.home + '-'
+                            + lastUserBets[game.fixture.id]?.away }}
+                              </div>
+                            <!-- <v-number-input v-model="lastUserBets[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
+                              :inset="false" variant="outlined"></v-number-input>
+                            <v-number-input v-model="lastUserBets[game.fixture.id].away" :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                              variant="outlined"></v-number-input> -->
+                          </v-col>
+
+                          <v-col cols="3" class="d-none d-sm-flex justify-center align-center">
+                            <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                          </v-col>
+                          <v-col cols="2" md="1" class="d-flex justify-center align-center">
+                            <v-img :max-height="50" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                          </v-col>
+                        </v-row>
+                      </v-card>
+                    </v-container>
+                    <!-- <v-alert v-else type="warning">{{ $t('snackbars.loading') + '...'}}</v-alert> -->
                   </v-container>
+                  
                 </v-tabs-window-item>
               </v-tabs-window>
             </v-col>
@@ -172,7 +212,28 @@ const authStore = useAuthStore()
 const nextGames = computed(() => betStore.nextGames);
 const lastGames = computed(() => betStore.pastGames)
 const user = computed(() => authStore.loggedUserData)
-const userBets = computed(() => betStore.userBets)
+const userBets = computed(() => betStore.allUserBets)
+
+const lastUserBets = computed(() => {
+  const bets = ref<{ [key: number]: IBet }>({})
+  betStore.lastBets.forEach((game : any) => {
+    console.log(game);
+    const bet: IBet = {
+      matchID: game.matchID,
+      matchDate: game.matchDate,
+      home: game.home,
+      away: game.away,
+      points: game.points,
+      counted: game.counted,
+      league: "eng"
+    };
+    console.log(bet);
+    bets.value[game.matchID] = bet
+  })
+  console.log(bets)
+  return bets.value
+})
+const lastBetsGames = computed(() => betStore.lastBetsData)
 
 const betsToSave = ref<{ [key: number]: IBet }>({})
 
@@ -209,8 +270,19 @@ async function saveBet(matchID: number) {
 
   if (user.value?.reference) {
     await betStore.saveUserBet(user.value.reference, bet)
+    await betStore.fetchLastUserBets(user.value.reference, "eng") //do zrobienia sprawdzenie czy mecz nie jest pobrany (dane)
   }
 }
+
+async function fetchLastUserBets() {
+  if (user.value?.reference) {
+    loading.value = true
+    await betStore.fetchLastUserBets(user.value.reference, "eng")
+  }
+  loading.value = false
+  console.log(lastUserBets.value)
+}
+
 
 function setMatchWeek(input: string): string {
   if (input.length === 0) {
