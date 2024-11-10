@@ -23,7 +23,7 @@ export const useBetStore = defineStore('bets', () => {
     const nextWeek = new Date(today);
     nextWeek.setDate(today.getDate() + 7);
     const lastTwoWeeks = new Date(today)
-    lastTwoWeeks.setDate(today.getDate() - 14)
+    lastTwoWeeks.setDate(today.getDate() - 9)
 
     const todayFormatted = formatDate(today);
     const nextWeekFormatted = formatDate(nextWeek);
@@ -45,24 +45,24 @@ export const useBetStore = defineStore('bets', () => {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
       };
-      nextGames.value = json
-      // try {
-      //   const response = await fetch(url, {
-      //     method: 'GET',
-      //     headers: headers,
-      //   });
-      //   const data = await response.json();
-      //   if (data && data.response) {
-      //     this.nextGames = data.response;
-      //     console.log(this.nextGames)
-      //   } else {
-      //     this.nextGames = null;
-      //   }
-      //   // this.nextGamesData = json3
-      // } catch (error) {
-      //   console.error('Error fetching fixtures data:', error);
-      //   this.nextGames = null;
-      // }
+      // nextGames.value = json
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          nextGames.value = data.response;
+          console.log(nextGames.value)
+        } else {
+          nextGames.value = null;
+        }
+        // this.nextGamesData = json3
+      } catch (error) {
+        console.error('Error fetching fixtures data:', error);
+        nextGames.value = null;
+      }
     }
 
     const fetchLastFixturesData =  async (leagueId: number, season: number) => {
@@ -72,23 +72,23 @@ export const useBetStore = defineStore('bets', () => {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
       }; 
-      pastGames.value = json2
-      // try {
-      //   const response = await fetch(url, {
-      //     method: 'GET',
-      //     headers: headers,
-      //   });
-      //   const data = await response.json();
-      //   if (data && data.response) {
-      //     this.pastGames = data.response;
-      //   } else {
-      //     this.pastGames = null;
-      //   }
-      //   // this.lastGamesData = json
-      // } catch (error) {
-      //   console.error('Error fetching fixtures data:', error);
-      //   this.pastGames = null;
-      // }
+      // pastGames.value = json2
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers,
+        });
+        const data = await response.json();
+        if (data && data.response) {
+          pastGames.value = data.response;
+        } else {
+          pastGames.value = null;
+        }
+        // this.lastGamesData = json
+      } catch (error) {
+        console.error('Error fetching fixtures data:', error);
+        pastGames.value = null;
+      }
     }
 
     const saveUserBet = async (userRef: DocumentReference, bet: IBet) => {

@@ -20,8 +20,9 @@
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <v-card :color="setColor(game.fixture.id)" variant="text" elevation="16" v-for="(game, index) in lastGames"
-                      :key="index" class="my-5 px-4">
+                    <v-card  :color="setColor(game.fixture.id, game.fixture.status.short)" 
+                    variant="text" elevation="16" v-for="(game, index) in lastGames"
+                      :key="index" class="my-5 px-0">
                       <v-row>
                         <v-col class="justify-center">
                           <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
@@ -40,7 +41,9 @@
                               <v-card-title>{{ makeShortName(game.teams.home.name) }}</v-card-title>
                             </v-col>
                             <v-col cols="4" class="d-flex flex-column justify-center align-center">
-                              <div no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}
+                              <div v-if="game.fixture.status.short =='NS'" no-wrap class="text-center text-h4"> - 
+                              </div>
+                              <div v-else no-wrap class="text-center text-h4">{{ game.goals.home + '-' + game.goals.away }}
                               </div>
                             </v-col>
                             <v-col cols="1" class="d-none d-sm-flex justify-center align-center">
@@ -66,20 +69,25 @@
                               <v-card-subtitle>
                                 {{ $t('user.points') + ":" }}
                               </v-card-subtitle>
-                              <div class="text-h4">
+                              <div v-if="game.fixture.status.short =='FT'" class="text-h4">
                                 {{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
                                   userBets.find(bet => bet.matchID === game.fixture.id)?.points : '-' }}
+                              </div>
+                              <div v-else class="text-h4">
+                                ?
                               </div>
                             </v-col>
                           </v-row>
                         </v-col>
                       </v-row>
+                      <v-progress-linear v-if="game.fixture.status.short !== 'FT'" color="red" height="5"
+                        :model-value="game.fixture.status.elapsed/90 * 100" striped></v-progress-linear>
                     </v-card>
                   </v-container>
 
                 </v-tabs-window-item>
                 <v-tabs-window-item :value="1">
-                  tu bedą się wyświetlać typy niezakończonych meczów
+                  asdkasdkasdas
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="2">
@@ -89,7 +97,8 @@
                     </v-card-actions> -->
                     <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index"
                       class="my-10 px-4">
-                      <v-row>
+                      <div v-if="game.fixture.status.short == 'NS'">
+                        <v-row>
                         <v-col class="justify-center">
                           <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
                           <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
@@ -121,6 +130,7 @@
                       </v-row>
                       <v-btn color="primary" variant="tonal" size="small" @click="saveBet(game.fixture.id)">
                         {{ $t('user.save') }}<v-icon>mdi-check</v-icon></v-btn>
+                      </div>
                     </v-card>
                   </v-container>
                 </v-tabs-window-item>
@@ -158,19 +168,19 @@ const betsToSave = ref<{ [key: number]: IBet }>({});
 function setBetsToSave() {
   console.log(nextGames.value)
   nextGames.value.forEach((game : any) => {
-  console.log(game);
-  const bet: IBet = {
-    matchID: game.fixture.id,
-    matchDate: game.fixture.date,
-    home: 0,
-    away: 0,
-    points: 0,
-    counted: false,
-    league: "eng"
-  };
-  console.log(bet);
-  betsToSave.value[game.fixture.id] = bet
-});
+    console.log(game);
+    const bet: IBet = {
+      matchID: game.fixture.id,
+      matchDate: game.fixture.date,
+      home: 0,
+      away: 0,
+      points: 0,
+      counted: false,
+      league: "eng"
+    };
+    console.log(bet);
+    betsToSave.value[game.fixture.id] = bet
+  });
 }
 
 async function saveBet(matchID: number) {
@@ -201,17 +211,25 @@ function formatTimestamp(timestamp: number): string {
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
 }
 
-function setColor(matchID: Number) {
+function setColor(matchID: Number, status: string) {
   const userBet = userBets.value.find(bet => bet.matchID === matchID);
-  if (userBet != undefined) {
-    switch (userBet.points) {
-    case 3:
-      return 'green'
-    case 1:
-      return "orange";
-    case 0:
-      return "red";
+  if (status == 'FT') {
+    if (userBet != undefined) {
+      switch (userBet.points) {
+        case 3:
+          return 'green'
+        case 1:
+          return "orange";
+        case 0:
+          return "red";
+        default:
+          return "red";
+      }
     }
+  } else if(status == 'NS') {
+    return 'cyan'
+  } else {
+    'white'
   }
 }
 
@@ -225,10 +243,10 @@ function makeShortName(name: string) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   console.log("liverpool".indexOf(' '))
-  betStore.fetchNextFixturesData(39, 2024)
-  betStore.fetchLastFixturesData(39, 2024)
+  await betStore.fetchNextFixturesData(39, 2024)
+  await betStore.fetchLastFixturesData(39, 2024)
   if (user.value?.reference) {
     betStore.fetchUserBets(user.value.reference)
     console.log(userBets.value)
