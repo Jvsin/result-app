@@ -1,5 +1,8 @@
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where, type DocumentReference } from 'firebase/firestore';
+import {
+  addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where,
+  type DocumentReference, orderBy, limit
+} from 'firebase/firestore';
 import { defineStore } from 'pinia';
 import { BetModel, type IBet } from '~/models/bet'
 
@@ -9,6 +12,7 @@ export const useBetStore = defineStore('bets', () => {
   const nextGames = ref<any>()
   const pastGames = ref<any>()
   const userBets = ref<BetModel[]>([])
+  const lastUserBets = ref<any>()
 
   const convertDateToString = () => {
     const today = new Date();
@@ -21,7 +25,7 @@ export const useBetStore = defineStore('bets', () => {
     };
 
     const nextWeek = new Date(today);
-    nextWeek.setDate(today.getDate() + 7);
+    nextWeek.setDate(today.getDate() + 10);
     const lastTwoWeeks = new Date(today)
     lastTwoWeeks.setDate(today.getDate() - 9)
 
@@ -39,8 +43,8 @@ export const useBetStore = defineStore('bets', () => {
 
   const fetchNextFixturesData = async (leagueId: number, count: number) => {
     const dates = convertDateToString()
-      // const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&next=${count}`;
-      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.today}&to=${dates.nextWeek}&status=NS`
+      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&next=${count}`;
+      // const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${leagueId}&season=2024&from=${dates.today}&to=${dates.nextWeek}&status=NS`
       const headers = {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
@@ -90,6 +94,52 @@ export const useBetStore = defineStore('bets', () => {
         pastGames.value = null;
       }
     }
+  
+  // const fetchBetsFromFirebase = async (userRef: DocumentReference, league: string) => {
+  //   const betsRef = collection(db, `users/${userRef.id}/bets`);
+  //     const betsQuery = query(
+  //       betsRef,
+  //       where("league", "==", league),
+  //       orderBy("timestamp", "desc"), 
+  //       limit(20)
+  //     );
+
+  //     const querySnapshot = await getDocs(betsQuery);
+  //   const bets: IBet[] = [];
+  //   const userBets: IBet = []
+  //   querySnapshot.forEach((doc) => {
+        
+  //       bets.push({ id: doc.id, ...doc.data() });
+  //     });
+
+  //     return bets;
+  // }
+  
+  // const fetchLastUserBets = async (games: [Number]) => {
+  //   const matchesString = games.join('-')
+  //   const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?ids=${matchesString}`
+  //   const headers = {
+  //       'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
+  //       'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+  //   };
+    
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: 'GET',
+  //       headers: headers,
+  //     });
+  //     const data = await response.json();
+  //     if (data && data.response) {
+  //       lastUserBets.value = data.response;
+  //       console.log(nextGames.value)
+  //     } else {
+  //       lastUserBets.value = [];
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching fixtures data:', error);
+  //     lastUserBets.value = [];
+  //   }
+  // }
 
     const saveUserBet = async (userRef: DocumentReference, bet: IBet) => {
       const user = auth.currentUser;

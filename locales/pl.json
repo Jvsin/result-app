@@ -108,7 +108,9 @@
       "cancel": "Anuluj",
       "save": "Zapisz",
       "noLeaguesInfo": "Nie obserwujesz żadnej ligi"
-    }
+    },
+    "show": "Pokaż"
+    
   },
   "errors": {
     "register": {
@@ -125,5 +127,8 @@
       "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
       "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
     }
+  },
+  "snackbars": {
+    "loading": "Ładowanie"
   }
 }

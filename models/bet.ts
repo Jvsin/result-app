@@ -34,7 +34,7 @@ export class BetModel implements IBet {
     }
 }
 
-export function toMapUser(data?: Partial<IBet>): IBet {
+export function toMapBet(data?: Partial<IBet>): IBet {
     return {
         matchID: data?.matchID || -1,
         matchDate: data?.matchDate || new Date(),

@@ -108,7 +108,8 @@
       "cancel": "Cancel",
       "save": "Save",
       "noLeaguesInfo": "You don't follow any league"
-    }
+    },
+    "show": "Show"
   },
   "errors":{
     "register": {
@@ -125,5 +126,8 @@
       "errorWhileEditingProfile": "Error while editing profile, try again later",
       "errorLeaguesNotFound": "No leagues founded."
     }
-  }  
+  },
+  "snackbars": {
+    "loading": "Loading"
+  }
 }

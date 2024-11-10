@@ -14,8 +14,8 @@
               </v-card-title>
               <v-tabs v-model="tab" color="primary" class="px-5" grow>
                 <v-tab :key="0" value="0">{{ $t('user.yourPoints') }}</v-tab>
-                <v-tab :key="1" value="1">{{ $t('user.yourBets') }}</v-tab>
-                <v-tab :key="2" value="2">{{ $t('user.bet') }}</v-tab>
+                <v-tab :key="1" value="1">{{ $t('user.bet') }}</v-tab>
+                <v-tab :key="2" value="2">{{ $t('user.yourBets') }}</v-tab>
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
@@ -84,19 +84,21 @@
                         :model-value="game.fixture.status.elapsed/90 * 100" striped></v-progress-linear>
                     </v-card>
                   </v-container>
-
                 </v-tabs-window-item>
+                
                 <v-tabs-window-item :value="1">
-                  asdkasdkasdas
-                </v-tabs-window-item>
-
-                <v-tabs-window-item :value="2">
-                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <!-- <v-card-actions class="justify-center">
-                      <v-btn color="primary" variant="tonal" size="large">{{ $t('user.saveBets') }}</v-btn>
-                    </v-card-actions> -->
+                  <v-container v-if="!loading" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-row justify="center">
+                      <v-col cols="auto">
+                        <v-select
+                          :label="$t('user.show')"
+                          :items="[10, 20, 30]"
+                          v-model="matchesNumber"
+                        ></v-select>
+                      </v-col>
+                    </v-row>
                     <v-card variant="text" elevation="16" v-for="(game, index) in nextGames" :key="index"
-                      class="my-10 px-4">
+                      class="mb-5 px-4">
                       <!-- <div v-if="game.fixture.status.short == 'NS'"> -->
                         <v-row>
                         <v-col class="justify-center">
@@ -133,6 +135,15 @@
                       <!-- </div> -->
                     </v-card>
                   </v-container>
+                  <v-alert v-else type="warning">{{ $t('snackbars.loading') + '...'}}</v-alert>
+                </v-tabs-window-item>
+
+                <v-tabs-window-item :value="2">
+                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
+                    <div>
+                      <v-btn color="primary" variant="outlined">Pobierz dane</v-btn>
+                    </div>
+                  </v-container>
                 </v-tabs-window-item>
               </v-tabs-window>
             </v-col>
@@ -163,7 +174,15 @@ const lastGames = computed(() => betStore.pastGames)
 const user = computed(() => authStore.loggedUserData)
 const userBets = computed(() => betStore.userBets)
 
-const betsToSave = ref<{ [key: number]: IBet }>({});
+const betsToSave = ref<{ [key: number]: IBet }>({})
+
+const loading = ref<Boolean>(false)
+const matchesNumber = ref<number>(10)
+watch(matchesNumber, async (oldNum, newNum) => {
+  loading.value = true
+  await betStore.fetchNextFixturesData(39, matchesNumber.value)
+  setBetsToSave()
+}, { immediate: true });
 
 function setBetsToSave() {
   console.log(nextGames.value)
@@ -181,6 +200,7 @@ function setBetsToSave() {
     console.log(bet);
     betsToSave.value[game.fixture.id] = bet
   });
+  loading.value = false
 }
 
 async function saveBet(matchID: number) {
@@ -245,7 +265,7 @@ function makeShortName(name: string) {
 
 onMounted(async () => {
   console.log("liverpool".indexOf(' '))
-  await betStore.fetchNextFixturesData(39, 2024)
+  await betStore.fetchNextFixturesData(39, 10)
   await betStore.fetchLastFixturesData(39, 2024)
   if (user.value?.reference) {
     betStore.fetchUserBets(user.value.reference)
