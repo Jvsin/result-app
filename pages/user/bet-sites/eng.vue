@@ -21,7 +21,7 @@
                 <v-tabs-window-item :value="0">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
                     <v-card  :color="setColor(game.fixture.id, game.fixture.status.short)" 
-                    variant="text" elevation="16" v-for="(game, index) in lastGames"
+                    variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
                       <v-row>
                         <v-col class="justify-center">
@@ -61,17 +61,26 @@
                                 <v-card-subtitle>
                                   {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
-                                <div class="text-h4">{{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
+                                <!-- <div class="text-h4">{{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
                                   userBets.find(bet => bet.matchID === game.fixture.id)?.home + '-' + userBets.find(bet => bet.matchID === game.fixture.id)?.away : `-` }}</div>
-                              </div>
+                              </div> -->
+                                  <!-- <div no-wrap class="text-center text-h4">{{ pastUserBets[game.fixture.id]?.home + '-'
+                                + pastUserBets[game.fixture.id]?.away }}</div> -->
+                                <div no-wrap class="text-center text-h4">
+                                  {{ (pastUserBets.find(bet => bet.matchID === game.fixture.id)) ? 
+                                    pastUserBets.find(bet => bet.matchID === game.fixture.id)?.home + '-'
+                                    + pastUserBets.find(bet => bet.matchID === game.fixture.id)?.away
+                                    : '-' }}
+                                </div>
+                            </div>
                             </v-col>
                             <v-col cols="6" class="d-flex flex-column justify-center align-center">
                               <v-card-subtitle>
                                 {{ $t('user.points') + ":" }}
                               </v-card-subtitle>
                               <div v-if="game.fixture.status.short =='FT'" class="text-h4">
-                                {{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
-                                  userBets.find(bet => bet.matchID === game.fixture.id)?.points : '-' }}
+                                {{ (pastUserBets.find(bet => bet.matchID === game.fixture.id)) ? 
+                                  pastUserBets.find(bet => bet.matchID === game.fixture.id)?.points : '-' }}
                               </div>
                               <div v-else class="text-h4">
                                 ?
@@ -141,10 +150,10 @@
                 <v-tabs-window-item :value="2">
                   <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
                     <div>
-                      <v-btn color="primary" variant="outlined" @click="fetchLastUserBets">Pobierz dane</v-btn>
+                      <v-btn color="primary" variant="outlined" @click="fetchFutureUserBets">Pobierz dane</v-btn>
                     </div>
-                    <v-container v-if="lastBetsGames" style="background-color: rgba(0, 0, 0, 0);">
-                      <v-card variant="text" elevation="16" v-for="(game, index) in lastBetsGames" :key="index"
+                    <v-container v-if="futureUserBetsData" style="background-color: rgba(0, 0, 0, 0);">
+                      <v-card variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
                         class="mb-5 px-4">
                         <v-row>
                           <v-col class="justify-center">
@@ -163,8 +172,8 @@
                           </v-col>
 
                           <v-col cols="auto" class="d-flex justify-center align-center">
-                            <div no-wrap class="text-center text-h4">{{ lastUserBets[game.fixture.id]?.home + '-'
-                            + lastUserBets[game.fixture.id]?.away }}
+                            <div no-wrap class="text-center text-h4">{{ futureUserBets[game.fixture.id]?.home + '-'
+                            + futureUserBets[game.fixture.id]?.away }}
                               </div>
                             <!-- <v-number-input v-model="lastUserBets[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                               :inset="false" variant="outlined"></v-number-input>
@@ -209,14 +218,37 @@ const { mobile } = useDisplay()
 
 const betStore = useBetStore()
 const authStore = useAuthStore()
-const nextGames = computed(() => betStore.nextGames);
-const lastGames = computed(() => betStore.pastGames)
+const nextGames = computed(() => betStore.nextGames)
+// const lastGames = computed(() => betStore.pastGames)
+// const userBets = computed(() => betStore.allUserBets)
 const user = computed(() => authStore.loggedUserData)
-const userBets = computed(() => betStore.allUserBets)
 
-const lastUserBets = computed(() => {
+const pastUserBets = computed(() => {
+  // const bets = ref<{ [key: number]: IBet }>({})
+  // betStore.pastUserBets.forEach((game : any) => {
+  //   console.log(game);
+  //   const bet: IBet = {
+  //     matchID: game.matchID,
+  //     matchDate: game.matchDate,
+  //     home: game.home,
+  //     away: game.away,
+  //     points: game.points,
+  //     counted: game.counted,
+  //     league: "eng"
+  //   };
+  //   console.log(bet);
+  //   bets.value[game.matchID] = bet
+  // })
+  // console.log(bets)
+  // return bets.value
+  return betStore.pastUserBets
+})
+const pastUserBetsData = computed(() => betStore.pastBetsData)
+
+
+const futureUserBets = computed(() => {
   const bets = ref<{ [key: number]: IBet }>({})
-  betStore.lastBets.forEach((game : any) => {
+  betStore.futureUserBets.forEach((game : any) => {
     console.log(game);
     const bet: IBet = {
       matchID: game.matchID,
@@ -233,9 +265,7 @@ const lastUserBets = computed(() => {
   console.log(bets)
   return bets.value
 })
-const lastBetsGames = computed(() => betStore.lastBetsData)
-
-const betsToSave = ref<{ [key: number]: IBet }>({})
+const futureUserBetsData = computed(() => betStore.futureBetsData)
 
 const loading = ref<Boolean>(false)
 const matchesNumber = ref<number>(10)
@@ -245,6 +275,7 @@ watch(matchesNumber, async (oldNum, newNum) => {
   setBetsToSave()
 }, { immediate: true });
 
+const betsToSave = ref<{ [key: number]: IBet }>({})
 function setBetsToSave() {
   console.log(nextGames.value)
   nextGames.value.forEach((game : any) => {
@@ -270,17 +301,17 @@ async function saveBet(matchID: number) {
 
   if (user.value?.reference) {
     await betStore.saveUserBet(user.value.reference, bet)
-    await betStore.fetchLastUserBets(user.value.reference, "eng") //do zrobienia sprawdzenie czy mecz nie jest pobrany (dane)
+    // await betStore.fetchFutureUserBets(user.value.reference, "eng") //do zrobienia sprawdzenie czy mecz nie jest pobrany (dane)
   }
 }
 
-async function fetchLastUserBets() {
+async function fetchFutureUserBets() {
   if (user.value?.reference) {
     loading.value = true
-    await betStore.fetchLastUserBets(user.value.reference, "eng")
+    await betStore.fetchFutureUserBets(user.value.reference, "eng")
   }
   loading.value = false
-  console.log(lastUserBets.value)
+  console.log(futureUserBets.value)
 }
 
 
@@ -304,7 +335,7 @@ function formatTimestamp(timestamp: number): string {
 }
 
 function setColor(matchID: Number, status: string) {
-  const userBet = userBets.value.find(bet => bet.matchID === matchID);
+  const userBet = pastUserBets.value.find(bet => bet.matchID === matchID);
   if (status == 'FT') {
     if (userBet != undefined) {
       switch (userBet.points) {
@@ -338,10 +369,14 @@ function makeShortName(name: string) {
 onMounted(async () => {
   console.log("liverpool".indexOf(' '))
   await betStore.fetchNextFixturesData(39, 10)
-  await betStore.fetchLastFixturesData(39, 2024)
+  // await betStore.fetchLastFixturesData(39, 2024)
+  
+
   if (user.value?.reference) {
-    betStore.fetchUserBets(user.value.reference)
-    console.log(userBets.value)
+    await betStore.fetchPastUserBets(user.value?.reference, 'eng')
+    await betStore.fetchFutureUserBets(user.value?.reference, 'eng')
+    // betStore.fetchUserBets(user.value.reference)
+    // console.log(userBets.value)
   }
   setBetsToSave()
 })

@@ -13,8 +13,11 @@ export const useBetStore = defineStore('bets', () => {
   const pastGames = ref<any>()
   const allUserBets = ref<BetModel[]>([])
 
-  const lastBets = ref<IBet[]>([])
-  const lastBetsData = ref<any>(null)
+  const futureUserBets = ref<BetModel[]>([])
+  const futureBetsData = ref<any>(null)
+
+  const pastUserBets = ref<BetModel[]>([])
+  const pastBetsData = ref<any>(null)
 
   const convertDateToString = () => {
     const today = new Date();
@@ -97,7 +100,7 @@ export const useBetStore = defineStore('bets', () => {
       }
     }
   
-  const fetchBetsFromFirebase = async (userRef: DocumentReference, league: string) => {
+  const fetchFutureBetsFromFirebase = async (userRef: DocumentReference, league: string) => {
     const betsRef = collection(db, `users/${userRef.id}/bets`);
       const betsQuery = query(
         betsRef,
@@ -105,22 +108,26 @@ export const useBetStore = defineStore('bets', () => {
         where("counted", "==", false),
         orderBy("matchDate", "desc"), 
         limit(20)
-      );
-
+    );
+    
     const querySnapshot = await getDocs(betsQuery);
     const matchIndexes: Number[] = []
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as IBet
-      console.log(data)
-      matchIndexes.push(data.matchID)
-      lastBets.value.push(data)
+      const betData = doc.data() as IBet
+      matchIndexes.push(betData.matchID)
+      const betModel = new BetModel(betData, doc.ref);
+      futureUserBets.value.push(betModel);
+      // const data = doc.data() as IBet
+      // console.log(data)
+      // matchIndexes.push(data.matchID)
+      // futureUserBets.value.push(data)
     });
     console.log(matchIndexes)
     return matchIndexes;
   }
-  
-  const fetchLastUserBets = async (userRef: DocumentReference, league: string) => {
-    const games = await fetchBetsFromFirebase(userRef, league)
+
+  const fetchFutureUserBets = async (userRef: DocumentReference, league: string) => {
+    const games = await fetchFutureBetsFromFirebase(userRef, league)
     const matchesString = games.join('-')
     console.log(matchesString)
     const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?ids=${matchesString}`
@@ -136,14 +143,68 @@ export const useBetStore = defineStore('bets', () => {
       });
       const data = await response.json();
       if (data && data.response) {
-        lastBetsData.value = data.response;
-        console.log(nextGames.value)
+        futureBetsData.value = data.response;
+        console.log(futureBetsData.value)
       } else {
-        lastBetsData.value = [];
+        futureBetsData.value = [];
       }
     } catch (error) {
       console.error('Error fetching fixtures data:', error);
-      lastBetsData.value = [];
+      futureBetsData.value = [];
+    }
+  }
+
+  const fetchPastBetsFromFirebase = async (userRef: DocumentReference, league: string) => {
+    const betsRef = collection(db, `users/${userRef.id}/bets`);
+      const betsQuery = query(
+        betsRef,
+        where("league", "==", league),
+        where("counted", "==", true),
+        orderBy("matchDate", "desc"), 
+        limit(20)
+      );
+
+    const querySnapshot = await getDocs(betsQuery);
+    const matchIndexes: Number[] = []
+    querySnapshot.forEach((doc) => {
+      const betData = doc.data() as IBet
+      matchIndexes.push(betData.matchID)
+      const betModel = new BetModel(betData, doc.ref);
+      pastUserBets.value.push(betModel);
+      // const data = doc.data() as IBet
+      // console.log(data)
+      // matchIndexes.push(data.matchID)
+      // pastUserBets.value.push(data)
+    });
+    console.log(matchIndexes)
+    return matchIndexes;
+  }
+
+  const fetchPastUserBets = async (userRef: DocumentReference, league: string) => {
+    const games = await fetchPastBetsFromFirebase(userRef, league)
+    const matchesString = games.join('-')
+    console.log(matchesString)
+    const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?ids=${matchesString}`
+    const headers = {
+        'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
+        'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
+    };
+    
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+      });
+      const data = await response.json();
+      if (data && data.response) {
+        pastBetsData.value = data.response;
+        console.log(nextGames.value)
+      } else {
+        pastBetsData.value = [];
+      }
+    } catch (error) {
+      console.error('Error fetching fixtures data:', error);
+      pastBetsData.value = [];
     }
   }
 
@@ -155,7 +216,8 @@ export const useBetStore = defineStore('bets', () => {
 
       try {
         const userBetsCollection = collection(db, 'users', userRef.id, 'bets');
-        const isBetExist = allUserBets.value.find(b => b.matchID === bet.matchID)
+        // const isBetExist = allUserBets.value.find(b => b.matchID === bet.matchID)
+        const isBetExist = futureUserBets.value.find(b => b.matchID === bet.matchID)
       
         
         if (isBetExist) {
@@ -171,16 +233,21 @@ export const useBetStore = defineStore('bets', () => {
             league: bet.league
           };
           await updateDoc(betDocRef, betUpdate);
-          const betIndex = allUserBets.value.findIndex(b => b.matchID === isBetExist.matchID);
+          const betIndex = futureUserBets.value.findIndex(b => b.matchID === isBetExist.matchID);
           if (betIndex !== -1) {
             const newBet = new BetModel(bet, isBetExist.reference)
-            allUserBets.value[betIndex] = newBet;
+            // allUserBets.value[betIndex] = newBet;
+            futureUserBets.value[betIndex] = newBet
           }
           console.log('Bet updated with ID: ', isBetExist.matchID);
         } else {
           const docRef = await addDoc(userBetsCollection, bet);
+            
+
+          // allUserBets.value.push(new BetModel(bet, docRef))
+          futureUserBets.value.push(new BetModel(bet, docRef))
           console.log('Bet saved with ID: ', docRef.id);
-          allUserBets.value.push(new BetModel(bet, docRef))
+
         }
       } catch (e) {
         console.error('Error adding or updating document: ', e);
@@ -216,7 +283,12 @@ export const useBetStore = defineStore('bets', () => {
       }
     }
   
-    return { pastGames, nextGames, allUserBets, lastBets, lastBetsData, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets,fetchLastUserBets }
+  return {
+    pastGames, nextGames, allUserBets, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets,
+    fetchPastUserBets, fetchFutureUserBets,
+    pastBetsData, pastUserBets,
+    futureBetsData, futureUserBets
+  }
 })
 
 
