@@ -219,7 +219,9 @@ export const useBetStore = defineStore('bets', () => {
         // const isBetExist = allUserBets.value.find(b => b.matchID === bet.matchID)
         const isBetExist = futureUserBets.value.find(b => b.matchID === bet.matchID)
       
-        
+        const matchObject = nextGames.value.find((match: any) => match.fixture.id === bet.matchID)
+        console.log(matchObject)
+      
         if (isBetExist) {
           console.log(isBetExist.reference.id)
           const betDocRef = doc(userBetsCollection, isBetExist.reference.id);
@@ -242,10 +244,10 @@ export const useBetStore = defineStore('bets', () => {
           console.log('Bet updated with ID: ', isBetExist.matchID);
         } else {
           const docRef = await addDoc(userBetsCollection, bet);
-            
-
           // allUserBets.value.push(new BetModel(bet, docRef))
           futureUserBets.value.push(new BetModel(bet, docRef))
+          futureBetsData.value.push(matchObject)
+
           console.log('Bet saved with ID: ', docRef.id);
 
         }
