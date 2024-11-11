@@ -111,36 +111,36 @@
                       <!-- <div v-if="game.fixture.status.short == 'NS'"> -->
                         <v-row>
                         <v-col class="justify-center">
-                          <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
+                          <v-card-subtitle>{{ game.id }}</v-card-subtitle>
                           <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
-                            + ' ' + setMatchWeek(game.league.round) + ' | ' +
-                            formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+                            + ' ' + setMatchWeek(game.round) + ' | ' +
+                            formatTimestamp(game.timestamp) }}</v-card-subtitle>
                         </v-col>
                       </v-row>
                       <v-row class="d-flex align-center" justify="center">
                         <v-col cols="2" md="1" class="d-flex justify-center align-center">
-                          <v-img max-height="70" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                          <v-img max-height="70" :src="game.homeLogo" aspect-ratio="1/1"></v-img>
                         </v-col>
                         <v-col cols="2" class="d-none d-md-flex justify-center align-center">
-                          <v-card-title>{{ game.teams.home.name }}</v-card-title>
+                          <v-card-title>{{ game.homeName }}</v-card-title>
                         </v-col>
 
                         <v-col cols="auto" class="d-flex justify-center align-center mt-3">
-                          <v-number-input v-model="betsToSave[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
+                          <v-number-input v-model="betsToSave[game.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                             :inset="false" variant="outlined"></v-number-input>
-                          <v-number-input v-model="betsToSave[game.fixture.id].away" :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
+                          <v-number-input v-model="betsToSave[game.id].away" :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
                             variant="outlined"></v-number-input>
                         </v-col>
 
                         <v-col cols="2" class="d-none d-md-flex justify-center align-center">
-                          <v-card-title>{{ game.teams.away.name }}</v-card-title>
+                          <v-card-title>{{ game.awayName }}</v-card-title>
                         </v-col>
                         <v-col cols="2" md="1" class="d-flex justify-center align-center">
-                          <v-img max-height="70" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                          <v-img max-height="70" :src="game.awayLogo" aspect-ratio="1/1"></v-img>
                         </v-col>
                       </v-row>
                       <div class="py-2">
-                        <v-btn color="primary" variant="tonal" size="small" @click="saveBet(game.fixture.id)">
+                        <v-btn color="primary" variant="tonal" size="small" @click="saveBet(game.id)">
                         {{ $t('user.save') }}<v-icon>mdi-check</v-icon></v-btn>
                       </div>
                       <!-- </div> -->
@@ -159,19 +159,19 @@
                         class="mb-5 px-4 py-2">
                         <v-row>
                           <v-col class="justify-center">
-                            <v-card-subtitle>{{ game.fixture.id }}</v-card-subtitle>
+                            <v-card-subtitle>{{ game.id }}</v-card-subtitle>
                             <v-card-subtitle class="text-center ">{{ $t('leaguesPage.resultsView.matchDay').toUpperCase()
-                              + ' ' + setMatchWeek(game.league.round) + ' | ' +
-                              formatTimestamp(game.fixture.timestamp) }}</v-card-subtitle>
+                              + ' ' + setMatchWeek(game.round) + ' | ' +
+                              formatTimestamp(game.timestamp) }}</v-card-subtitle>
                           </v-col>
                         </v-row>
                         <v-row class="d-flex align-center" justify="center">
                           <v-col cols="2" md="1" class="d-flex justify-center align-center">
-                            <v-img max-height="70" :src="game.teams.home.logo" aspect-ratio="1/1"></v-img>
+                            <v-img max-height="70" :src="game.homeLogo" aspect-ratio="1/1"></v-img>
                           </v-col>
                           <v-col cols="3" class="d-flex justify-center align-center">
-                            <v-card-title class="d-none d-sm-flex">{{ game.teams.home.name }}</v-card-title>
-                            <v-card-title class="d-flex d-sm-none">{{ makeShortName(game.teams.home.name) }}</v-card-title>
+                            <v-card-title class="d-none d-sm-flex">{{ game.homeName }}</v-card-title>
+                            <v-card-title class="d-flex d-sm-none">{{ makeShortName(game.homeName) }}</v-card-title>
                           </v-col>
 
                           <v-col cols="2" class="d-flex justify-center align-center">
@@ -179,8 +179,8 @@
                               <v-card-subtitle>
                                   {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
-                              {{ futureUserBets[game.fixture.id]?.home + '-'
-                            + futureUserBets[game.fixture.id]?.away }}
+                              {{ futureUserBets[game.id]?.home + '-'
+                            + futureUserBets[game.id]?.away }}
                               </div>
                             <!-- <v-number-input v-model="lastUserBets[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                               :inset="false" variant="outlined"></v-number-input>
@@ -189,11 +189,11 @@
                           </v-col>
 
                           <v-col cols="3" class="d-flex justify-center align-center">
-                            <v-card-title class="d-none d-sm-flex">{{ game.teams.away.name }}</v-card-title>
-                            <v-card-title class="d-flex d-sm-none">{{ makeShortName(game.teams.away.name) }}</v-card-title>
+                            <v-card-title class="d-none d-sm-flex">{{ game.awayName }}</v-card-title>
+                            <v-card-title class="d-flex d-sm-none">{{ makeShortName(game.awayName) }}</v-card-title>
                           </v-col>
                           <v-col cols="2" md="1" class="d-flex justify-center align-center">
-                            <v-img max-height="70" :src="game.teams.away.logo" aspect-ratio="1/1"></v-img>
+                            <v-img max-height="70" :src="game.awayLogo" aspect-ratio="1/1"></v-img>
                           </v-col>
                         </v-row>
                       </v-card>
@@ -216,6 +216,7 @@ import { useDisplay } from 'vuetify'
 import type { BetModel, IBet } from '~/models/bet';
 import { useBetStore } from '~/stores/betStore';
 import { useAuthStore } from '~/stores/authStore';
+import type { IMatch } from '~/models/match';
 
 definePageMeta({
   middleware: 'auth'
@@ -226,7 +227,9 @@ const { mobile } = useDisplay()
 
 const betStore = useBetStore()
 const authStore = useAuthStore()
-const nextGames = computed(() => betStore.nextGames)
+const nextGames = computed(() => {
+  return betStore.nextGames.filter((game: IMatch) => game.league === "eng")
+})
 const user = computed(() => authStore.loggedUserData)
 
 const pastUserBets = computed(() => {
@@ -238,7 +241,8 @@ const pastUserBetsData = computed(() => betStore.pastBetsData)
 const futureUserBets = computed(() => {
   const bets = ref<{ [key: number]: IBet }>({})
   betStore.futureUserBets.forEach((game : any) => {
-    const bet: IBet = {
+    if (game.league == 'eng') {
+      const bet: IBet = {
       matchID: game.matchID,
       matchDate: game.matchDate,
       home: game.home,
@@ -246,14 +250,17 @@ const futureUserBets = computed(() => {
       points: game.points,
       counted: game.counted,
       league: "eng"
-    };
-    // console.log(bet);
-    bets.value[game.matchID] = bet
+      };
+      // console.log(bet);
+      bets.value[game.matchID] = bet
+    }
   })
-  // console.log(bets)
+  console.log(bets)
   return bets.value
 })
-const futureUserBetsData = computed(() => betStore.futureBetsData)
+const futureUserBetsData = computed(() => {
+  return betStore.futureBetsData?.filter(bet => bet.league === "eng")
+})
 
 const loading = ref<Boolean>(false)
 const matchesNumber = ref<number>(10)
@@ -266,19 +273,24 @@ watch(matchesNumber, async (oldNum, newNum) => {
 const betsToSave = ref<{ [key: number]: IBet }>({})
 function setBetsToSave() {
   console.log(nextGames.value)
-  nextGames.value.forEach((game : any) => {
-    const bet: IBet = {
-      matchID: game.fixture.id,
-      matchDate: game.fixture.date,
-      home: 0,
-      away: 0,
-      points: 0,
-      counted: false,
-      league: "eng"
-    };
-    // console.log(bet);
-    betsToSave.value[game.fixture.id] = bet
-  });
+  if (nextGames.value != undefined) {
+    nextGames.value.forEach((game : IMatch) => {
+      if(game.league === "eng"){
+        const bet: IBet = {
+          matchID: game.id,
+          matchDate: game.timestamp,
+          home: 0,
+          away: 0,
+          points: 0,
+          counted: false,
+          league: "eng"
+        };
+        // console.log(bet);
+        betsToSave.value[game.id] = bet
+      }
+    });
+  }
+  console.log(betsToSave.value)
   loading.value = false
 }
 
@@ -301,7 +313,7 @@ async function fetchFutureUserBets() {
 }
 
 
-function setMatchWeek(input: string): string {
+function setMatchWeek(input: String): string {
   if (input.length === 0) {
     return '';
   }
@@ -342,7 +354,7 @@ function setColor(matchID: Number, status: string) {
   }
 }
 
-function makeShortName(name: string) {
+function makeShortName(name: String) {
   const space = name.indexOf(' ')
   if (space !== -1) {
     return (name.substring(0,1) + name.substring(space + 1, space + 3)).toUpperCase()

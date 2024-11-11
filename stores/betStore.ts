@@ -5,16 +5,17 @@ import {
 } from 'firebase/firestore';
 import { defineStore } from 'pinia';
 import { BetModel, type IBet } from '~/models/bet'
+import type { IMatch } from '~/models/match';
 
 export const useBetStore = defineStore('bets', () => {
   const auth = getAuth();
   const db = getFirestore();
-  const nextGames = ref<any>()
+  const nextGames = ref<IMatch[]>([])
   // const pastGames = ref<any>()
   // const allUserBets = ref<BetModel[]>([])
 
   const futureUserBets = ref<BetModel[]>([])
-  const futureBetsData = ref<any>(null)
+  const futureBetsData = ref<IMatch[]>()
 
   const pastUserBets = ref<BetModel[]>([])
   const pastBetsData = ref<any>(null)
@@ -53,24 +54,58 @@ export const useBetStore = defineStore('bets', () => {
       const headers = {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
-      };
-      // nextGames.value = json
-      try {
-        const response = await fetch(url, {
+    };
+    
+    const league = ref()
+    switch (leagueId) {
+      case 39:
+        league.value = 'eng'
+        break;
+      case 106:
+        league.value = 'pol'
+        break;
+      case 2:
+        league.value = 'ucl'
+        break;
+    }
+    try {
+       const response = await fetch(url, {
           method: 'GET',
           headers: headers,
         });
         const data = await response.json();
-        if (data && data.response) {
-          nextGames.value = data.response;
-          console.log(nextGames.value)
-        } else {
-          nextGames.value = null;
-        }
-        // this.nextGamesData = json3
+         data.response.forEach((game: any) => {
+          const match: IMatch = {
+            id: game.fixture.id,
+            league: league.value,
+            status: game.fixture.status.short,
+            round: game.league.round,
+            timestamp: game.fixture.timestamp,
+            homeName: game.teams.home.name,
+            awayName: game.teams.away.name,
+            goalsHome: game.score.fulltime.home,
+            goalsAway: game.score.fulltime.away,
+            homeLogo: game.teams.home.logo,
+            awayLogo: game.teams.away.logo,
+            timeElapsed: game.fixture.status.elapsed,
+            isFinished: false
+          }
+          console.log(match)
+          // nextGames.value = data.response;
+          //  console.log(nextGames.value)
+           
+           if (nextGames.value != undefined) {
+            const existingIndex = nextGames.value.findIndex((g:any) => g.id === match.id);
+            if (existingIndex === -1) {
+              nextGames.value.push(match);
+            } else {
+              nextGames.value[existingIndex] = match;
+            }
+          }
+      });
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
-        nextGames.value = null;
+        nextGames.value = [];
       }
     }
 
@@ -114,9 +149,12 @@ export const useBetStore = defineStore('bets', () => {
     const matchIndexes: Number[] = []
     querySnapshot.forEach((doc) => {
       const betData = doc.data() as IBet
-      matchIndexes.push(betData.matchID)
-      const betModel = new BetModel(betData, doc.ref);
-      futureUserBets.value.push(betModel);
+      
+      if (!futureUserBets.value.find(b => b.matchID === betData.matchID)) {
+        const betModel = new BetModel(betData, doc.ref)
+        futureUserBets.value.push(betModel);
+        matchIndexes.push(betData.matchID)
+      }
       // const data = doc.data() as IBet
       // console.log(data)
       // matchIndexes.push(data.matchID)
@@ -128,6 +166,9 @@ export const useBetStore = defineStore('bets', () => {
 
   const fetchFutureUserBets = async (userRef: DocumentReference, league: string) => {
     const games = await fetchFutureBetsFromFirebase(userRef, league)
+    if (!games.length) {
+      return
+    }
     const matchesString = games.join('-')
     console.log(matchesString)
     const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?ids=${matchesString}`
@@ -135,19 +176,46 @@ export const useBetStore = defineStore('bets', () => {
         'x-rapidapi-key': '9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d',
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
     };
-    
+    if (!Array.isArray(futureBetsData.value)) {
+      futureBetsData.value = [];
+    }
     try {
       const response = await fetch(url, {
         method: 'GET',
         headers: headers,
       });
       const data = await response.json();
-      if (data && data.response) {
-        futureBetsData.value = data.response;
-        console.log(futureBetsData.value)
-      } else {
-        futureBetsData.value = [];
-      }
+      console.log(data.response)
+      data.response.forEach((game: any) => {
+        const match: IMatch = {
+          id: game.fixture.id,
+          league: league,
+          status: game.fixture.status.short,
+          round: game.league.round,
+          timestamp: game.fixture.timestamp,
+          homeName: game.teams.home.name,
+          awayName: game.teams.away.name,
+          goalsHome: game.score.fulltime.home,
+          goalsAway: game.score.fulltime.away,
+          homeLogo: game.teams.home.logo,
+          awayLogo: game.teams.away.logo,
+          timeElapsed: game.fixture.status.elapsed,
+          isFinished: false
+        }
+        console.log(match)
+
+        if (futureBetsData.value != undefined) {
+          const existingIndex = futureBetsData.value.findIndex((g:any) => g.id === match.id);
+          if (existingIndex === -1) {
+            // Add newBet to futureBetsData if it doesn't already exist
+            futureBetsData.value.push(match);
+          } else {
+            // Optionally, update the existing bet with new data if needed
+            futureBetsData.value[existingIndex] = match;
+          }
+        }
+    });
+    console.log(futureBetsData.value);
     } catch (error) {
       console.error('Error fetching fixtures data:', error);
       futureBetsData.value = [];
@@ -219,8 +287,11 @@ export const useBetStore = defineStore('bets', () => {
         // const isBetExist = allUserBets.value.find(b => b.matchID === bet.matchID)
         const isBetExist = futureUserBets.value.find(b => b.matchID === bet.matchID)
       
-        const matchObject = nextGames.value.find((match: any) => match.fixture.id === bet.matchID)
-        console.log(matchObject)
+        let matchObject: IMatch | undefined
+        if (nextGames.value != undefined) {
+          matchObject = nextGames.value.find((match: IMatch) => match.id === bet.matchID)
+          console.log(matchObject)
+        }
       
         if (isBetExist) {
           console.log(isBetExist.reference.id)
@@ -246,7 +317,10 @@ export const useBetStore = defineStore('bets', () => {
           const docRef = await addDoc(userBetsCollection, bet);
           // allUserBets.value.push(new BetModel(bet, docRef))
           futureUserBets.value.push(new BetModel(bet, docRef))
-          futureBetsData.value.push(matchObject)
+
+          if (futureBetsData.value != undefined && matchObject != undefined) {
+            futureBetsData.value.push(matchObject)
+          }
 
           console.log('Bet saved with ID: ', docRef.id);
 

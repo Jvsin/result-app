@@ -1,14 +1,15 @@
 import type { Timestamp } from "firebase/firestore"
 
 export interface IMatch {
-  id: Number,
+  id: number,
+  league: String,
   status: String,
   round: String,
-  timestamp: Timestamp,
+  timestamp: number,
   homeName: String,
   awayName: String,
-  goalsHome: Number,
-  goalsAway: Number,
+  goalsHome: Number | null,
+  goalsAway: Number | null,
   homeLogo: any,
   awayLogo: any,
   timeElapsed: Number,
@@ -17,9 +18,10 @@ export interface IMatch {
 
 export interface Match {
   id: Number,
+  league: String,
   status: String,
   round: String,
-  timestamp: Timestamp,
+  timestamp: number,
   homeName: String,
   awayName: String,
   goalsHome: Number,
