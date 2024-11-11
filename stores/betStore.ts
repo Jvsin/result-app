@@ -10,8 +10,8 @@ export const useBetStore = defineStore('bets', () => {
   const auth = getAuth();
   const db = getFirestore();
   const nextGames = ref<any>()
-  const pastGames = ref<any>()
-  const allUserBets = ref<BetModel[]>([])
+  // const pastGames = ref<any>()
+  // const allUserBets = ref<BetModel[]>([])
 
   const futureUserBets = ref<BetModel[]>([])
   const futureBetsData = ref<any>(null)
@@ -89,14 +89,14 @@ export const useBetStore = defineStore('bets', () => {
         });
         const data = await response.json();
         if (data && data.response) {
-          pastGames.value = data.response;
+          // pastGames.value = data.response;
         } else {
-          pastGames.value = null;
+          // pastGames.value = null;
         }
         // this.lastGamesData = json
       } catch (error) {
         console.error('Error fetching fixtures data:', error);
-        pastGames.value = null;
+        // pastGames.value = null;
       }
     }
   
@@ -262,7 +262,7 @@ export const useBetStore = defineStore('bets', () => {
 
     }
     
-    const fetchUserBets = async (userRef: DocumentReference) => {
+    const fetchAllUserBets = async (userRef: DocumentReference) => {
       const user = auth.currentUser;
       if (!user) {
         throw new Error('User not authenticated');
@@ -278,16 +278,17 @@ export const useBetStore = defineStore('bets', () => {
           bets.push(betModel);
         });
 
-        allUserBets.value = bets;
-        console.log('User bets fetched: ', allUserBets.value);
+        // allUserBets.value = bets;
+        // console.log('User bets fetched: ', allUserBets.value);
       } catch (e) {
         console.error('Error fetching user bets: ', e);
       }
     }
   
   return {
-    pastGames, nextGames, allUserBets, fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchUserBets,
+    fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchAllUserBets,
     fetchPastUserBets, fetchFutureUserBets,
+    nextGames,
     pastBetsData, pastUserBets,
     futureBetsData, futureUserBets
   }
