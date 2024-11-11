@@ -18,7 +18,7 @@ export const useBetStore = defineStore('bets', () => {
   const futureBetsData = ref<IMatch[]>()
 
   const pastUserBets = ref<BetModel[]>([])
-  const pastBetsData = ref<any>(null)
+  const pastBetsData = ref<IMatch[]>()
 
   const convertDateToString = () => {
     const today = new Date();
@@ -236,9 +236,11 @@ export const useBetStore = defineStore('bets', () => {
     const matchIndexes: Number[] = []
     querySnapshot.forEach((doc) => {
       const betData = doc.data() as IBet
-      matchIndexes.push(betData.matchID)
-      const betModel = new BetModel(betData, doc.ref);
-      pastUserBets.value.push(betModel);
+      if (!pastUserBets.value.find(b => b.matchID === betData.matchID)) {
+        const betModel = new BetModel(betData, doc.ref)
+        pastUserBets.value.push(betModel);
+        matchIndexes.push(betData.matchID)
+      }
       // const data = doc.data() as IBet
       // console.log(data)
       // matchIndexes.push(data.matchID)
@@ -258,18 +260,44 @@ export const useBetStore = defineStore('bets', () => {
         'x-rapidapi-host': 'api-football-v1.p.rapidapi.com',
     };
     
+    if (!Array.isArray(pastBetsData.value)) {
+      pastBetsData.value = [];
+    }
     try {
       const response = await fetch(url, {
         method: 'GET',
         headers: headers,
       });
       const data = await response.json();
-      if (data && data.response) {
-        pastBetsData.value = data.response;
-        console.log(nextGames.value)
-      } else {
-        pastBetsData.value = [];
-      }
+      console.log(data.response)
+      data.response.forEach((game: any) => {
+        const match: IMatch = {
+          id: game.fixture.id,
+          league: league,
+          status: game.fixture.status.short,
+          round: game.league.round,
+          timestamp: game.fixture.timestamp,
+          homeName: game.teams.home.name,
+          awayName: game.teams.away.name,
+          goalsHome: game.score.fulltime.home,
+          goalsAway: game.score.fulltime.away,
+          homeLogo: game.teams.home.logo,
+          awayLogo: game.teams.away.logo,
+          timeElapsed: game.fixture.status.elapsed,
+          isFinished: false
+        }
+        console.log(match)
+
+        if (pastBetsData.value != undefined) {
+          const existingIndex = pastBetsData.value.findIndex((g:any) => g.id === match.id);
+          if (existingIndex === -1) {
+            pastBetsData.value.push(match);
+          } else {
+            pastBetsData.value[existingIndex] = match;
+          }
+        }
+    });
+    console.log(futureBetsData.value);
     } catch (error) {
       console.error('Error fetching fixtures data:', error);
       pastBetsData.value = [];

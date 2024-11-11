@@ -12,7 +12,7 @@ export interface IMatch {
   goalsAway: Number | null,
   homeLogo: any,
   awayLogo: any,
-  timeElapsed: Number,
+  timeElapsed: number,
   isFinished: boolean
 }
 
