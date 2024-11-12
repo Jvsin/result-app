@@ -10,7 +10,7 @@
             <v-col cols="12">
               <v-card-title class="my-2">
                 <v-avatar color="white" image="/public/england.png"></v-avatar>
-                Champions League
+                Premier League 
               </v-card-title>
               <v-tabs v-model="tab" color="primary" class="px-5" grow>
                 <v-tab :key="0" value="0">{{ $t('user.betSites.yourPoints') }}</v-tab>
@@ -150,7 +150,7 @@
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="2">
-                    <v-container class="scrollable-container" v-if="futureUserBetsData" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-container class="scrollable-container" v-if="futureUserBetsData?.length" style="background-color: rgba(0, 0, 0, 0);">
                       <v-card variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
                         class="mb-5 px-4 py-2">
                         <v-row>

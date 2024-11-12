@@ -387,9 +387,18 @@ export const useBetStore = defineStore('bets', () => {
       }
     }
   
+  const handleLogout = async () => {
+    nextGames.value = [];
+    futureUserBets.value = [];
+    futureBetsData.value = [];
+    pastUserBets.value = [];
+    pastBetsData.value = [];
+  }
+  
   return {
     fetchLastFixturesData, fetchNextFixturesData, saveUserBet, fetchAllUserBets,
     fetchPastUserBets, fetchFutureUserBets,
+    handleLogout,
     nextGames,
     pastBetsData, pastUserBets,
     futureBetsData, futureUserBets

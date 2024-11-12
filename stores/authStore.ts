@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
 import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { useBetStore } from './betStore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -14,6 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref<string | null>(null);
 
   const db = getFirestore();
+  const betStore = useBetStore()
 
   const registerWithPassword = async (email: string, password: string, userData: IUser) => {
     loading.value = true;
@@ -79,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = null;
       loggedUserData.value = null
       console.log(loggedUserData.value + ' ' + user.value)
+      await betStore.handleLogout()
     } catch (err: any) {
       error.value = err.message;
       console.log(error.value)

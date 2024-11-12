@@ -150,7 +150,7 @@
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="2">
-                    <v-container class="scrollable-container" v-if="futureUserBetsData" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-container class="scrollable-container" v-if="futureUserBetsData?.length" style="background-color: rgba(0, 0, 0, 0);">
                       <v-card variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
                         class="mb-5 px-4 py-2">
                         <v-row>
