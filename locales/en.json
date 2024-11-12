@@ -84,9 +84,6 @@
     "profile": "Profile",
     "betButton": "Bet",
     "editProfile": "Edit profile",
-    "yourPoints": "Points",
-    "yourBets": "Your bets",
-    "bet": "Bet games",
     "saveBets": "Save your bets",
     "save": "Save",
     "yourBet": "Your bet",
@@ -109,7 +106,17 @@
       "save": "Save",
       "noLeaguesInfo": "You don't follow any league"
     },
-    "show": "Show"
+    "show": "Show",
+    "betSites": {
+      "yourPoints": "Punkty",
+      "yourBets": "Twoje typy",
+      "bet": "Typuj",
+      "noPointsTitle": "No points to display!",
+      "noPointsInfo": "Your points will be displayed here.",
+      "noBetsTitle": "No bets for upcoming matches!",
+      "noBetsInfo": "You can bet on matches in the Bet tab.",
+      "showMatchesCounter": "Count of upcoming matches:"
+    }
   },
   "errors":{
     "register": {

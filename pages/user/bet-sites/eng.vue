@@ -9,17 +9,17 @@
           <v-row>
             <v-col cols="12">
               <v-card-title class="my-2">
-                <v-avatar image="/public/england.png"></v-avatar>
-                Premier League
+                <v-avatar color="white" image="/public/england.png"></v-avatar>
+                Champions League
               </v-card-title>
               <v-tabs v-model="tab" color="primary" class="px-5" grow>
-                <v-tab :key="0" value="0">{{ $t('user.yourPoints') }}</v-tab>
-                <v-tab :key="1" value="1">{{ $t('user.bet') }}</v-tab>
-                <v-tab :key="2" value="2">{{ $t('user.yourBets') }}</v-tab>
+                <v-tab :key="0" value="0">{{ $t('user.betSites.yourPoints') }}</v-tab>
+                <v-tab :key="1" value="1">{{ $t('user.betSites.bet') }}</v-tab>
+                <v-tab :key="2" value="2">{{ $t('user.betSites.yourBets') }}</v-tab>
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
+                  <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
@@ -61,11 +61,6 @@
                                 <v-card-subtitle>
                                   {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
-                                <!-- <div class="text-h4">{{ (userBets.find(bet => bet.matchID === game.fixture.id)) ? 
-                                  userBets.find(bet => bet.matchID === game.fixture.id)?.home + '-' + userBets.find(bet => bet.matchID === game.fixture.id)?.away : `-` }}</div>
-                              </div> -->
-                                  <!-- <div no-wrap class="text-center text-h4">{{ pastUserBets[game.fixture.id]?.home + '-'
-                                + pastUserBets[game.fixture.id]?.away }}</div> -->
                                 <div no-wrap class="text-center text-h4">
                                   {{ (pastUserBets.find(bet => bet.matchID === game.id)) ? 
                                     pastUserBets.find(bet => bet.matchID === game.id)?.home + '-'
@@ -90,15 +85,20 @@
                         </v-col>
                       </v-row>
                       <v-progress-linear v-if="game.status !== 'FT'" color="red" height="5"
-                        :model-value="game.timeElapsed / 90 * 100" striped></v-progress-linear>
+                        :model-value="game.timeElapsed /90 * 100" striped></v-progress-linear>
                     </v-card>
                   </v-container>
+                  <div v-else class="py-5">
+                      <v-card-title class="text-center">{{ $t('user.betSites.noPointsTitle') }}</v-card-title>
+                      <v-card-text class="text-center">{{ $t('user.betSites.noPointsInfo') }}</v-card-text>
+                    </div>
                 </v-tabs-window-item>
                 
                 <v-tabs-window-item :value="1">
                   <v-container v-if="!loading" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
                     <v-row justify="center">
                       <v-col cols="auto">
+                        <v-card-text>{{ $t('user.betSites.showMatchesCounter') }}</v-card-text>
                         <v-select
                           :label="$t('user.show')"
                           :items="[10, 15, 20]"
@@ -150,11 +150,7 @@
                 </v-tabs-window-item>
 
                 <v-tabs-window-item :value="2">
-                  <v-container class="scrollable-container" style="background-color: rgba(0, 0, 0, 0);">
-                    <!-- <div>
-                      <v-btn color="primary" variant="outlined" @click="fetchFutureUserBets">Pobierz dane</v-btn>
-                    </div> -->
-                    <v-container v-if="futureUserBetsData" style="background-color: rgba(0, 0, 0, 0);">
+                    <v-container class="scrollable-container" v-if="futureUserBetsData" style="background-color: rgba(0, 0, 0, 0);">
                       <v-card variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
                         class="mb-5 px-4 py-2">
                         <v-row>
@@ -198,8 +194,12 @@
                         </v-row>
                       </v-card>
                     </v-container>
+                    <v-container class="py-5 align-stretch" v-else>
+                      <v-card-title class="text-center">{{ $t('user.betSites.noBetsTitle') }}</v-card-title>
+                      <v-card-text class="text-center">{{ $t('user.betSites.noPointsInfo') }}</v-card-text>
+                    </v-container>
+                  
                     <!-- <v-alert v-else type="warning">{{ $t('snackbars.loading') + '...'}}</v-alert> -->
-                  </v-container>
                   
                 </v-tabs-window-item>
               </v-tabs-window>

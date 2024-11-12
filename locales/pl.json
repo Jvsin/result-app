@@ -84,9 +84,7 @@
     "profile": "Profil",
     "betButton": "Typuj",
     "editProfile": "Edytuj profil",
-    "yourPoints": "Punkty",
-    "yourBets": "Twoje typy",
-    "bet": "Typuj",
+    
     "saveBets": "Zapisz swoje typy",
     "save": "Zapisz",
     "yourBet": "Twój typ",
@@ -109,8 +107,17 @@
       "save": "Zapisz",
       "noLeaguesInfo": "Nie obserwujesz żadnej ligi"
     },
-    "show": "Pokaż"
-    
+    "show": "Pokaż",
+    "betSites": {
+      "yourPoints": "Punkty",
+      "yourBets": "Twoje typy",
+      "bet": "Typuj",
+      "noPointsTitle": "Brak punktów do wyświetlenia!",
+      "noPointsInfo": "Tutaj będą wyświetlać się Twoje punkty.",
+      "noBetsTitle": "Brak typów na nadchodzące mecze!",
+      "noBetsInfo": "Mecze możesz typować w zakładce Typuj",
+      "showMatchesCounter": "Ilość nadchodzących meczów:"
+    }
   },
   "errors": {
     "register": {
