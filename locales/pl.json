@@ -84,9 +84,11 @@
     "profile": "Profil",
     "betButton": "Typuj",
     "editProfile": "Edytuj profil",
-    "yourBets": "Twoje wyniki",
-    "bet": "Typuj",
+    
     "saveBets": "Zapisz swoje typy",
+    "save": "Zapisz",
+    "yourBet": "Twój typ",
+    "points": "Punkty",
     "logout": "Wyloguj",
     "nameAndSurname": "Imię i nazwisko",
     "established": "Założono",
@@ -104,12 +106,24 @@
       "cancel": "Anuluj",
       "save": "Zapisz",
       "noLeaguesInfo": "Nie obserwujesz żadnej ligi"
+    },
+    "show": "Pokaż",
+    "betSites": {
+      "yourPoints": "Punkty",
+      "yourBets": "Twoje typy",
+      "bet": "Typuj",
+      "noPointsTitle": "Brak punktów do wyświetlenia!",
+      "noPointsInfo": "Tutaj będą wyświetlać się Twoje punkty.",
+      "noBetsTitle": "Brak typów na nadchodzące mecze!",
+      "noBetsInfo": "Mecze możesz typować w zakładce Typuj",
+      "showMatchesCounter": "Pokaż nadchodzące mecze:"
     }
   },
   "errors": {
     "register": {
       "registerErrorBasic": "Błąd podczas tworzenia konta. Spróbuj ponownie później.",
-      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!"
+      "registerErrorEmailInUse": "Adres e-mail jest już w użyciu!",
+      "errorPasswordsMismatch": "Wprowadzone hasła się różnią!"
     },
     "login": {
       "loginErrorBasic": "Błąd podczas logowania. Spróbuj ponownie później.",
@@ -120,5 +134,8 @@
       "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
       "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
     }
+  },
+  "snackbars": {
+    "loading": "Ładowanie"
   }
 }

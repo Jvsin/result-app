@@ -84,9 +84,10 @@
     "profile": "Profile",
     "betButton": "Bet",
     "editProfile": "Edit profile",
-    "yourBets": "Your bets",
-    "bet": "Bet games",
     "saveBets": "Save your bets",
+    "save": "Save",
+    "yourBet": "Your bet",
+    "points": "Points",
     "logout": "Logout",
     "nameAndSurname": "Name and surname",
     "established": "Established",
@@ -104,12 +105,24 @@
       "cancel": "Cancel",
       "save": "Save",
       "noLeaguesInfo": "You don't follow any league"
+    },
+    "show": "Show",
+    "betSites": {
+      "yourPoints": "Punkty",
+      "yourBets": "Twoje typy",
+      "bet": "Typuj",
+      "noPointsTitle": "No points to display!",
+      "noPointsInfo": "Your points will be displayed here.",
+      "noBetsTitle": "No bets for upcoming matches!",
+      "noBetsInfo": "You can bet on matches in the Bet tab.",
+      "showMatchesCounter": "Count of upcoming matches:"
     }
   },
   "errors":{
     "register": {
       "registerErrorBasic": "Error while creating account. Try agan later.",
-      "registerErrorEmailInUse": "Email in use!"
+      "registerErrorEmailInUse": "Email in use!",
+      "errorPasswordsMismatch": "Passwords do not match!"
     },
     "login": {
       "loginErrorBasic": "Error while login. Try again later.",
@@ -120,5 +133,8 @@
       "errorWhileEditingProfile": "Error while editing profile, try again later",
       "errorLeaguesNotFound": "No leagues founded."
     }
-  }  
+  },
+  "snackbars": {
+    "loading": "Loading"
+  }
 }

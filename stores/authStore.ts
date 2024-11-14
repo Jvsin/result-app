@@ -3,7 +3,8 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { useBetStore } from './betStore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -14,6 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref<string | null>(null);
 
   const db = getFirestore();
+  const betStore = useBetStore()
 
   const registerWithPassword = async (email: string, password: string, userData: IUser) => {
     loading.value = true;
@@ -32,9 +34,11 @@ export const useAuthStore = defineStore('auth', () => {
       console.log("User data saved to Firestore:", userData);
 
       if (userCredential) {
-        console.log("wszedłem")
         await fetchUserData(userCredential.user.uid)
       }
+
+      // const betsCollectionRef = collection(userDocRef, "bets");
+      // await addDoc(betsCollectionRef, {})
 
     } catch (err: any) {
       console.log("Error during registration:", err);
@@ -77,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = null;
       loggedUserData.value = null
       console.log(loggedUserData.value + ' ' + user.value)
+      await betStore.handleLogout()
     } catch (err: any) {
       error.value = err.message;
       console.log(error.value)
@@ -88,6 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
   const fetchUserData = async (uid: string) => { 
     loading.value = true;
     error.value = null;
+
     try {
       const userDocRef = doc(db, "users", uid);
       const userDoc = await getDoc(userDocRef);
@@ -105,6 +111,35 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       // loading.value = false;
     }
+  }
+
+  const actualizeUserData = async () => {
+    try {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      const uid = currentUser.uid;
+      const userDocRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as IUser;
+        loggedUserData.value = new UserModel(userData, userDocRef);
+      } else {
+        error.value = "User data not found";
+        loggedUserData.value = null;
+      }
+    } else {
+      error.value = "No authenticated user found";
+      loggedUserData.value = null;
+    }
+  } catch (err: any) {
+    error.value = err.message;
+    console.log(err);
+    loggedUserData.value = null;
+  } finally {
+    loading.value = false;
+  }
   }
 
   const editProfile = async (data: any) => {
@@ -131,5 +166,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, loggedUserData, fetchUserData, registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague };
+  return {
+    user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
+    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague
+  };
 });
