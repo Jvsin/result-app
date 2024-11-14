@@ -1,3 +1,6 @@
+const { ESLint } = require("eslint");
+const tsPlugin = require("@typescript-eslint/eslint-plugin");
+
 module.exports = [
   {
     ignores: ["lib/**/*"], // Ignore built files
@@ -13,13 +16,13 @@ module.exports = [
       },
     },
     plugins: {
-      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+      "@typescript-eslint": tsPlugin,
     },
     rules: {
       "semi": ["error", "never"], // Enforce semicolon usage at the end of statements
       "quotes": ["error", "double"], // Enforce double quotes for strings
       "no-unused-vars": "off", // Disable the base rule as it can report incorrect errors
-      "@typescript-eslint/no-unused-vars": ["error"], // Enable TypeScript-specific rule
+      "@typescript-eslint/no-unused-vars": ["error"], // Enable TypeScript-specific unused-vars rule
     },
   },
 ];
