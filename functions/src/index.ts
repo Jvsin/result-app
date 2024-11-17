@@ -35,7 +35,7 @@ const convertDateToString = () => {
   return formatDate(today)
 }
 
-exports.processBets = onSchedule("every 3 hours", async (event) => {
+exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
   try {
     if (false) {
         console.log(event)
@@ -103,22 +103,214 @@ exports.processBets = onSchedule("every 3 hours", async (event) => {
             if (fixture.isFinished == true) {
               if (betDifference === matchDifference) {
               if (fixture.goalsHome === home && fixture.goalsAway === away) {
-                points = 3
-              } else {
-                points = 1
+                  points = 3
+                } else {
+                  points = 1
+                }
+                console.log(points + " for correct betting match with id: " + matchID)
+                await betDoc.ref.update({
+                  counted: true,
+                  points: points,
+                })
+                await admin.firestore().collection("users").doc(userId).update({
+                  pol: admin.firestore.FieldValue.increment(points),
+                }) 
               }
-              console.log(points + " for correct betting match with id: " + matchID)
-              await betDoc.ref.update({
-                counted: true,
-                points: points,
-              })
-              await admin.firestore().collection("users").doc(userId).update({
-                pol: admin.firestore.FieldValue.increment(points),
-              })
+              else {
+                console.log("Match not finished yet!")
+              }
             }
-            }
+          }
+        }
+      }
+      console.log("Bet processing completed successfully!")
+    } catch (error) {
+      console.error("Error processing bets:", error)
+    }
+})
 
-            
+exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
+  try {
+    if (false) {
+        console.log(event)
+      }
+      const usersSnapshot = await admin.firestore().collection("users").get()
+      console.log("Fetching users from Firestore:", usersSnapshot.size)
+
+      const fixtureResults: IMatch[] = []
+      const currentDate = convertDateToString()
+      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=2`
+      const headers = {
+        "x-rapidapi-key": "9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d",
+        "x-rapidapi-host": "api-football-v1.p.rapidapi.com",
+      }
+
+      const response = await axios.get(url, { headers })
+      const data = response.data
+      console.log(data)
+
+      data.response.forEach((game: any) => {
+        const match: IMatch = {
+          id: game.fixture.id,
+          league: "ucl",
+          status: game.fixture.status.short,
+          round: game.league.round,
+          timestamp: game.fixture.timestamp,
+          goalsHome: game.score.fulltime.home,
+          goalsAway: game.score.fulltime.away,
+          nameHome: game.teams.home.name,
+          nameAway: game.teams.away.name,
+          isFinished: game.status.short ? true : false
+        }
+        fixtureResults.push(match)
+        console.log("Match found:", match)
+      })
+
+    for (const userDoc of usersSnapshot.docs) {
+        console.log("Count points for user: " + userDoc)
+        const currentTime = Date.now()
+        console.log("Aktualna data " + currentTime)
+        const userId = userDoc.id
+        const betsSnapshot = await admin.firestore()
+          .collection("users")
+          .doc(userId)
+          .collection("bets")
+          .where("counted", "==", false)
+          .where("league", "==", "ucl")
+          .where("matchDate", "<", currentTime)
+          .get()
+
+        for (const betDoc of betsSnapshot.docs) {
+          const betData = betDoc.data()
+          console.log(betData)
+          const { matchID, home, away } = betData
+          
+          const fixture = fixtureResults.find(f => f.id === matchID)
+          if (fixture) {
+            console.log(`${matchID}: ${fixture.nameHome} ${home} : ${away} ${fixture.nameAway}`)
+            let points = 0
+
+            console.log(`${fixture.goalsHome}-${fixture.goalsAway} ? ${home}-${away}`)
+            const betDifference = home - away
+            const matchDifference = fixture.goalsHome - fixture.goalsAway
+
+            if (fixture.isFinished == true) {
+              if (betDifference === matchDifference) {
+                if (fixture.goalsHome === home && fixture.goalsAway === away) {
+                  points = 3
+                } else {
+                  points = 1
+                }
+                console.log(points + " for correct betting match with id: " + matchID)
+                await betDoc.ref.update({
+                  counted: true,
+                  points: points,
+                })
+                await admin.firestore().collection("users").doc(userId).update({
+                  pol: admin.firestore.FieldValue.increment(points),
+                })
+              }
+            }
+            else {
+              console.log("Match not finished yet!")
+            }
+          }
+        }
+      }
+      console.log("Bet processing completed successfully!")
+    } catch (error) {
+      console.error("Error processing bets:", error)
+    }
+})
+
+exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
+  try {
+    if (false) {
+        console.log(event)
+      }
+      const usersSnapshot = await admin.firestore().collection("users").get()
+      console.log("Fetching users from Firestore:", usersSnapshot.size)
+
+      const fixtureResults: IMatch[] = []
+      const currentDate = convertDateToString()
+      const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=39`
+      const headers = {
+        "x-rapidapi-key": "9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d",
+        "x-rapidapi-host": "api-football-v1.p.rapidapi.com",
+      }
+
+      const response = await axios.get(url, { headers })
+      const data = response.data
+      console.log(data)
+
+      data.response.forEach((game: any) => {
+        const match: IMatch = {
+          id: game.fixture.id,
+          league: "eng",
+          status: game.fixture.status.short,
+          round: game.league.round,
+          timestamp: game.fixture.timestamp,
+          goalsHome: game.score.fulltime.home,
+          goalsAway: game.score.fulltime.away,
+          nameHome: game.teams.home.name,
+          nameAway: game.teams.away.name,
+          isFinished: game.status.short ? true : false
+        }
+        fixtureResults.push(match)
+        console.log("Match found:", match)
+      })
+
+    for (const userDoc of usersSnapshot.docs) {
+        console.log("Count points for user: " + userDoc)
+        const currentTime = Date.now()
+        console.log("Aktualna data " + currentTime)
+        const userId = userDoc.id
+        const betsSnapshot = await admin.firestore()
+          .collection("users")
+          .doc(userId)
+          .collection("bets")
+          .where("counted", "==", false)
+          .where("league", "==", "eng")
+          .where("matchDate", "<", currentTime)
+          .get()
+
+        for (const betDoc of betsSnapshot.docs) {
+          const betData = betDoc.data()
+          console.log(betData)
+          const { matchID, home, away } = betData
+          
+          const fixture = fixtureResults.find(f => f.id === matchID)
+          if (fixture) {
+            console.log(`${matchID}: ${fixture.nameHome} ${home} : ${away} ${fixture.nameAway}`)
+            let points = 0
+
+            console.log(`${fixture.goalsHome}-${fixture.goalsAway} ? ${home}-${away}`)
+            const betDifference = home - away
+            const matchDifference = fixture.goalsHome - fixture.goalsAway
+
+            if (fixture.isFinished == true) {
+              if (betDifference === matchDifference) {
+                if (fixture.goalsHome === home && fixture.goalsAway === away) {
+                  points = 3
+                } else {
+                  points = 1
+                }
+
+                console.log(points + " for correct betting match with id: " + matchID)
+                
+                await betDoc.ref.update({
+                  counted: true,
+                  points: points,
+                })
+
+                await admin.firestore().collection("users").doc(userId).update({
+                  pol: admin.firestore.FieldValue.increment(points),
+                })
+              }
+            }
+            else {
+                console.log("Match not finished yet!")
+              }
           }
         }
       }
