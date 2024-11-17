@@ -19,6 +19,9 @@ interface IMatch {
   timestamp: number;
   goalsHome: number;
   goalsAway: number;
+  nameHome: String,
+  nameAway: String,
+  isFinished: boolean
 }
 
 const convertDateToString = () => {
@@ -50,6 +53,7 @@ exports.processBets = onSchedule("every 3 hours", async (event) => {
 
       const response = await axios.get(url, { headers })
       const data = response.data
+      console.log(data)
 
       data.response.forEach((game: any) => {
         const match: IMatch = {
@@ -60,12 +64,18 @@ exports.processBets = onSchedule("every 3 hours", async (event) => {
           timestamp: game.fixture.timestamp,
           goalsHome: game.score.fulltime.home,
           goalsAway: game.score.fulltime.away,
+          nameHome: game.teams.home.name,
+          nameAway: game.teams.away.name,
+          isFinished: game.status.short ? true : false
         }
         fixtureResults.push(match)
         console.log("Match found:", match)
       })
 
-      for (const userDoc of usersSnapshot.docs) {
+    for (const userDoc of usersSnapshot.docs) {
+        console.log("Count points for user: " + userDoc)
+        const currentTime = Date.now()
+        console.log("Aktualna data " + currentTime)
         const userId = userDoc.id
         const betsSnapshot = await admin.firestore()
           .collection("users")
@@ -73,28 +83,31 @@ exports.processBets = onSchedule("every 3 hours", async (event) => {
           .collection("bets")
           .where("counted", "==", false)
           .where("league", "==", "pol")
+          .where("matchDate", "<", currentTime)
           .get()
 
         for (const betDoc of betsSnapshot.docs) {
           const betData = betDoc.data()
+          console.log(betData)
           const { matchID, home, away } = betData
-          console.log(`${matchID}: Home: ${home}, Away: ${away}`)
-
+          
           const fixture = fixtureResults.find(f => f.id === matchID)
           if (fixture) {
+            console.log(`${matchID}: ${fixture.nameHome} ${home} : ${away} ${fixture.nameAway}`)
             let points = 0
 
             console.log(`${fixture.goalsHome}-${fixture.goalsAway} ? ${home}-${away}`)
             const betDifference = home - away
             const matchDifference = fixture.goalsHome - fixture.goalsAway
 
-            if (betDifference === matchDifference) {
+            if (fixture.isFinished == true) {
+              if (betDifference === matchDifference) {
               if (fixture.goalsHome === home && fixture.goalsAway === away) {
                 points = 3
               } else {
                 points = 1
               }
-
+              console.log(points + " for correct betting match with id: " + matchID)
               await betDoc.ref.update({
                 counted: true,
                 points: points,
@@ -103,12 +116,12 @@ exports.processBets = onSchedule("every 3 hours", async (event) => {
                 pol: admin.firestore.FieldValue.increment(points),
               })
             }
+            }
 
             
           }
         }
       }
-
       console.log("Bet processing completed successfully!")
     } catch (error) {
       console.error("Error processing bets:", error)
@@ -185,14 +198,15 @@ exports.processBetsHTTP = functions.https.onRequest((req, res) => {
               } else {
                 points = 1
               }
+              await betDoc.ref.update({
+                counted: true,
+                points: points,
+              })
+              await admin.firestore().collection("users").doc(userId).update({
+                pol: admin.firestore.FieldValue.increment(points),
+              })
             }
-            await betDoc.ref.update({
-              counted: true,
-              points: points,
-            })
-            await admin.firestore().collection("users").doc(userId).update({
-              pol: admin.firestore.FieldValue.increment(points),
-            })
+            
           }
         }
       }
