@@ -162,7 +162,7 @@
               <v-tabs-window-item :value="2">
 
                 <v-container>
-                  <div v-for="card in leagues">
+                  <div v-for="card in userBetLeagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
                         <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
@@ -176,14 +176,14 @@
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
                               <v-card-subtitle>
-                                {{ card.league }}
+                                {{ setLeaguesData(card.league) }}
                               </v-card-subtitle>
                             </v-col>
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
-                              <v-card-subtitle>
+                              <!-- <v-card-subtitle>
                                 {{ 'Pozycja: ' + card.position + '/' + card.players }}
-                              </v-card-subtitle>
+                              </v-card-subtitle> -->
                             </v-col>
                           </v-row>
                         </v-card>
@@ -207,6 +207,7 @@ import type { Timestamp } from 'firebase/firestore';
 import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore';
 
 definePageMeta({
   middleware: 'auth'
@@ -222,16 +223,13 @@ const leagues = [
 const router = useRouter();
 
 const authStore = useAuthStore()
-// const userData = authStore.loggedUserData
-// const betAccuracy = computed(() => userData?.betAcc)
+const betLeagueStore = useBetLeagueStore()
 
-// const nameAndSurname = computed(() => userData?.name + ' ' + userData?.surname)
-// const email = computed(() => userData?.email)
-// const established = computed(() => formatTimestampToDate(userData?.established))
 const userData = computed(() => authStore.loggedUserData)
 watch(userData, (olddata, newdata) => {
   console.log(userData.value?.favLeagues)
 })
+
 const nameAndSurname = computed(() => {
   if (!userData.value) return ''
   return `${userData.value?.name} ${userData.value?.surname}`
@@ -250,6 +248,10 @@ const betAccuracy = computed(() => {
 const established = computed(() => {
   if(!userData.value) return 'data'
   return formatTimestampToDate(userData.value.established)
+})
+
+const userBetLeagues = computed(() => {
+  return betLeagueStore.userBetLeagues
 })
 
 function getLeagueRoute() {
@@ -286,6 +288,20 @@ async function handleLogout() {
   }
 }
 
+function setLeaguesData(league: string) {
+  switch (league) {
+    case "eng":
+      return "Premier League"
+      break;
+    case "pol":
+      return "Ekstraklasa"
+      break;
+    case "ucl":
+      return "Champions League"
+      break;
+  }
+}
+
 function formatTimestampToDate(timestamp: any) {
   if (timestamp != undefined) {
     const { seconds, nanoseconds } = timestamp;
@@ -307,6 +323,9 @@ function formatTimestampToDate(timestamp: any) {
 
 onMounted(async () => {
   await authStore.actualizeUserData()
+  if (userData.value) {
+    await betLeagueStore.fetchUserBetLeagues(userData.value.leagues)
+  }
 })
 </script>
 

@@ -9,7 +9,7 @@ export interface IUser {
     favLeagues: [],
     photo: String,
     role: TRole,
-    leagues: String[],
+    leagues: DocumentReference[],
     polPoints: Number,
     engPoints: Number,
     uclPoints: Number,
@@ -25,7 +25,7 @@ export class UserModel implements IUser {
     favLeagues: []
     photo: String
     role: TRole
-    leagues: String[]
+    leagues: DocumentReference[]
     polPoints: Number
     engPoints: Number
     uclPoints: Number
