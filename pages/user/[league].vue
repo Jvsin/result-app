@@ -42,7 +42,9 @@
                       <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
                     </v-col>
                     <v-col class="d-flex flex-column align-start justify-center" cols="5">
-                      {{ player.nick }}
+                      <v-card-title>
+                        {{ player.nick }}
+                      </v-card-title>
                     </v-col>
                     <v-col class="d-flex flex-column align-center justify-center" cols="2">
                       <v-card-subtitle>
@@ -50,7 +52,9 @@
                       </v-card-subtitle>
                     </v-col>
                     <v-col class="d-flex flex-column align-center justify-center" cols="2">
-                      {{ player.polPoints }}
+                      <v-card-title>
+                        {{ player.polPoints }}
+                      </v-card-title>
                     </v-col>
                   </v-row>
                 </v-card>
