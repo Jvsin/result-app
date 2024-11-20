@@ -8,26 +8,57 @@
             <v-col>
               <v-card-title class="text-h3">{{ league?.name }}</v-card-title>
               <v-card-subtitle class="text-h5">{{ setLeaguesData(league?.league) }}</v-card-subtitle>
-              <div class="justify-center align-center scrollable-container">
-                <v-card class="ma-5 d-flex justify-center align-center" v-for="player in players" variant="text">
+              <div v-if="!loading" class="justify-center align-center scrollable-container py-2">
+                <v-card class="ma-5 d-flex justify-center align-center" variant="text">
                   <v-row class="d-flex align-center">
-                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="1">
-                      {{ player.position }}
+                    <v-col class="d-flex flex-column align-center justify-center" cols="1">
+                      <v-card-subtitle class="text-center">
+                        {{ $t('user.betLeaguesSites.position') }}
+                      </v-card-subtitle>
                     </v-col>
-                    <v-col cols="2">
-                      <v-avatar color="surface-variant"></v-avatar>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-start justify-center" cols="7">
-                      {{ player.name }}
+                    <v-col class="d-flex flex-column align-center justify-center" cols="7">
+                      <v-card-subtitle class="text-center">
+                        {{ $t('user.betLeaguesSites.playerName') }}
+                      </v-card-subtitle>
                     </v-col>
                     <v-col class="d-flex flex-column align-center justify-center" cols="2">
-                      {{ player.points }}
+                      <v-card-subtitle class="text-center">
+                        {{ $t('user.betLeaguesSites.accuracy') }}
+                      </v-card-subtitle>
+                    </v-col>
+                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                      <v-card-subtitle class="text-center">
+                        {{ $t('user.betLeaguesSites.points') }}
+                      </v-card-subtitle>
+                    </v-col>
+                  </v-row>
+                </v-card>
+                <v-card class="ma-5 d-flex justify-center align-center" v-for="(player,index) in playersTable" variant="text">
+                  <v-row class="d-flex align-center">
+                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="1">
+                      {{ index + 1 }}
+                    </v-col>
+                    <v-col cols="2">
+                      <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
+                    </v-col>
+                    <v-col class="d-flex flex-column align-start justify-center" cols="5">
+                      {{ player.nick }}
+                    </v-col>
+                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                      <v-card-subtitle>
+                        {{ player.betAcc + "%" }}
+                      </v-card-subtitle>
+                    </v-col>
+                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                      {{ player.polPoints }}
                     </v-col>
                   </v-row>
                 </v-card>
               </div>
+              <div v-else>
+                <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
+              </div>
             </v-col>
-
           </v-sheet>
         </v-img>
       </v-main>
@@ -57,41 +88,38 @@ function setLeaguesData(league: string) {
   }
 }
 
-const players = [
-  { name: "player20", points: 24, position: 1 },
-  { name: "player12", points: 22, position: 2 },
-  { name: "player16", points: 20, position: 3 },
-  { name: "kox12", points: 18, position: 4 },
-  { name: "player2", points: 17, position: 5 },
-  { name: "player3", points: 12, position: 6 },
-  { name: "player_4", points: 10, position: 7 },
-  { name: "player_5", points: 7, position: 8 },
-  { name: "kicker234", points: 2, position: 9 },
-  { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
-  // { name: "name", points: 0, position: 10 },
+// const players = [
+//   { name: "player20", points: 24, position: 1 },
+//   { name: "player12", points: 22, position: 2 },
+//   { name: "player16", points: 20, position: 3 },
+//   { name: "kox12", points: 18, position: 4 },
+//   { name: "player2", points: 17, position: 5 },
+//   { name: "player3", points: 12, position: 6 },
+//   { name: "player_4", points: 10, position: 7 },
+//   { name: "player_5", points: 7, position: 8 },
+//   { name: "kicker234", points: 2, position: 9 },
+//   { name: "name", points: 0, position: 10 },
+// ]
 
-]
+const loading = ref(true)
+
+async function setPlayersTable() {
+  await betLeagueStore.fetchPlayersData(league.value.players)
+  console.log(betLeagueStore.playersTable.value)
+  playersTable.value = betLeagueStore.playersTable
+  loading.value = false
+}
 
 const betLeagueStore = useBetLeagueStore();
 const league = ref();
-const img_src = '/public/ucl-league.jpg'
+// const img_src = `/public/${league.value.league}-league.jpg`
+const playersTable = ref()
 
 onMounted(async () => {
+  loading.value = true
   await betLeagueStore.fetchLeagueById(leagueId.value)
   league.value = betLeagueStore.leagueToDisplay
+  setPlayersTable()
 })
 
 </script>
@@ -100,5 +128,6 @@ onMounted(async () => {
 .scrollable-container {
   max-height: 700px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

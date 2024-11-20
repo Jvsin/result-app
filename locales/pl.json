@@ -117,6 +117,13 @@
       "noBetsTitle": "Brak typów na nadchodzące mecze!",
       "noBetsInfo": "Mecze możesz typować w zakładce Typuj",
       "showMatchesCounter": "Pokaż nadchodzące mecze:"
+    },
+    "betLeaguesSites": {
+      "loadingAlert": "Trwa wczytywanie tabeli...",
+      "position": "Pozycja",
+      "playerName": "Gracz",
+      "accuracy": "Skuteczność",
+      "points": "Punkty"
     }
   },
   "errors": {

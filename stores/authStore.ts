@@ -166,8 +166,31 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const fetchLeaguePlayers = async (playerRefs: DocumentReference[]) => {
+    const players = [];
+
+    for (const playerRef of playerRefs) {
+      try {
+        const playerDoc = await getDoc(playerRef);
+
+        if (playerDoc.exists()) {
+          const { nick, polPoints, betAcc } = playerDoc.data();
+          players.push({
+            nick,
+            polPoints,
+            betAcc
+          });
+        }
+      } catch (error) {
+        console.error(`Failed to fetch player data for ref: ${playerRef.id}`, error);
+      }
+    }
+    return players
+  }
+
   return {
     user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
-    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague
+    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague,
+    fetchLeaguePlayers
   };
 });

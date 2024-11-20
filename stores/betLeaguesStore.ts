@@ -5,11 +5,15 @@ import {
   type DocumentReference, orderBy, limit,
   getDoc
 } from 'firebase/firestore';
+import { useAuthStore } from './authStore';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
   const userBetLeagues = ref<LeagueModel[]>([])
   const leagueToDisplay = ref<LeagueModel>()
+
+  const authStore = useAuthStore()
+  const playersTable = ref<any>()
 
   const fetchUserBetLeagues = async (userLeagues: DocumentReference[]) => {
     try {
@@ -36,19 +40,22 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   const fetchLeagueById = async (leagueId: string) => {
     try {
       const league = userBetLeagues.value.find((l) => l.reference.id === leagueId);
-      if (league) {
-        leagueToDisplay.value = league
-        // return league;
-      }
+      // if (league) {
+      //   leagueToDisplay.value = league
+      //   // return league;
+      // }
 
       const docRef = doc(db, "leagues", leagueId);
       const leagueDoc = await getDoc(docRef);
 
       if (leagueDoc.exists()) {
-        const leagueData = leagueDoc.data() as ILeague;
-        const league = new LeagueModel(leagueData, leagueDoc.ref);
-        userBetLeagues.value.push(league)
-        leagueToDisplay.value = league
+        const leagueData = leagueDoc.data() as ILeague
+        const data = new LeagueModel(leagueData, leagueDoc.ref)
+        if (!userBetLeagues.value.find(l => l.leagueCode === leagueData.leagueCode)) {
+          console.log(data)
+          userBetLeagues.value.push(data)
+        }
+        leagueToDisplay.value = data
         // return league;
       } else {
         console.error("League not found")
@@ -58,10 +65,25 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
       console.error("Error fetching league:", error);
       return null;
     }
-  };
+  }
+
+  const fetchPlayersData = async (playersData: DocumentReference[]) => {
+    const players = await authStore.fetchLeaguePlayers(playersData)
+    console.log(players)
+
+    players.sort((a, b) => {
+      if (b.polPoints !== a.polPoints) {
+        return b.polPoints - a.polPoints; 
+      }
+
+      return b.betAcc - a.betAcc; 
+    })
+    console.log(players)
+    playersTable.value = players
+  }
 
   return {
-    userBetLeagues, leagueToDisplay,
-    fetchUserBetLeagues, fetchLeagueById
+    userBetLeagues, leagueToDisplay, playersTable,
+    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData
   }
 })

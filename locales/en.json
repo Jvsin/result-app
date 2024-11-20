@@ -116,6 +116,13 @@
       "noBetsTitle": "No bets for upcoming matches!",
       "noBetsInfo": "You can bet on matches in the Bet tab.",
       "showMatchesCounter": "Count of upcoming matches:"
+    },
+    "betLeaguesSites": {
+      "loadingAlert": "Table loading...",
+      "position": "Place",
+      "playerName": "Player",
+      "accuracy": "Accuracy",
+      "points": "Points"
     }
   },
   "errors":{
