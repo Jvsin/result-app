@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "resultapp"
+location: "europe-central2"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "resultapp_sql_id"
+      cloudSql:
+        instanceId: "resultapp_sql"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
