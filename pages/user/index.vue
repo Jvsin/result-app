@@ -48,6 +48,10 @@
                               {{ $t('user.followLeagues')}}
                             </v-btn>
                           </div>
+
+                          <div>
+                            <v-btn @click="router.push('/user/test')">Run Firebase Function</v-btn>
+                          </div>
                         </v-row>
                       </v-card>
                     </v-col>
@@ -308,6 +312,8 @@ function formatTimestampToDate(timestamp: any) {
 onMounted(async () => {
   await authStore.actualizeUserData()
 })
+
+
 </script>
 
 <style scoped>
