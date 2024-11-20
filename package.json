@@ -10,7 +10,6 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@firebasegen/default-connector": "file:dataconnect-generated\\js\\default-connector",
     "@flaticon/flaticon-uicons": "^3.3.1",
     "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
@@ -19,11 +18,11 @@
     "@vuepic/vue-datepicker": "^8.8.0",
     "axios": "^1.7.5",
     "dotenv": "^16.4.5",
-    "eslint": "^9.14.0",
     "firebase": "^10.12.5",
     "firebase-tools": "^13.11.3",
     "nuxt": "^3.12.4",
     "pinia": "^2.1.7",
+    "typescript": "^5.5.2",
     "vue": "latest",
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.3.3",
@@ -32,8 +31,6 @@
   },
   "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e",
   "devDependencies": {
-    "@typescript-eslint/parser": "^8.14.0",
-    "typescript": "^5.6.3",
     "vite-plugin-vuetify": "^2.0.4",
     "vuetify": "^3.7.0"
   }
