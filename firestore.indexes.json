@@ -1,0 +1,37 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "bets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "counted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "league",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "matchDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "bets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "league",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "matchDate",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
