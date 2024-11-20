@@ -255,7 +255,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
             }
           }
           else {
-            console.log("Match not finished yet!")
+            console.log("Match not finished yet!!")
           }
         }
       }
