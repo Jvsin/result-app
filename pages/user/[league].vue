@@ -6,8 +6,8 @@
           <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
             style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
             <v-col>
-              <v-card-title class="text-h3">{{ league.name }}</v-card-title>
-              <v-card-subtitle class="text-h5">{{ league.league }}</v-card-subtitle>
+              <v-card-title class="text-h3">{{ league?.name }}</v-card-title>
+              <v-card-subtitle class="text-h5">{{ setLeaguesData(league?.league) }}</v-card-subtitle>
               <div class="justify-center align-center scrollable-container">
                 <v-card class="ma-5 d-flex justify-center align-center" v-for="player in players" variant="text">
                   <v-row class="d-flex align-center">
@@ -35,9 +35,27 @@
 </template>
 
 <script lang="ts" setup>
+import type { LeagueModel } from '~/models/betLeague';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore';
+
 definePageMeta({
   middleware: 'auth'
 })
+
+const route = useRoute()
+const leagueId = ref(route.params.league as string)
+console.log(leagueId)
+
+function setLeaguesData(league: string) {
+  switch (league) {
+    case "eng":
+      return "Premier League"
+    case "pol":
+      return "Ekstraklasa"
+    case "ucl":
+      return "Champions League"
+  }
+}
 
 const players = [
   { name: "player20", points: 24, position: 1 },
@@ -66,8 +84,15 @@ const players = [
   // { name: "name", points: 0, position: 10 },
 
 ]
-const league = { name: "Moja liga testowa", position: 4, players: 10, league: "Premier League", icon: "/public/pl.png" }
+
+const betLeagueStore = useBetLeagueStore();
+const league = ref();
 const img_src = '/public/ucl-league.jpg'
+
+onMounted(async () => {
+  await betLeagueStore.fetchLeagueById(leagueId.value)
+  league.value = betLeagueStore.leagueToDisplay
+})
 
 </script>
 

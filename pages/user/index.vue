@@ -166,7 +166,7 @@
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
                         <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
-                          @click="getLeagueRoute()">
+                          @click="getLeagueRoute(card.reference.id)">
                           <v-row class="d-flex flex-wrap" justify="center">
                             <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
                               <v-card-title>
@@ -181,9 +181,9 @@
                             </v-col>
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
-                              <!-- <v-card-subtitle>
-                                {{ 'Pozycja: ' + card.position + '/' + card.players }}
-                              </v-card-subtitle> -->
+                              <v-card-subtitle>
+                                {{'Graczy w lidze: ' +  card.players.length }}
+                              </v-card-subtitle>
                             </v-col>
                           </v-row>
                         </v-card>
@@ -254,10 +254,10 @@ const userBetLeagues = computed(() => {
   return betLeagueStore.userBetLeagues
 })
 
-function getLeagueRoute() {
+function getLeagueRoute(ref: string) {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
-  router.push('/user/table')
+  router.push(`/user/${ref}`)
 }
 
 function getBettingRoute(league: string) {
@@ -292,13 +292,10 @@ function setLeaguesData(league: string) {
   switch (league) {
     case "eng":
       return "Premier League"
-      break;
     case "pol":
       return "Ekstraklasa"
-      break;
     case "ucl":
       return "Champions League"
-      break;
   }
 }
 
