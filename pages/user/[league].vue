@@ -12,8 +12,9 @@
               <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
 
               <div v-if="isAuthor" class="py-1">
-                <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn>
-                <v-btn class="mb-2 mx-2" prepend-icon="mdi-account-multiple" color="primary" variant="outlined">Gracze</v-btn>
+                <!-- <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn> -->
+                <v-btn class="mb-2 mx-2" prepend-icon="mdi-table-account" color="secondary" variant="outlined"
+                @click="changeLeagueEditFlag">Zarządzaj</v-btn>
               </div>
               <div v-else>
                 <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined">Opuść ligę</v-btn>
@@ -79,7 +80,8 @@
                 <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
               
-            </v-col> 
+            </v-col>
+            <EditLeagueDialog :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
           </v-sheet>
         </v-img>
       </v-main>
@@ -89,11 +91,17 @@
 <script lang="ts" setup>
 import type { LeagueModel } from '~/models/betLeague';
 import { useAuthStore } from '~/stores/authStore';
-import { useBetLeagueStore } from '~/stores/betLeaguesStore';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore'
+import EditLeagueDialog from '~/components/leagues/editLeagueDialog.vue';
 
 definePageMeta({
   middleware: 'auth'
 })
+
+const editFlag = ref(false)
+function changeLeagueEditFlag() {
+  editFlag.value = !editFlag.value
+}
 
 const route = useRoute()
 const leagueId = ref(route.params.league as string)

@@ -122,7 +122,17 @@
       "position": "Place",
       "playerName": "Player",
       "accuracy": "Acc.",
-      "points": "Pts"
+      "points": "Pts",
+      "manageLeague": "Manage the league",
+      "editDialog": {
+        "leagueName": "Name",
+        "description": "Description",
+        "codeLeague": "League code:",
+        "copy": "Copy code",
+        "copied": "Code copied",
+        "cancel": "Cancel",
+        "save": "Save"
+      }
     }
   },
   "errors":{

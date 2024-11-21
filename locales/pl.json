@@ -123,7 +123,17 @@
       "position": "Pozycja",
       "playerName": "Gracz",
       "accuracy": "Skut.",
-      "points": "Pkt"
+      "points": "Pkt",
+      "manageLeague": "Manage the league",
+      "editDialog": {
+        "leagueName": "Nazwa",
+        "description": "Opis",
+        "codeLeague": "Kod ligi:",
+        "copy": "Kopiuj kod",
+        "copied": "Skopiowano!",
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+      }
     }
   },
   "errors": {
