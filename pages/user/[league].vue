@@ -14,7 +14,7 @@
               <div v-if="isAuthor" class="py-1">
                 <!-- <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn> -->
                 <v-btn class="mb-2 mx-2" prepend-icon="mdi-table-account" color="secondary" variant="outlined"
-                @click="changeLeagueEditFlag">Zarządzaj</v-btn>
+                @click="changeLeagueEditFlag">{{ $t('user.betLeaguesSites.manageLeague') }}</v-btn>
               </div>
               <div v-else>
                 <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined">Opuść ligę</v-btn>
@@ -131,29 +131,30 @@ function setLeaguesData(league: string) {
 const loading = ref(true)
 
 async function setPlayersTable() {
-  await betLeagueStore.fetchPlayersData(league.value.players)
+  if (league.value != undefined) {
+    await betLeagueStore.fetchPlayersData(league?.value.players)
+  }
   console.log(betLeagueStore.playersTable.value)
   playersTable.value = betLeagueStore.playersTable
   loading.value = false
 }
 
 const betLeagueStore = useBetLeagueStore()
-const league = ref();
-// const img_src = `/public/${league.value.league}-league.jpg`
+const league = computed(() => betLeagueStore.leagueToDisplay)
 const playersTable = ref()
 
 onMounted(async () => {
   loading.value = true
 
   await betLeagueStore.fetchLeagueById(leagueId.value)
-  league.value = betLeagueStore.leagueToDisplay
-  leagueName.value = setLeaguesData(league.value.league)
+  // league.value = betLeagueStore.leagueToDisplay
+  if (league.value != undefined) {
+    leagueName.value = setLeaguesData(league.value.league)
 
-  if (loggedUserData.value?.reference?.id === league.value.owner.id) {
-    console.log(true)
-    isAuthor.value = true
+    if (loggedUserData.value?.reference?.id === league.value.owner.id) {
+      isAuthor.value = true
+    }
   }
-  
   setPlayersTable()
 })
 

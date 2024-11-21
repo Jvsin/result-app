@@ -40,10 +40,6 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   const fetchLeagueById = async (leagueId: string) => {
     try {
       const league = userBetLeagues.value.find((l) => l.reference.id === leagueId);
-      // if (league) {
-      //   leagueToDisplay.value = league
-      //   // return league;
-      // }
 
       const docRef = doc(db, "leagues", leagueId);
       const leagueDoc = await getDoc(docRef);
@@ -82,8 +78,21 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     playersTable.value = players
   }
 
+  const editLeagueData = async (data: any, ref: string) => {
+    try {
+      const userDocRef = doc(db, `leagues/${ref}`);
+      console.log(userDocRef)
+      await updateDoc(userDocRef, data);
+      console.log('League updated successfully');
+      await fetchLeagueById(ref)
+      
+    } catch (error) { 
+      console.error('Error updating league data:', error);
+    }
+  }
+
   return {
     userBetLeagues, leagueToDisplay, playersTable,
-    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData
+    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData
   }
 })

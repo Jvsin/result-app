@@ -127,7 +127,7 @@
       "editDialog": {
         "leagueName": "Name",
         "description": "Description",
-        "codeLeague": "League code:",
+        "codeLeague": "invite your friends by code:",
         "copy": "Copy code",
         "copied": "Code copied",
         "cancel": "Cancel",

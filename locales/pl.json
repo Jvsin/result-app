@@ -124,11 +124,11 @@
       "playerName": "Gracz",
       "accuracy": "Skut.",
       "points": "Pkt",
-      "manageLeague": "Manage the league",
+      "manageLeague": "Zarządzaj ligą",
       "editDialog": {
         "leagueName": "Nazwa",
         "description": "Opis",
-        "codeLeague": "Kod ligi:",
+        "codeLeague": "Zaproś znajomych poprzez kod:",
         "copy": "Kopiuj kod",
         "copied": "Skopiowano!",
         "cancel": "Anuluj",
