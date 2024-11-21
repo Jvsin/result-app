@@ -5,10 +5,20 @@
           class="text-center w-100 h-100">
           <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
             style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%" rounded>
-            <v-col>
-              <v-avatar color="white" :src="leagueIcon"></v-avatar>
-              <v-card-title class="text-h3">{{ league?.name }}</v-card-title>
-              <v-card-subtitle class="text-h5">{{ setLeaguesData(league?.league) }}</v-card-subtitle>
+            <v-col cols="12">
+              <!-- <v-avatar v-if="!loading" color="white" :src="leagueIcon"></v-avatar> -->
+              <v-card-text class="text-h3">{{ league?.name }}</v-card-text>
+              <v-card-subtitle class="text-h6">{{ leagueName }}</v-card-subtitle>
+              <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
+
+              <div v-if="isAuthor" class="py-1">
+                <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn>
+                <v-btn class="mb-2 mx-2" prepend-icon="mdi-account-multiple" color="primary" variant="outlined">Gracze</v-btn>
+              </div>
+              <div v-else>
+                <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined">Opuść ligę</v-btn>
+              </div>
+
               <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
                 <v-card class="ma-5 d-flex justify-center align-center" variant="text">
                   <v-row class="d-flex align-center">
@@ -68,7 +78,8 @@
               <div v-else>
                 <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
-            </v-col>
+              
+            </v-col> 
           </v-sheet>
         </v-img>
       </v-main>
@@ -77,6 +88,7 @@
 
 <script lang="ts" setup>
 import type { LeagueModel } from '~/models/betLeague';
+import { useAuthStore } from '~/stores/authStore';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore';
 
 definePageMeta({
@@ -86,8 +98,13 @@ definePageMeta({
 const route = useRoute()
 const leagueId = ref(route.params.league as string)
 console.log(leagueId)
-const leagueIcon = ref("")
 
+const isAuthor = ref(false)
+const authStore = useAuthStore()
+const { loggedUserData } = storeToRefs(authStore)
+
+const leagueIcon = ref("")
+const leagueName = ref("")
 function setLeaguesData(league: string) {
   switch (league) {
     case "eng":
@@ -100,20 +117,8 @@ function setLeaguesData(league: string) {
       leagueIcon.value = "/public/ucl.png"
       return "Champions League"
   }
+  return ""
 }
-
-// const players = [
-//   { name: "player20", points: 24, position: 1 },
-//   { name: "player12", points: 22, position: 2 },
-//   { name: "player16", points: 20, position: 3 },
-//   { name: "kox12", points: 18, position: 4 },
-//   { name: "player2", points: 17, position: 5 },
-//   { name: "player3", points: 12, position: 6 },
-//   { name: "player_4", points: 10, position: 7 },
-//   { name: "player_5", points: 7, position: 8 },
-//   { name: "kicker234", points: 2, position: 9 },
-//   { name: "name", points: 0, position: 10 },
-// ]
 
 const loading = ref(true)
 
@@ -124,17 +129,23 @@ async function setPlayersTable() {
   loading.value = false
 }
 
-const betLeagueStore = useBetLeagueStore();
+const betLeagueStore = useBetLeagueStore()
 const league = ref();
 // const img_src = `/public/${league.value.league}-league.jpg`
 const playersTable = ref()
 
 onMounted(async () => {
   loading.value = true
+
   await betLeagueStore.fetchLeagueById(leagueId.value)
   league.value = betLeagueStore.leagueToDisplay
-  setLeaguesData(league.value.league)
-  console.log(leagueIcon.value)
+  leagueName.value = setLeaguesData(league.value.league)
+
+  if (loggedUserData.value?.reference?.id === league.value.owner.id) {
+    console.log(true)
+    isAuthor.value = true
+  }
+  
   setPlayersTable()
 })
 

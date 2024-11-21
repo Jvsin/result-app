@@ -4,6 +4,7 @@ import { DocumentReference } from "firebase/firestore"
 export interface ILeague {
     leagueCode: string,
     name: string,
+    description: string,
     league: string,
     owner: DocumentReference,
     players: DocumentReference[]
@@ -14,6 +15,7 @@ export interface ILeague {
 export class LeagueModel implements ILeague {
     leagueCode: string
     name: string
+    description: string
     league: string
     owner: DocumentReference
     players: DocumentReference[]
@@ -24,6 +26,7 @@ export class LeagueModel implements ILeague {
     
     constructor(data: ILeague, reference: DocumentReference) {
         this.leagueCode = data?.leagueCode || ''
+        this.description = data?.description || ''
         this.league = data?.league || ''
         this.name = data?.name || ''
         this.owner = data?.owner || null
