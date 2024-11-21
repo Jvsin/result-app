@@ -121,8 +121,8 @@
       "loadingAlert": "Table loading...",
       "position": "Place",
       "playerName": "Player",
-      "accuracy": "Accuracy",
-      "points": "Points"
+      "accuracy": "Acc.",
+      "points": "Pts"
     }
   },
   "errors":{

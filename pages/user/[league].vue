@@ -4,29 +4,33 @@
         <v-img src="/public/english-league.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.6)"
           class="text-center w-100 h-100">
           <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
-            style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
+            style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%" rounded>
             <v-col>
+              <v-avatar color="white" :src="leagueIcon"></v-avatar>
               <v-card-title class="text-h3">{{ league?.name }}</v-card-title>
               <v-card-subtitle class="text-h5">{{ setLeaguesData(league?.league) }}</v-card-subtitle>
-              <div v-if="!loading" class="justify-center align-center scrollable-container py-2">
+              <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
                 <v-card class="ma-5 d-flex justify-center align-center" variant="text">
                   <v-row class="d-flex align-center">
-                    <v-col class="d-flex flex-column align-center justify-center" cols="1">
+                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
                       <v-card-subtitle class="text-center">
-                        {{ $t('user.betLeaguesSites.position') }}
+                        #
                       </v-card-subtitle>
                     </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="7">
+                    <v-col cols="1" md="2">
+
+                    </v-col>
+                    <v-col class="d-flex flex-column align-start justify-center" cols="5" md="5">
                       <v-card-subtitle class="text-center">
                         {{ $t('user.betLeaguesSites.playerName') }}
                       </v-card-subtitle>
                     </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                    <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
                       <v-card-subtitle class="text-center">
                         {{ $t('user.betLeaguesSites.accuracy') }}
                       </v-card-subtitle>
                     </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
                       <v-card-subtitle class="text-center">
                         {{ $t('user.betLeaguesSites.points') }}
                       </v-card-subtitle>
@@ -35,30 +39,32 @@
                 </v-card>
                 <v-card class="ma-5 d-flex justify-center align-center" v-for="(player,index) in playersTable" variant="text">
                   <v-row class="d-flex align-center">
-                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="1">
-                      {{ index + 1 }}
+                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
+                      <v-card-title>
+                        {{ index + 1 }}
+                      </v-card-title>
                     </v-col>
-                    <v-col cols="2">
+                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
                       <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
                     </v-col>
-                    <v-col class="d-flex flex-column align-start justify-center" cols="5">
+                    <v-col class="d-flex flex-column align-center align-sm-start justify-center" cols="5" md="5">
                       <v-card-title>
                         {{ player.nick }}
                       </v-card-title>
                     </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                    <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
                       <v-card-subtitle>
                         {{ player.betAcc + "%" }}
                       </v-card-subtitle>
                     </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2">
+                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
                       <v-card-title>
                         {{ player.polPoints }}
                       </v-card-title>
                     </v-col>
                   </v-row>
                 </v-card>
-              </div>
+              </v-card>
               <div v-else>
                 <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
@@ -80,14 +86,18 @@ definePageMeta({
 const route = useRoute()
 const leagueId = ref(route.params.league as string)
 console.log(leagueId)
+const leagueIcon = ref("")
 
 function setLeaguesData(league: string) {
   switch (league) {
     case "eng":
+      leagueIcon.value = "/public/england.png"
       return "Premier League"
     case "pol":
+      leagueIcon.value = "/public/poland.png"
       return "Ekstraklasa"
     case "ucl":
+      leagueIcon.value = "/public/ucl.png"
       return "Champions League"
   }
 }
@@ -123,6 +133,8 @@ onMounted(async () => {
   loading.value = true
   await betLeagueStore.fetchLeagueById(leagueId.value)
   league.value = betLeagueStore.leagueToDisplay
+  setLeaguesData(league.value.league)
+  console.log(leagueIcon.value)
   setPlayersTable()
 })
 

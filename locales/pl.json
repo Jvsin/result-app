@@ -122,8 +122,8 @@
       "loadingAlert": "Trwa wczytywanie tabeli...",
       "position": "Pozycja",
       "playerName": "Gracz",
-      "accuracy": "Skuteczność",
-      "points": "Punkty"
+      "accuracy": "Skut.",
+      "points": "Pkt"
     }
   },
   "errors": {
