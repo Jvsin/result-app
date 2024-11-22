@@ -81,7 +81,7 @@
               </div>
               
             </v-col>
-            <EditLeagueDialog :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
+            <EditLeagueDialog :players="playersTable" :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
           </v-sheet>
         </v-img>
       </v-main>

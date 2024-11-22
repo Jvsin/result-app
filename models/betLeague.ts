@@ -38,7 +38,7 @@ export class LeagueModel implements ILeague {
     }
 }
 
-// export function toMapBet(data?: Partial<I>): IBet {
+// export function toMapBetLeague(data?: Partial<ILeague>): ILeague {
 //     return {
 //         matchID: data?.matchID || -1,
 //         matchDate: data?.matchDate || 0,
