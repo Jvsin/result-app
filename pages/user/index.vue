@@ -48,6 +48,9 @@
                               {{ $t('user.followLeagues')}}
                             </v-btn>
                           </div>
+                          <!-- <div>
+                            <v-btn @click="router.push('/user/test')">Run Firebase Function</v-btn>
+                          </div> -->
                         </v-row>
                       </v-card>
                     </v-col>

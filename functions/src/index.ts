@@ -100,7 +100,7 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
           goalsAway: game.score.fulltime.away,
           nameHome: game.teams.home.name,
           nameAway: game.teams.away.name,
-          isFinished: game.status.short ? true : false
+          isFinished: game.fixture.status.short === "FT" ? true : false
         }
         fixtureResults.push(match)
         console.log("Match found:", match)
@@ -111,7 +111,7 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc } = userDoc.data()
+      const { betAcc, polPoints } = userDoc.data()
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -138,23 +138,23 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
 
           if (fixture.isFinished == true) {
             if (betDifference === matchDifference) {
-            if (fixture.goalsHome === home && fixture.goalsAway === away) {
-              points = 3
+              if (fixture.goalsHome === home && fixture.goalsAway === away) {
+                  points = 3
               } else {
                 points = 1
               }
-              console.log(points + " for correct betting match with id: " + matchID)
-              await betDoc.ref.update({
-                counted: true,
-                points: points,
-              })
-              await admin.firestore().collection("users").doc(userId).update({
-                polPoints: admin.firestore.FieldValue.increment(points),
-              }) 
             }
-            else {
-              console.log("Match not finished yet!")
-            }
+            console.log(points + " for betting match with id: " + matchID)
+            await betDoc.ref.update({
+              counted: true,
+              points: points,
+            })
+            await admin.firestore().collection("users").doc(userId).update({
+              polPoints: polPoints + points,
+            })
+          }
+          else {
+            console.log("Match not finished yet!")
           }
         }
       }
@@ -201,7 +201,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
         goalsAway: game.score.fulltime.away,
         nameHome: game.teams.home.name,
         nameAway: game.teams.away.name,
-        isFinished: game.status.short ? true : false
+        isFinished: game.fixture.status.short === "FT" ? true : false
       }
       fixtureResults.push(match)
       console.log("Match found:", match)
@@ -212,7 +212,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc } = userDoc.data()
+      const { betAcc, uclPoints } = userDoc.data()
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -244,15 +244,15 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
               } else {
                 points = 1
               }
-              console.log(points + " for correct betting match with id: " + matchID)
-              await betDoc.ref.update({
-                counted: true,
-                points: points,
-              })
-              await admin.firestore().collection("users").doc(userId).update({
-                uclPoints: admin.firestore.FieldValue.increment(points),
-              })
             }
+            console.log(points + " for betting match with id: " + matchID)
+            await betDoc.ref.update({
+              counted: true,
+              points: points,
+            })
+            await admin.firestore().collection("users").doc(userId).update({
+              uclPoints: uclPoints + points,
+            })
           }
           else {
             console.log("Match not finished yet!")
@@ -302,7 +302,7 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
         goalsAway: game.score.fulltime.away,
         nameHome: game.teams.home.name,
         nameAway: game.teams.away.name,
-        isFinished: game.status.short ? true : false
+        isFinished: game.fixture.status.short === "FT" ? true : false
       }
       fixtureResults.push(match)
       console.log("Match found:", match)
@@ -313,7 +313,7 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc } = userDoc.data()
+      const { betAcc, engPoints } = userDoc.data()
       
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -331,6 +331,7 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
           
         const fixture = fixtureResults.find(f => f.id === matchID)
         if (fixture) {
+          console.log(fixture)
           console.log(`${matchID}: ${fixture.nameHome} ${home} : ${away} ${fixture.nameAway}`)
           let points = 0
 
@@ -345,18 +346,16 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
               } else {
                 points = 1
               }
-
-              console.log(points + " for correct betting match with id: " + matchID)
-                
-              await betDoc.ref.update({
-                counted: true,
-                points: points,
-              })
-
-              await admin.firestore().collection("users").doc(userId).update({
-                engPoints: admin.firestore.FieldValue.increment(points),
-              })
             }
+            console.log(points + " for betting match with id: " + matchID)
+            await betDoc.ref.update({
+              counted: true,
+              points: points,
+            })
+
+            await admin.firestore().collection("users").doc(userId).update({
+              engPoints: engPoints + points,
+            })
           }
           else {
             console.log("Match not finished yet!")
