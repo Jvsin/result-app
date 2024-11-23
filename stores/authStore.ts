@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { useBetStore } from './betStore';
 // import { auth, db } from '@/firebaseConfig';
 
@@ -181,6 +181,7 @@ export const useAuthStore = defineStore('auth', () => {
             betAcc
           });
         }
+        console.log(players)
       } catch (error) {
         console.error(`Failed to fetch player data for ref: ${playerRef.id}`, error);
       }
@@ -188,9 +189,51 @@ export const useAuthStore = defineStore('auth', () => {
     return players
   }
 
+  const fetchUserByRef = async (userRef: DocumentReference) => {
+    try {
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as IUser;
+        return userData
+      } else {
+        error.value = "User data not found";
+        return null
+      }
+    } catch (error) {
+        console.error("Error getting documents: ", error);
+        throw new Error("Failed to get user");
+    }
+  }
+
+  const fetchUserByCode = async (nick: string): Promise<UserModel[]> => {
+    try {
+      const usersRef = collection(db, 'users')
+      const usersQuery = query(
+        usersRef,
+        where('userCode', '==', nick)
+        // where('nick', '>=', nick),
+        // where('nick', '<=', nick + '\uf8ff'),
+      )
+      
+      const users: UserModel[] = []
+      const querySnapshot = await getDocs(usersQuery)
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data() as IUser
+        console.log(userData)
+        const user = new UserModel(userData, doc.ref)
+        users.push(user)
+      })
+      console.log(users)
+      return users || null
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+      throw new Error("Failed to get user");
+    }   
+  }
+
   return {
     user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
     registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague,
-    fetchLeaguePlayers
+    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode
   };
 });

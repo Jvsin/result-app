@@ -111,18 +111,14 @@ const isAuthor = ref(false)
 const authStore = useAuthStore()
 const { loggedUserData } = storeToRefs(authStore)
 
-const leagueIcon = ref("")
 const leagueName = ref("")
 function setLeaguesData(league: string) {
   switch (league) {
     case "eng":
-      leagueIcon.value = "/public/england.png"
       return "Premier League"
     case "pol":
-      leagueIcon.value = "/public/poland.png"
       return "Ekstraklasa"
     case "ucl":
-      leagueIcon.value = "/public/ucl.png"
       return "Champions League"
   }
   return ""
@@ -147,6 +143,7 @@ onMounted(async () => {
   loading.value = true
 
   await betLeagueStore.fetchLeagueById(leagueId.value)
+  console.log(league.value)
   // league.value = betLeagueStore.leagueToDisplay
   if (league.value != undefined) {
     leagueName.value = setLeaguesData(league.value.league)
@@ -155,6 +152,7 @@ onMounted(async () => {
       isAuthor.value = true
     }
   }
+  
   setPlayersTable()
 })
 

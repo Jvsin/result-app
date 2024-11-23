@@ -24,7 +24,7 @@
         </v-tabs-window-item>
 
         <v-tabs-window-item :value="1">
-          <v-card-text class="text-center mb-0 py-5">
+          <v-card-text v-if="isPublic" class="text-center mb-0 py-5">
               <div class="mb-2">
                 {{ $t('user.betLeaguesSites.editDialog.codeLeague') }}
               </div>
@@ -33,33 +33,56 @@
                 <v-btn color="secondary" variant="plain" :prepend-icon="prependIcon" @click="copyToClipboard">{{ copyBtnText }}</v-btn>
               </v-card-subtitle>
             </v-card-text>
+            <v-card-text v-else>
+              <v-card-title class="text-center">
+                Wpisz poprawny unikalny 8-znakowy kod gracza:
+              </v-card-title>
+              <v-row class="py-2 px-2">
+                <v-text-field class="align-center"
+                  v-model="searchUser"
+                  label="Wyszukaj gracza"
+                  variant="outlined"
+                  clearable
+                  :rules="[codeLengthRule()]"
+                ></v-text-field>
+                <v-btn color="primary" class="d-flex ml-2 align-center justify-center"
+                 variant="plain" icon="mdi-account-search"
+                 @click="searchPlayer"></v-btn>
+              </v-row>
+              <v-card v-for="user in foundUsers">
+                {{ user.nick }}
+              </v-card>
+              
+            </v-card-text>
         </v-tabs-window-item>
 
         <v-tabs-window-item :value="2">
-          <v-card class="py-2" v-for="(player,index) in players" :key="index">
-            <v-row>
-              <v-col cols="8">
-                <v-card-title>
-                  {{ player.nick }}
-                </v-card-title>
-              </v-col>
-              <v-col cols="4" class="d-flex align-center justify-end">
-                <v-btn v-if="confirmDeleteFlag !== index" variant="plain" color="error" @click="confirmDeleteFlag = index">
-                  <v-icon >mdi-account-cancel-outline</v-icon>
-                </v-btn>
-                <div v-else>
-                  <v-row class="mx-1">
-                    <v-btn color="grey" variant="plain" @click="confirmDeleteFlag = -1">
-                      <v-icon >mdi-cancel</v-icon>
-                    </v-btn>
-                    <v-btn color="error" variant="plain" @click="deletePlayer(index)">
-                      <v-icon >mdi-check-bold</v-icon>
-                    </v-btn> 
-                  </v-row>
-                </div>
-              </v-col>
-            </v-row>
-          </v-card>
+          <v-container class="scrollable-container">
+            <v-card  class="py-2" v-for="(player,index) in players" :key="index">
+              <v-row>
+                <v-col cols="8">
+                  <v-card-title>
+                    {{ player.nick }}
+                  </v-card-title>
+                </v-col>
+                <v-col cols="4" class="d-flex align-center justify-end">
+                  <v-btn v-if="confirmDeleteFlag !== index" variant="plain" color="error" @click="confirmDeleteFlag = index">
+                    <v-icon >mdi-account-cancel-outline</v-icon>
+                  </v-btn>
+                  <div v-else>
+                    <v-row class="mx-1">
+                      <v-btn color="grey" variant="plain" @click="confirmDeleteFlag = -1">
+                        <v-icon >mdi-cancel</v-icon>
+                      </v-btn>
+                      <v-btn color="error" variant="plain" @click="deletePlayer(index)">
+                        <v-icon >mdi-check-bold</v-icon>
+                      </v-btn> 
+                    </v-row>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-container>
         </v-tabs-window-item>
 
       </v-tabs-window>
@@ -73,9 +96,12 @@
 <script lang="ts" setup>
 import type { LeagueModel } from '~/models/betLeague';
 import formValidation from '~/composables/formValidation'
-import { lengthRuleShort, leagueNameLengthRule, descriptionLengthRule, requiredRule } from '~/composables/rules'
+import { lengthRuleShort, leagueNameLengthRule, descriptionLengthRule, requiredRule, codeLengthRule } from '~/composables/rules'
 import { useI18n } from 'vue-i18n'
-import { useBetLeagueStore } from '~/stores/betLeaguesStore';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore'
+import { useAuthStore } from '~/stores/authStore';
+import { useInvitationStore } from '~/stores/invitationStore';
+import type { UserModel } from '~/models/user';
 
 const { form, valid, isValid } = formValidation()
 const { t } = useI18n()
@@ -107,6 +133,7 @@ const betLeagueStore = useBetLeagueStore()
 
 const description = ref('')
 const leagueName = ref('')
+const isPublic = ref(false)
 
 const invitationCode = ref('')
 const copyBtnText = ref(t('user.betLeaguesSites.editDialog.copy'))
@@ -116,6 +143,14 @@ async function copyToClipboard() {
   await navigator.clipboard.writeText(invitationCode.value);
   copyBtnText.value = t('user.betLeaguesSites.editDialog.copied')
   prependIcon.value = 'mdi-check-circle-outline'
+}
+
+const authStore = useAuthStore()
+const searchUser = ref('')
+const foundUsers = ref<UserModel[]>()
+
+async function searchPlayer() {
+  await authStore.fetchUserByCode(searchUser.value).then(users => {foundUsers.value = users})
 }
 
 async function editLeague() {
@@ -142,6 +177,7 @@ function setData() {
     leagueName.value = league.value.name
     description.value = league.value.description
     invitationCode.value = league.value.leagueCode
+    isPublic.value = league.value.isPublic
   }
 }
 
@@ -161,5 +197,9 @@ watch(isShow, (newVal) => {
 .equal-width-tab {
   flex: 1 1 0;
   text-align: center;
+}
+.scrollable-container {
+  max-height: 75vh;
+  overflow-y: auto;
 }
 </style>

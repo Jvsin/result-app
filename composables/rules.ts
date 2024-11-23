@@ -53,3 +53,9 @@ export function descriptionLengthRule() {
     return Boolean(value?.length <= 50) || textError
   }
 }
+
+export function codeLengthRule() {
+  return (value: string | string[], textError = 'Kod musi mieć osiem znaków') => {
+    return Boolean(value?.length === 8) || textError
+  }
+}

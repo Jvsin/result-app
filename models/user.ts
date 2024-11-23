@@ -14,7 +14,8 @@ export interface IUser {
     engPoints: Number,
     uclPoints: Number,
     betAcc: Number,
-    established: Date
+    established: Date,
+    userCode: String
 }
 
 export class UserModel implements IUser {
@@ -31,6 +32,7 @@ export class UserModel implements IUser {
     uclPoints: Number
     betAcc: Number
     established: Date
+    userCode: String
 
     reference: DocumentReference | null
     
@@ -48,6 +50,7 @@ export class UserModel implements IUser {
         this.uclPoints = data.uclPoints || 0
         this.betAcc = data.betAcc || 0
         this.established = data.established || new Date()
+        this.userCode = data.userCode || ''
 
         this.reference = reference
     }
@@ -67,6 +70,7 @@ export function toMapUser(data?: Partial<IUser>): IUser {
         engPoints: data?.engPoints || 0,
         uclPoints: data?.uclPoints || 0,
         betAcc: data?.betAcc || 0,
-        established: data?.established || new Date()
+        established: data?.established || new Date(),
+        userCode: data?.userCode|| ''
     }
 }
