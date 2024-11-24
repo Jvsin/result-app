@@ -1,13 +1,14 @@
 <template>
   <div>
-    <v-btn color="primary" variant="outlined" prepend-icon="mdi-calendar" @click="dialog = true">{{ $t('user.betLeaguesSites.editDialog.chooseDate') }}</v-btn>
+    <v-btn class="my-2" color="primary" variant="outlined" prepend-icon="mdi-calendar" @click="dialog = true">
+      {{ stringToShow ? stringToShow : $t('user.betLeaguesSites.editDialog.chooseDate') }}</v-btn>
 
     <v-dialog max-width="fit-content" v-model="dialog" persistent>
       <v-card>
         <v-card-title class="headline">{{ $t('user.betLeaguesSites.editDialog.chooseDate') }}</v-card-title>
         
         <v-card-text>
-          <v-date-picker v-model="selectedDate" @input="save" :locale="locale"
+          <v-date-picker color="primary" v-model="dateFromPicker" @input="save" :locale="locale"
           />
         </v-card-text>
 
@@ -26,8 +27,10 @@ import { Timestamp } from 'firebase/firestore';
 import { useI18n } from 'vue-i18n';
 import { useLocale } from 'vuetify'
 
+
 const dialog = ref(false)
-const selectedDate = ref()
+const dateFromPicker = ref()
+const stringToShow = ref('')
 
 const { locale } = useI18n()
 const { current } = useLocale()
@@ -38,15 +41,23 @@ const emit = defineEmits<{
 }>()
 
 function save() {
-  if (selectedDate.value) {
-    const date = new Date(selectedDate.value);
+  if (dateFromPicker.value) {
+    const date = new Date(dateFromPicker.value);
     const timestamp = Timestamp.fromDate(date);
-    
-    emit('onSave', timestamp.seconds);
+    emit('onSave', timestamp.seconds)
   }
-  selectedDate.value = null
   emit('onClose')
   dialog.value = false
+}
+
+function formatTimestamp(timestamp: number): string {
+  const date = new Date(timestamp);
+
+  const day = (date.getUTCDate() + 1).toString().padStart(2, '0')
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0')
+  const year = date.getUTCFullYear()
+
+  return `${day}.${month}.${year}`;
 }
 
 watch(locale, (newLocale) => {

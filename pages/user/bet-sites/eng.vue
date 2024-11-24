@@ -19,15 +19,14 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-                  <datePicker @onSave="handleDateSave"></datePicker>
-                  <div class="my-2" v-if="dateToShow">
-                    <v-card-subtitle>
-                      {{ formatTimestamp(dateToShow + 86400).slice(0,-7) }}
-                    </v-card-subtitle>
-                    <v-btn prepend-icon="mdi-close-box" variant="plain" color="error" @click="dateToShow = null"></v-btn>
+
+                  <datePicker v-if="!dateToShow" @onSave="handleDateSave"></datePicker>
+                  <div class="my-2" v-else>
+                    <v-btn prepend-icon="mdi-close-box" variant="outlined" color="error" @click="dateToShow = null">
+                      {{ formatButtonDate(dateToShow) }}</v-btn>
                   </div>
+
                   <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
-                    
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
@@ -385,6 +384,16 @@ function formatTimestamp(timestamp: number): string {
   const minutes = date.getUTCMinutes().toString().padStart(2, '0');
 
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
+}
+
+function formatButtonDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+
+  const day = (date.getUTCDate()+1).toString().padStart(2, '0');
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+  const year = date.getUTCFullYear();
+
+  return `${day}.${month}.${year}`
 }
 
 function setColor(matchID: Number, status: String) {
