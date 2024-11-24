@@ -24,7 +24,7 @@ interface IMatch {
   isFinished: boolean
 }
 
-const convertDateToString = () => {
+const convertDateToStringToday = () => {
   const today = new Date()
   const formatDate = (date: Date): string => {
     const year = date.getFullYear()
@@ -34,6 +34,22 @@ const convertDateToString = () => {
   }
   return formatDate(today)
 }
+
+const convertDateToStringYesterday = () => {
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, "0")
+    const day = date.getDate().toString().padStart(2, "0")
+    return `${year}-${month}-${day}`
+  }
+  
+  return formatDate(yesterday)
+}
+convertDateToStringYesterday()
 
 const countBetAccuracy = async (userId: string, actualAcc: number) => {
   try {
@@ -78,7 +94,7 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
       console.log("Fetching users from Firestore:", usersSnapshot.size)
 
       const fixtureResults: IMatch[] = []
-      const currentDate = convertDateToString()
+      const currentDate = convertDateToStringToday()
       const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=106`
       const headers = {
         "x-rapidapi-key": "9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d",
@@ -144,6 +160,10 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
                 points = 1
               }
             }
+            else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
+              points = 1
+            }
+            
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
@@ -179,7 +199,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
     console.log("Fetching users from Firestore:", usersSnapshot.size)
 
     const fixtureResults: IMatch[] = []
-    const currentDate = convertDateToString()
+    const currentDate = convertDateToStringToday()
     const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=2`
     const headers = {
       "x-rapidapi-key": "9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d",
@@ -245,6 +265,10 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
                 points = 1
               }
             }
+            else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
+              points = 1
+            }
+
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
@@ -280,7 +304,7 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
     console.log("Fetching users from Firestore:", usersSnapshot.size)
 
     const fixtureResults: IMatch[] = []
-    const currentDate = convertDateToString()
+    const currentDate = convertDateToStringToday()
     const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=39`
     const headers = {
       "x-rapidapi-key": "9e5e2785cbmshd7e0f7a68c44835p1fd16fjsndac8dbc9c39d",
@@ -347,12 +371,16 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
                 points = 1
               }
             }
+            else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
+              points = 1
+            }
+            
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
               points: points,
             })
-
+            console.log("Adding engPoints: " + engPoints + " " + points)
             await admin.firestore().collection("users").doc(userId).update({
               engPoints: engPoints + points,
             })
@@ -381,7 +409,7 @@ exports.processBetsHTTP = functions.https.onRequest((req, res) => {
       console.log("Fetching users from Firestore:", usersSnapshot.size)
 
       const fixtureResults: any[]  = []
-      const currentDate = convertDateToString()
+      const currentDate = convertDateToStringToday()
       console.log(currentDate)
       // const url = `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${currentDate}&season=2024&league=106`
       const url = "https://api-football-v1.p.rapidapi.com/v3/fixtures?date=2024-11-22&season=2024&league=106"
