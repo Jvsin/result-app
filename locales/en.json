@@ -131,7 +131,8 @@
         "copy": "Copy code",
         "copied": "Code copied",
         "cancel": "Cancel",
-        "save": "Save"
+        "save": "Save",
+        "chooseDate": "Choose date"
       }
     }
   },

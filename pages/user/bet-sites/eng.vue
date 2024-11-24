@@ -19,7 +19,15 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
+                  <datePicker @onSave="handleDateSave"></datePicker>
+                  <div class="my-2" v-if="dateToShow">
+                    <v-card-subtitle>
+                      {{ formatTimestamp(dateToShow + 86400).slice(0,-7) }}
+                    </v-card-subtitle>
+                    <v-btn prepend-icon="mdi-close-box" variant="plain" color="error" @click="dateToShow = null"></v-btn>
+                  </div>
                   <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
+                    
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
@@ -226,6 +234,8 @@ import type { BetModel, IBet } from '~/models/bet';
 import { useBetStore } from '~/stores/betStore';
 import { useAuthStore } from '~/stores/authStore';
 import type { IMatch } from '~/models/match';
+import datePicker from '~/components/user/datePicker.vue';
+import type { Timestamp } from 'firebase/firestore';
 
 definePageMeta({
   middleware: 'auth'
@@ -241,11 +251,45 @@ const nextGames = computed(() => {
 })
 const user = computed(() => authStore.loggedUserData)
 
+const dateToShow = ref()
+function handleDateSave(date: Number) {
+  dateToShow.value = date
+}
+
 const pastUserBets = computed(() => {
-  return betStore.pastUserBets.filter((bet: IBet) => bet.league === "eng")
-})
+  if (!dateToShow.value) return betStore.pastUserBets.filter((bet: IBet) => bet.league === "eng")
+
+  const startTimestamp = dateToShow.value;
+  const endTimestamp = startTimestamp + 86400
+
+  console.log(startTimestamp + ' ' + endTimestamp)
+
+  return betStore.pastUserBets.filter((bet: IBet) => {
+    return (
+      bet.league === "eng" &&
+      bet.matchDate >= startTimestamp &&
+      bet.matchDate < endTimestamp
+    );
+  });
+});
+
 const pastUserBetsData = computed(() => {
-  return betStore.pastBetsData?.filter((match: IMatch) => match.league === "eng")
+  if (betStore.pastBetsData) {
+    if (!dateToShow.value) return betStore.pastBetsData.filter((bet: IMatch) => bet.league === "eng")
+
+    const startTimestamp = dateToShow.value;
+    const endTimestamp = startTimestamp + 86400
+
+    console.log(startTimestamp + ' ' + endTimestamp)
+
+    return betStore.pastBetsData.filter((bet: IMatch) => {
+      return (
+        bet.league === "eng" &&
+        bet.timestamp >= startTimestamp &&
+        bet.timestamp < endTimestamp
+      );
+    });
+  }
 })
 
 

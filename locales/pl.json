@@ -132,7 +132,8 @@
         "copy": "Kopiuj kod",
         "copied": "Skopiowano!",
         "cancel": "Anuluj",
-        "save": "Zapisz"
+        "save": "Zapisz",
+        "chooseDate": "Wybierz datę"
       }
     }
   },
