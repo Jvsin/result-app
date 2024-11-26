@@ -118,6 +118,11 @@
       "noBetsInfo": "Mecze możesz typować w zakładce Typuj",
       "showMatchesCounter": "Pokaż nadchodzące mecze:"
     },
+    "noBetLeaguesTitle": "Nie należysz do żadnej ligi typerów!",
+    "noBetLeaguesText": "Możesz dołączyć do istniejących lig lub stworzyć własną!",
+    "joinPublicLeague": "Szukaj ligi",
+    "joinByInvitation": "Zaproszenia",
+    "createOwnLeague": "Stwórz ligę typerów",
     "betLeaguesSites": {
       "loadingAlert": "Trwa wczytywanie tabeli...",
       "position": "Pozycja",

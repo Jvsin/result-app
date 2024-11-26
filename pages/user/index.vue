@@ -15,7 +15,6 @@
                 <v-tab :key="0" value="0">{{ $t("user.profile") }}</v-tab>
                 <v-tab :key="1" value="1">{{ $t("user.betMatchesView") }}</v-tab>
                 <v-tab :key="2" value="2">{{ $t("user.leaguesView") }}</v-tab>
-                
               </v-tabs>
             </v-col>
           </v-row>
@@ -165,7 +164,7 @@
               <v-tabs-window-item :value="2">
 
                 <v-container>
-                  <div v-for="card in userBetLeagues">
+                  <div v-if="userBetLeagues.length" v-for="card in userBetLeagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
                         <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
@@ -193,6 +192,25 @@
                       </template>
                     </v-hover>
                   </div>
+                  <div v-else>
+                    <v-card-title class="text-h4 text-center text-wrap">
+                      {{ $t('user.noBetLeaguesTitle') }}
+                    </v-card-title>
+                    <v-card-text class="py-2">{{ $t('user.noBetLeaguesText') }}</v-card-text>
+                  </div>
+                  <v-card-actions>
+                    <v-row justify="center" class="py-2">
+                      <v-col cols="auto">
+                        <v-btn variant="outlined" color="secondary">{{ $t('user.joinPublicLeague') }}</v-btn>
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn variant="outlined" color="secondary">{{ $t('user.joinByInvitation')}}</v-btn>
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn variant="flat" color="primary">{{ $t('user.createOwnLeague') }}</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-actions>
 
                 </v-container>
               </v-tabs-window-item>

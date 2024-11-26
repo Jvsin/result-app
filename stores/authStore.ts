@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, si
 import { type IUser, UserModel } from '~/models/user';
 import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { useBetStore } from './betStore';
+import { useBetLeagueStore } from './betLeaguesStore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -16,6 +17,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const db = getFirestore();
   const betStore = useBetStore()
+  const betLeagueStore = useBetLeagueStore()
 
   const registerWithPassword = async (email: string, password: string, userData: IUser) => {
     loading.value = true;
@@ -74,14 +76,16 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
     try {
       await signOut(auth);
       user.value = null;
       loggedUserData.value = null
-      console.log(loggedUserData.value + ' ' + user.value)
+      
       await betStore.handleLogout()
+      await betLeagueStore.handleLogout()
+
     } catch (err: any) {
       error.value = err.message;
       console.log(error.value)

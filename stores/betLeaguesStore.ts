@@ -9,7 +9,7 @@ import { useAuthStore } from './authStore';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
-  const userBetLeagues = ref<LeagueModel[]>([])
+  const userBetLeagues = ref<LeagueModel[] >([])
   const leagueToDisplay = ref<LeagueModel>()
 
   const authStore = useAuthStore()
@@ -91,8 +91,15 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const handleLogout = async () => {
+    userBetLeagues.value = []
+    leagueToDisplay.value = undefined
+    playersTable.value = null
+  }
+
   return {
     userBetLeagues, leagueToDisplay, playersTable,
-    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData
+    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
+    handleLogout
   }
 })

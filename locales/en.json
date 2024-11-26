@@ -117,6 +117,11 @@
       "noBetsInfo": "You can bet on matches in the Bet tab.",
       "showMatchesCounter": "Count of upcoming matches:"
     },
+    "noBetLeaguesTitle": "You do not belong to any betting league!",
+    "noBetLeaguesText": "You can join existing leagues or create your own!",
+    "joinPublicLeague": "Search for a league",
+    "joinByInvitation": "Invitations",
+    "createOwnLeague": "Create a bet league",
     "betLeaguesSites": {
       "loadingAlert": "Table loading...",
       "position": "Place",
