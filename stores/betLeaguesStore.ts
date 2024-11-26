@@ -3,7 +3,8 @@ import { LeagueModel, type ILeague } from '~/models/betLeague'
 import {
   addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where,
   type DocumentReference, orderBy, limit,
-  getDoc
+  getDoc,
+  setDoc
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
 
@@ -14,6 +15,8 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   const authStore = useAuthStore()
   const playersTable = ref<any>()
+
+  const mess = ref('')
 
   const fetchUserBetLeagues = async (userLeagues: DocumentReference[]) => {
     try {
@@ -91,15 +94,59 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const createLeague = async (league: any) => {
+    mess.value = ''
+
+    try {
+      const docRef = await addDoc(collection(db, "leagues"), league)
+      mess.value = 'successfulLeagueCreation'
+
+      await authStore.addNewBetLeague(docRef)
+    } catch (err) {
+      mess.value = 'errorCreatingLeague'
+      console.error("Error while creating league: ", err);
+    }
+  }
+
+  const generateCode = (): string => {
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 8; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+    return result;
+  }
+
+  const checkIfCodeExists = async (code: string): Promise<boolean> => {
+    const leaguesRef = collection(db, "leagues");
+    const q = query(leaguesRef, where("leagueCode", "==", code));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  }
+
   const handleLogout = async () => {
     userBetLeagues.value = []
     leagueToDisplay.value = undefined
     playersTable.value = null
   }
 
+  const generateUniqueLeagueCode = async (): Promise<string | undefined> => {
+    let code;
+    let exists = true;
+
+    while (exists) {
+      code = generateCode();
+      exists = await checkIfCodeExists(code);
+    }
+
+    return code
+  }
+
   return {
-    userBetLeagues, leagueToDisplay, playersTable,
+    userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
+    generateUniqueLeagueCode, createLeague,
     handleLogout
   }
 })

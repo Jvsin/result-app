@@ -170,6 +170,27 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const addNewBetLeague = async (data: DocumentReference) => {
+    try {
+      const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id)
+
+      if (loggedUserData.value?.leagues != undefined) {
+        const updatedFavLeagues = [...loggedUserData.value?.leagues, data]
+        console.log(updatedFavLeagues)
+        
+        await updateDoc(userDocRef, {
+          leagues: updatedFavLeagues
+        });
+      }
+      
+      console.log('User bet leagues actualized!');
+      await fetchUserData(userDocRef.id)
+      console.log(loggedUserData)
+    } catch (error) { 
+      console.error('Error updating user profile:', error);
+    }
+  }
+
   const fetchLeaguePlayers = async (playerRefs: DocumentReference[]) => {
     const players = [];
 
@@ -238,6 +259,6 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
     registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague,
-    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode
+    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode, addNewBetLeague
   };
 });

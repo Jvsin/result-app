@@ -207,11 +207,11 @@
                         <v-btn variant="outlined" color="secondary">{{ $t('user.joinByInvitation')}}</v-btn>
                       </v-col>
                       <v-col cols="auto">
-                        <v-btn variant="flat" color="primary">{{ $t('user.createOwnLeague') }}</v-btn>
+                        <v-btn variant="flat" color="primary" @click="changeCreateLeagueFlag">{{ $t('user.createOwnLeague') }}</v-btn>
                       </v-col>
                     </v-row>
                   </v-card-actions>
-
+                  <createLeagueDialog :is-show="showCreateLeagueFlag" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
                 </v-container>
               </v-tabs-window-item>
 
@@ -228,7 +228,8 @@ import type { Timestamp } from 'firebase/firestore';
 import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
-import { useBetLeagueStore } from '~/stores/betLeaguesStore';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore'
+import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue';
 
 definePageMeta({
   middleware: 'auth'
@@ -290,6 +291,7 @@ function getBettingRoute(league: string) {
 
 const showEditProfileFlag = ref(false)
 const showAddLeaguesFlag = ref(false)
+const showCreateLeagueFlag = ref(false)
 
 function changeProfileDialogFlag() {
   showEditProfileFlag.value = !showEditProfileFlag.value
@@ -297,6 +299,10 @@ function changeProfileDialogFlag() {
 
 function changeAddLeaguesFlag( ) {
   showAddLeaguesFlag.value = !showAddLeaguesFlag.value
+}
+
+function changeCreateLeagueFlag() {
+  showCreateLeagueFlag.value = !showCreateLeagueFlag.value
 }
 
 async function handleLogout() {
