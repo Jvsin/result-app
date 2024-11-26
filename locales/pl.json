@@ -138,7 +138,10 @@
         "copied": "Skopiowano!",
         "cancel": "Anuluj",
         "save": "Zapisz",
-        "chooseDate": "Wybierz datę"
+        "chooseDate": "Wybierz datę",
+        "falsePublic": "Prywatna",
+        "truePublic": "Publiczna",
+        "privacy": "Prywatność"
       }
     }
   },

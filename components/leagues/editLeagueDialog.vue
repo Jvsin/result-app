@@ -13,6 +13,7 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="0">
           <v-form ref="form" v-model="valid" class="px-5 my-5" @submit.prevent="editLeague">
+            <v-text-field readonly :label="$t('user.betLeaguesSites.editDialog.privacy')" v-model="isPublicText" variant="outlined"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.leagueName')" v-model="leagueName" variant="outlined" :rules="[requiredRule(), lengthRuleShort(), leagueNameLengthRule()]"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.description')" v-model="description" variant="outlined" :rules="[requiredRule(), descriptionLengthRule()]"></v-text-field>
           </v-form>
@@ -134,6 +135,7 @@ const betLeagueStore = useBetLeagueStore()
 const description = ref('')
 const leagueName = ref('')
 const isPublic = ref(false)
+const isPublicText = isPublic ? t('user.betLeaguesSites.editDialog.falsePublic') : t('user.betLeaguesSites.editDialog.truePublic') 
 
 const invitationCode = ref('')
 const copyBtnText = ref(t('user.betLeaguesSites.editDialog.copy'))

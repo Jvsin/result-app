@@ -80,7 +80,8 @@ function close() {
 }
 
 const emit = defineEmits<{
-  (e: 'onClose'): void
+  (e: 'onClose'): void,
+  (e: 'onSave'): void
 }>()
 
 const { isShow } = toRefs(props)
@@ -107,7 +108,7 @@ async function createLeague() {
     try {
       await betLeagueStore.createLeague(newLeague)
       emit('onClose')
-      const router = useRouter()
+      emit('onSave')
     } catch (e) {
       console.log(e)
     }

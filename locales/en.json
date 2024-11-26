@@ -122,6 +122,7 @@
     "joinPublicLeague": "Search for a league",
     "joinByInvitation": "Invitations",
     "createOwnLeague": "Create a bet league",
+
     "betLeaguesSites": {
       "loadingAlert": "Table loading...",
       "position": "Place",
@@ -137,7 +138,10 @@
         "copied": "Code copied",
         "cancel": "Cancel",
         "save": "Save",
-        "chooseDate": "Choose date"
+        "chooseDate": "Choose date",
+        "falsePublic": "Private",
+        "truePublic": "Public",
+        "privacy": "Privacy"
       }
     }
   },

@@ -184,7 +184,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
       
       console.log('User bet leagues actualized!');
-      await fetchUserData(userDocRef.id)
+      await actualizeUserData()
       console.log(loggedUserData)
     } catch (error) { 
       console.error('Error updating user profile:', error);

@@ -211,7 +211,7 @@
                       </v-col>
                     </v-row>
                   </v-card-actions>
-                  <createLeagueDialog :is-show="showCreateLeagueFlag" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
+                  <createLeagueDialog :is-show="showCreateLeagueFlag" @on-save="fetchNewLeagues" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
                 </v-container>
               </v-tabs-window-item>
 
@@ -236,11 +236,6 @@ definePageMeta({
 })
 
 const tab = ref(0)
-
-const leagues = [
-  { name: "Moja liga testowa", position: 12, players: 24, league: "english-league", icon: "/public/pl.png" },
-  { name: "Liga graczy", position: 2, players: 10, league: "polish-league", icon: "/public/ekstraklasa.png" },
-]
 
 const router = useRouter();
 
@@ -276,6 +271,18 @@ const userBetLeagues = computed(() => {
   return betLeagueStore.userBetLeagues
 })
 
+async function fetchNewLeagues() {
+  if (userData.value != null) {
+    await betLeagueStore.fetchUserBetLeagues(userData.value?.leagues)
+  }
+}
+
+// watch((userBetLeagues), async (oldLeagues, newLeagues)  => {
+//   if (userData.value != null) {
+//     await betLeagueStore.fetchUserBetLeagues(userData.value?.leagues)
+//   }
+// })
+
 function getLeagueRoute(ref: string) {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
@@ -303,16 +310,6 @@ function changeAddLeaguesFlag( ) {
 
 function changeCreateLeagueFlag() {
   showCreateLeagueFlag.value = !showCreateLeagueFlag.value
-}
-
-async function handleLogout() {
-  try {
-    await authStore.logout()
-    router.push('/')
-  }
-  catch (err: any) {
-    console.log(err)
-  }
 }
 
 function setLeaguesData(league: string) {
