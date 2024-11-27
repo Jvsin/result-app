@@ -177,6 +177,10 @@
       "errorLeagueAlreadyExist": "You have already follow this league.",
       "errorWhileEditingProfile": "Error while editing profile, try again later",
       "errorLeaguesNotFound": "No leagues founded."
+    },
+    "betLeaguesSites": {
+      "invitationAlreadySended": "Invitation to this user already sended!",
+      "invitationSendedCorrectly": "User invited!"
     }
   },
   "snackbars": {

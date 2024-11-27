@@ -178,6 +178,10 @@
       "errorLeagueAlreadyExist": "Obserwujesz już wybraną ligę",
       "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
       "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
+    },
+    "betLeaguesSites": {
+      "invitationAlreadySended": "Gracz posiada już zaproszenie!",
+      "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!"
     }
   },
   "snackbars": {

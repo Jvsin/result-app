@@ -11,6 +11,8 @@ export const useInvitationStore = defineStore('invitations', () => {
   const db = getFirestore()
 
   const leagueInvitations = ref<InvitationModel[]>()
+
+  const alertMess = ref('')
   
   const fetchAllLeagueInvitations = async (leagueRef: DocumentReference) => {
     try {
@@ -34,8 +36,29 @@ export const useInvitationStore = defineStore('invitations', () => {
     }
   }
 
+  const sendInviteToUser = async (invitation: IInvitation) => {
+    try {
+      const invitationsRef = collection(db, "invitations")
+      const q = query(invitationsRef, where("user", "==", invitation.user),
+        where("leagueCode", "==", invitation.leagueCode))
+      const querySnapshot = await getDocs(q)
+
+      if (!querySnapshot.empty) {
+        console.log("User has already been invited to this league.")
+        alertMess.value = 'invitationAlreadySended'
+        return
+      }
+
+      await addDoc(invitationsRef, invitation);
+      console.log("Invitation sent successfully.");
+      alertMess.value = 'invitationSendCorrectly'
+    } catch (error) {
+      console.error("Error sending invitation: ", error);
+    }
+  }
+
   return { 
-    leagueInvitations,
-    fetchAllLeagueInvitations
+    leagueInvitations, alertMess,
+    fetchAllLeagueInvitations, sendInviteToUser
   }
 })

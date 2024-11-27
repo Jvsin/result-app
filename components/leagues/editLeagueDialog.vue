@@ -51,9 +51,23 @@
                  variant="plain" icon="mdi-account-search"
                  @click="searchPlayer"></v-btn>
               </v-row>
-              <v-card v-for="user in foundUsers">
-                {{ user.nick }}
+              <v-card class="py-2" v-for="user in foundUsers">
+                <v-row>
+                  <v-col cols="4" class="d-flex justify-center align-center">
+                    {{ user.nick }}
+                  </v-col>
+                  <v-col cols="6" class="d-flex justify-center align-center">
+                    <v-card-subtitle>
+                      {{ user.name + ' ' + user.surname }}
+                    </v-card-subtitle>
+                  </v-col>
+                  <v-col cols="2" class="d-flex justify-center align-center">
+                    <v-btn variant="plain" color="primary" @click="sendInvite(user.reference)"> <v-icon >mdi-account-plus-outline</v-icon></v-btn>
+                  </v-col>
+                </v-row>
               </v-card>
+              <v-alert closable elevation="13" v-if="alertMess.length" type="info">
+                {{ $t(`errors.betLeaguesSites.${alertMess}`) }}</v-alert>
             </v-card-text>
         </v-tabs-window-item>
 
@@ -103,6 +117,8 @@ import { useBetLeagueStore } from '~/stores/betLeaguesStore'
 import { useAuthStore } from '~/stores/authStore';
 import { useInvitationStore } from '~/stores/invitationStore';
 import type { UserModel } from '~/models/user';
+import type { IInvitation } from '~/models/invitation'
+import { Timestamp } from 'firebase/firestore';
 
 const { form, valid, isValid } = formValidation()
 const { t } = useI18n()
@@ -131,6 +147,7 @@ const { players, league, isShow } = toRefs(props)
 
 const isShowRef = ref<boolean>()
 const betLeagueStore = useBetLeagueStore()
+const invitationStore = useInvitationStore()
 
 const description = ref('')
 const leagueName = ref('')
@@ -152,6 +169,7 @@ async function copyToClipboard() {
 const authStore = useAuthStore()
 const searchUser = ref('')
 const foundUsers = ref<UserModel[]>()
+const alertMess = computed(() => invitationStore.alertMess)
 
 async function searchPlayer() {
   await authStore.fetchUserByCode(searchUser.value).then(users => {foundUsers.value = users})
@@ -199,6 +217,23 @@ function setData() {
   }
   isPublicText.value = isPublic.value ? t('user.betLeaguesSites.editDialog.truePublic') : t('user.betLeaguesSites.editDialog.falsePublic')
   console.log(isPublic.value)
+}
+
+async function sendInvite(inviteUserRef: any) {
+  try {
+    if (inviteUserRef) {
+      const newInvite: IInvitation = {
+        leagueReference: league.value.reference,
+        leagueCode: league.value.leagueCode,
+        user: inviteUserRef,
+        creationDate: Timestamp.now(),
+        isAccepted: false
+      }
+      await invitationStore.sendInviteToUser(newInvite)
+    }
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 watch(isShow, (newVal) => {
