@@ -179,6 +179,7 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
       const { polPoints } = userDoc.data()
+      let newPointsCounter = 0
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -214,21 +215,23 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
             else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
               points = 1
             }
-            
+            newPointsCounter += points
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
               points: points,
             })
-            await admin.firestore().collection("users").doc(userId).update({
-              polPoints: polPoints + points,
-            })
+            
           }
           else {
             console.log("Match not finished yet!")
           }
         }
       }
+      console.log("newPOINTS: " + newPointsCounter)
+      await admin.firestore().collection("users").doc(userId).update({
+        polPoints: polPoints + newPointsCounter,
+      })
       // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
       // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
       // await admin.firestore().collection("users").doc(userId).update({
@@ -284,6 +287,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
       const { uclPoints } = userDoc.data()
+      let newPointsCounter = 0
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -319,22 +323,24 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
             else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
               points = 1
             }
-
+            newPointsCounter += points
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
               points: points,
             })
-            console.log("Adding points: " + uclPoints + "+" + points)
-            await admin.firestore().collection("users").doc(userId).update({
-              uclPoints: uclPoints + points,
-            })
+            console.log("Adding points: " + newPointsCounter + "+" + points)
+            
           }
           else {
             console.log("Match not finished yet!")
           }
         }
       }
+      console.log(newPointsCounter)
+      await admin.firestore().collection("users").doc(userId).update({
+        uclPoints: uclPoints + newPointsCounter,
+      })
       // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
       // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
       // await admin.firestore().collection("users").doc(userId).update({
@@ -390,7 +396,8 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
       const { engPoints } = userDoc.data()
-      
+      let newPointsCounter = 0
+
       const betsSnapshot = await admin.firestore()
         .collection("users")
         .doc(userId)
@@ -426,22 +433,24 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
             else if ((betDifference > 0 && matchDifference > 0 ) || (betDifference < 0 && matchDifference < 0)) {
               points = 1
             }
-            
+            newPointsCounter += points
             console.log(points + " for betting match with id: " + matchID)
             await betDoc.ref.update({
               counted: true,
               points: points,
             })
             console.log("Adding engPoints: " + engPoints + " " + points)
-            await admin.firestore().collection("users").doc(userId).update({
-              engPoints: engPoints + points,
-            })
+            
           }
           else {
             console.log("Match not finished yet!")
           }
         }
       }
+      console.log("New points: " + newPointsCounter)
+      await admin.firestore().collection("users").doc(userId).update({
+        engPoints: engPoints + newPointsCounter,
+      })
       // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
       // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
       // await admin.firestore().collection("users").doc(userId).update({
