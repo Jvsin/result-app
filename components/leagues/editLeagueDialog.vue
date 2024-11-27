@@ -5,15 +5,16 @@
         {{ $t('user.betLeaguesSites.manageLeague') }}
       </v-card-title>
        <v-tabs v-model="tab" align-tabs="center" fixed-tabs color="primary" class="full-width-tabs d-flex">
-        <v-tab :key="0" value="0" class="equal-width-tab">Ogólne</v-tab>
-        <v-tab :key="1" value="1" class="equal-width-tab">Zaproś</v-tab>
-        <v-tab :key="2" value="2" class="equal-width-tab">Gracze</v-tab>
+        <v-tab :key="0" value="0" class="equal-width-tab">{{ $t('user.betLeaguesSites.editDialog.mainTab') }}</v-tab>
+        <v-tab :key="1" value="1" class="equal-width-tab">{{ $t('user.betLeaguesSites.editDialog.inviteTab') }}</v-tab>
+        <v-tab :key="2" value="2" class="equal-width-tab">{{ $t('user.betLeaguesSites.editDialog.playersTab') }}</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="0">
           <v-form ref="form" v-model="valid" class="px-5 my-5" @submit.prevent="editLeague">
-            <v-text-field readonly :label="$t('user.betLeaguesSites.editDialog.privacy')" v-model="isPublicText" variant="outlined"></v-text-field>
+            <v-text-field readonly disabled :label="$t('user.betLeaguesSites.editDialog.leagueToBet')" v-model="leagueToBet" variant="outlined"></v-text-field>
+            <v-text-field readonly disabled :label="$t('user.betLeaguesSites.editDialog.privacy')" v-model="isPublicText" variant="outlined"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.leagueName')" v-model="leagueName" variant="outlined" :rules="[requiredRule(), lengthRuleShort(), leagueNameLengthRule()]"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.description')" v-model="description" variant="outlined" :rules="[requiredRule(), descriptionLengthRule()]"></v-text-field>
           </v-form>
@@ -26,22 +27,22 @@
 
         <v-tabs-window-item :value="1">
           <v-card-text v-if="isPublic" class="text-center mb-0 py-5">
-              <div class="mb-2">
+              <div class="mb-2 text-h6">
                 {{ $t('user.betLeaguesSites.editDialog.codeLeague') }}
               </div>
               <v-card-subtitle color="grey" text-color="white" class="font-weight-bold">
-                <div class="inv-text">{{ invitationCode }}</div>
+                <div class="inv-text text-h6">{{ invitationCode }}</div>
                 <v-btn color="secondary" variant="plain" :prepend-icon="prependIcon" @click="copyToClipboard">{{ copyBtnText }}</v-btn>
               </v-card-subtitle>
             </v-card-text>
             <v-card-text v-else>
               <v-card-title class="text-center">
-                Wpisz poprawny unikalny 8-znakowy kod gracza:
+                {{ $t('user.betLeaguesSites.editDialog.typeUserCode') }}
               </v-card-title>
               <v-row class="py-2 px-2">
                 <v-text-field class="align-center"
                   v-model="searchUser"
-                  label="Wyszukaj gracza"
+                  :label="$t('user.betLeaguesSites.editDialog.searchPlayer')"
                   variant="outlined"
                   clearable
                   :rules="[codeLengthRule()]"
@@ -53,7 +54,6 @@
               <v-card v-for="user in foundUsers">
                 {{ user.nick }}
               </v-card>
-              
             </v-card-text>
         </v-tabs-window-item>
 
@@ -88,7 +88,7 @@
 
       </v-tabs-window>
       <v-card-actions>
-        <v-btn color="secondary" @click="close">Zamknij</v-btn>
+        <v-btn color="secondary" @click="close">{{ $t('leaguesPage.close')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -135,6 +135,8 @@ const betLeagueStore = useBetLeagueStore()
 const description = ref('')
 const leagueName = ref('')
 const isPublic = ref(false)
+const leagueCode = ref('')
+const leagueToBet = ref('')
 const isPublicText = isPublic ? t('user.betLeaguesSites.editDialog.falsePublic') : t('user.betLeaguesSites.editDialog.truePublic') 
 
 const invitationCode = ref('')
@@ -174,12 +176,26 @@ function resetState() {
 
 }
 
+function setLeagueName(league: string) {
+  switch (league) {
+    case "pol":
+      return "Ekstraklasa"
+    case "eng":
+      return "Premier League"
+    case "ucl":
+      return "Champions League"
+  }
+  return ''
+}
+
 function setData() {
   if (league.value != null) {
     leagueName.value = league.value.name
     description.value = league.value.description
     invitationCode.value = league.value.leagueCode
     isPublic.value = league.value.isPublic
+    leagueCode.value = league.value.leagueCode
+    leagueToBet.value = setLeagueName(league.value.league)
   }
 }
 

@@ -123,6 +123,17 @@
     "joinByInvitation": "Invitations",
     "createOwnLeague": "Create a bet league",
 
+    "createLeagueDialog": {
+      "createLeague": "Create your league",
+      "leagueName": "Set your bet league name",
+      "leagueDescription": "What are you going to compete for?",
+      "leaguePicker": "Choose a league to bet on",
+      "publicLeague": "Public",
+      "privateLeague": "Private",
+      "publicLeagueDescription": "Anyone will be able to search and join your league",
+      "privateLeagueDescription": "Players will need your invitation to join"
+    },
+
     "betLeaguesSites": {
       "loadingAlert": "Table loading...",
       "position": "Place",
@@ -130,6 +141,7 @@
       "accuracy": "Acc.",
       "points": "Pts",
       "manageLeague": "Manage the league",
+
       "editDialog": {
         "leagueName": "Name",
         "description": "Description",
@@ -141,7 +153,13 @@
         "chooseDate": "Choose date",
         "falsePublic": "Private",
         "truePublic": "Public",
-        "privacy": "Privacy"
+        "privacy": "Privacy",
+        "leagueToBet": "League",
+        "typeUserCode": "Enter a valid unique 8-character player code:",
+        "searchPlayer": "Search player",
+        "mainTab": "Main",
+        "inviteTab": "Invite",
+        "playersTab": "Players"
       }
     }
   },

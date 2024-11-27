@@ -2,21 +2,21 @@
   <v-dialog :model-value="isShow" max-width="1000" @update:model-value="close" >
     <v-card>
       <v-card-title class="align-center justify-center d-flex px-5 py-5">
-        <span class="text-h5">Stwórz ligę typerów</span>
+        <span class="text-h5">{{ $t('user.createLeagueDialog.createLeague')}}</span>
       </v-card-title>
 
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               v-model="leagueName"
-              label="Nazwa ligi"
+              :label="$t('user.createLeagueDialog.leagueName')"
               :rules="[requiredRule(), leagueNameLengthRule(), lengthRuleShort()]"
               required
             ></v-text-field>
 
             <v-text-field
               v-model="leagueDescription"
-              label="Opis ligi"
+              :label="$t('user.createLeagueDialog.leagueDescription')"
               :rules="[requiredRule(), descriptionLengthRule(),lengthRuleShort() ]"
               required
             ></v-text-field>
@@ -24,7 +24,7 @@
             <v-select
               v-model="pickedLeague"
               :items="leagues"
-              label="Wybierz ligę"
+              :label="$t('user.createLeagueDialog.leaguePicker')"
               item-title="text"
               item-value="value"
               :rules="[requiredRule()]"
@@ -34,12 +34,12 @@
             <div class="d-flex flex-column align-center">
               <v-switch
                 v-model="leagueIsPublic"
-                :label="leagueIsPublic ? 'Liga publiczna' : 'Liga prywatna'"
+                :label="leagueIsPublic ? $t('user.createLeagueDialog.publicLeague') : $t('user.createLeagueDialog.privateLeague')"
                 class="my-4"
               ></v-switch>
 
               <v-card-subtitle class="text-wrap text-center">
-                {{ leagueIsPublic ? 'Każdy będzie mógł wyszukać i dołączyć do twojej ligi.' : 'Gracze będą potrzebować Twojego zaproszenia' }}
+                {{ leagueIsPublic ? $t('user.createLeagueDialog.publicLeagueDescription') : $t('user.createLeagueDialog.privateLeagueDescription') }}
               </v-card-subtitle>
             </div>
           </v-form>
@@ -47,8 +47,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="close">Anuluj</v-btn>
-          <v-btn color="primary" @click="createLeague">Zapisz</v-btn>
+          <v-btn color="error" @click="close">{{ $t('user.profileDialogs.cancel')}}</v-btn>
+          <v-btn color="primary" @click="createLeague">{{ $t('user.save') }}</v-btn>
         </v-card-actions>
         <v-alert v-if="mess?.length"> {{ mess }}</v-alert>
       </v-card>

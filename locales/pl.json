@@ -123,6 +123,18 @@
     "joinPublicLeague": "Szukaj ligi",
     "joinByInvitation": "Zaproszenia",
     "createOwnLeague": "Stwórz ligę typerów",
+
+    "createLeagueDialog": {
+      "createLeague": "Stwórz własną ligę",
+      "leagueName": "Podaj nazwę swojej ligi",
+      "leagueDescription": "O co zamierzacie rywalizować?",
+      "leaguePicker": "Wybierz ligę do typowania",
+      "publicLeague": "Publiczna",
+      "privateLeague": "Prywatna",
+      "publicLeagueDescription": "Każdy będzie mógł wyszukać i dołączyć do ligi",
+      "privateLeagueDescription": "Gracze będą potrzebować Twojego zaproszenia by dołączyć"
+    },
+
     "betLeaguesSites": {
       "loadingAlert": "Trwa wczytywanie tabeli...",
       "position": "Pozycja",
@@ -130,6 +142,7 @@
       "accuracy": "Skut.",
       "points": "Pkt",
       "manageLeague": "Zarządzaj ligą",
+
       "editDialog": {
         "leagueName": "Nazwa",
         "description": "Opis",
@@ -141,7 +154,13 @@
         "chooseDate": "Wybierz datę",
         "falsePublic": "Prywatna",
         "truePublic": "Publiczna",
-        "privacy": "Prywatność"
+        "privacy": "Prywatność",
+        "leagueToBet": "Liga",
+        "typeUserCode": "Wpisz poprawny unikalny 8-znakowy kod gracza:",
+        "searchPlayer": "Szukaj gracza",
+        "mainTab": "Ogólne",
+        "inviteTab": "Zaproś",
+        "playersTab": "Gracze"
       }
     }
   },
