@@ -51,39 +51,90 @@ const convertDateToStringYesterday = () => {
 }
 convertDateToStringYesterday()
 
-const countBetAccuracy = async (userId: string, actualAcc: number) => {
+// const countBetAccuracy = async (userId: string, actualAcc: number) => {
+//   try {
+//     const betsSnapshot = await admin.firestore()
+//       .collection("users")
+//       .doc(userId)
+//       .collection("bets")
+//       .where("counted", "==", true)
+//       .get()
+    
+//     const allBetsCounter = betsSnapshot.size
+//     console.log("Counter of all bets: " + allBetsCounter)
+
+//     let allPoints = 0
+
+//     for (const betDoc of betsSnapshot.docs) {
+//       const betData = betDoc.data()
+//       console.log(betData)
+
+//       const { points } = betData
+//       if (points == 3) {
+//         allPoints += 3
+//       } else if (points == 1) {
+//         allPoints += 1
+//       }
+//     }
+//     console.log("Points gained: " + allPoints + " from bets count: " + allBetsCounter)
+//     return allPoints ? (allPoints / (3 * allBetsCounter)) * 100 : 0
+//   }
+//   catch (error) {
+//     console.error("Error processing bets:", error)
+//     return actualAcc
+//   }
+// }
+
+exports.countAccuracy = onSchedule("every 12 hours", async (event) => {
+  if (false) {
+    console.log(event)
+  }
   try {
-    const betsSnapshot = await admin.firestore()
+    const usersSnapshot = await admin.firestore().collection("users").get()
+    console.log("Fetching users from Firestore:", usersSnapshot.size)
+
+    for (const userDoc of usersSnapshot.docs) {
+      const userId = userDoc.id
+      const { betAcc } = userDoc.data()
+      
+      const betsSnapshot = await admin.firestore()
       .collection("users")
       .doc(userId)
       .collection("bets")
       .where("counted", "==", true)
       .get()
     
-    const allBetsCounter = betsSnapshot.size
-    console.log("Counter of all bets: " + allBetsCounter)
+      const allBetsCounter = betsSnapshot.size
+      console.log("Counter of all bets: " + allBetsCounter)
 
-    let allPoints = 0
+      let allPoints = 0
 
-    for (const betDoc of betsSnapshot.docs) {
-      const betData = betDoc.data()
-      console.log(betData)
+      for (const betDoc of betsSnapshot.docs) {
+        const betData = betDoc.data()
+        console.log(betData)
 
-      const { points } = betData
-      if (points == 3) {
-        allPoints += 3
-      } else if (points == 1) {
-        allPoints += 1
+        const { points } = betData
+        if (points == 3) {
+          allPoints += 3
+        } else if (points == 1) {
+          allPoints += 1
+        }
       }
+      console.log("Points gained: " + allPoints + " from bets count: " + allBetsCounter)
+
+      const result = allPoints ? (allPoints / (3 * allBetsCounter)) * 100 : 0
+      const newAcc = Math.round(result)
+
+      console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
+      await admin.firestore().collection("users").doc(userId).update({
+        betAcc: newAcc,
+      }) 
     }
-    console.log("Points gained: " + allPoints + " from bets count: " + allBetsCounter)
-    return allPoints ? (allPoints / (3 * allBetsCounter)) * 100 : 0
   }
   catch (error) {
     console.error("Error processing bets:", error)
-    return actualAcc
   }
-}
+})
 
 exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
   try {
@@ -127,7 +178,7 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc, polPoints } = userDoc.data()
+      const { polPoints } = userDoc.data()
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -178,11 +229,11 @@ exports.processBetsPoland = onSchedule("every 3 hours", async (event) => {
           }
         }
       }
-      const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
-      console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
-      await admin.firestore().collection("users").doc(userId).update({
-        betAcc: newAcc,
-      }) 
+      // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
+      // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
+      // await admin.firestore().collection("users").doc(userId).update({
+      //   betAcc: newAcc,
+      // }) 
     }
     console.log("Bet processing completed successfully!")
   } catch (error) {
@@ -232,7 +283,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc, uclPoints } = userDoc.data()
+      const { uclPoints } = userDoc.data()
 
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -274,6 +325,7 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
               counted: true,
               points: points,
             })
+            console.log("Adding points: " + uclPoints + "+" + points)
             await admin.firestore().collection("users").doc(userId).update({
               uclPoints: uclPoints + points,
             })
@@ -283,11 +335,11 @@ exports.processBetsUCL = onSchedule("every 3 hours", async (event) => {
           }
         }
       }
-      const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
-      console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
-      await admin.firestore().collection("users").doc(userId).update({
-        betAcc: newAcc,
-      }) 
+      // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
+      // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
+      // await admin.firestore().collection("users").doc(userId).update({
+      //   betAcc: newAcc,
+      // }) 
     }
     console.log("Bet processing completed successfully!")
   } catch (error) {
@@ -337,7 +389,7 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
       const currentTime = Date.now()
       console.log("Aktualna data " + currentTime)
       const userId = userDoc.id
-      const { betAcc, engPoints } = userDoc.data()
+      const { engPoints } = userDoc.data()
       
       const betsSnapshot = await admin.firestore()
         .collection("users")
@@ -390,11 +442,11 @@ exports.processBetsEngland = onSchedule("every 3 hours", async (event) => {
           }
         }
       }
-      const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
-      console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
-      await admin.firestore().collection("users").doc(userId).update({
-        betAcc: newAcc,
-      }) 
+      // const newAcc = Math.round(await countBetAccuracy(userId, betAcc))
+      // console.log("Old Accuracy: " + betAcc + ", new accuracy: " + newAcc)
+      // await admin.firestore().collection("users").doc(userId).update({
+      //   betAcc: newAcc,
+      // }) 
     }
     console.log("Bet processing completed successfully!")
     } catch (error) {
