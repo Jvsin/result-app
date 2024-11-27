@@ -137,7 +137,7 @@ const leagueName = ref('')
 const isPublic = ref(false)
 const leagueCode = ref('')
 const leagueToBet = ref('')
-const isPublicText = isPublic ? t('user.betLeaguesSites.editDialog.falsePublic') : t('user.betLeaguesSites.editDialog.truePublic') 
+const isPublicText = ref('')
 
 const invitationCode = ref('')
 const copyBtnText = ref(t('user.betLeaguesSites.editDialog.copy'))
@@ -197,6 +197,8 @@ function setData() {
     leagueCode.value = league.value.leagueCode
     leagueToBet.value = setLeagueName(league.value.league)
   }
+  isPublicText.value = isPublic.value ? t('user.betLeaguesSites.editDialog.truePublic') : t('user.betLeaguesSites.editDialog.falsePublic')
+  console.log(isPublic.value)
 }
 
 watch(isShow, (newVal) => {
