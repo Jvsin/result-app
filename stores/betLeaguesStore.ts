@@ -4,9 +4,11 @@ import {
   addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where,
   type DocumentReference, orderBy, limit,
   getDoc,
-  setDoc
+  setDoc,
+  runTransaction
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
+import { getAuth } from 'firebase/auth';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
@@ -76,7 +78,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
       )
       const querySnapshot = await getDocs(leaguesQuery)
       const leagueDoc = querySnapshot.docs[0]
-      
+
       if (leagueDoc) {
         const leagueData = leagueDoc.data() as ILeague
         const data = new LeagueModel(leagueData, leagueDoc.ref)
@@ -89,6 +91,51 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     } catch (error) {
       console.error("Error fetching league:", error);
       return null;
+    }
+  }
+
+  const joinLeague = async (league: LeagueModel) => {
+    try {
+      const auth = getAuth()
+      const userRef = authStore.loggedUserData?.reference
+      if (userRef == undefined) {
+        throw new Error("User fetch error")
+      }
+      const docRef = doc(db, "leagues", league.reference.id)
+
+      await runTransaction(db, async (transaction) => {
+        const leagueDoc = await transaction.get(docRef);
+        if (!leagueDoc.exists()) {
+          throw new Error("League does not exist!");
+        }
+
+        const players = leagueDoc.data().players || [];
+        
+        const userExists = players.some((ref: DocumentReference) => ref.id === userRef.id);
+
+        if (userExists) {
+          mess.value = "alreadyJoinedToLeague";
+          return;
+        }
+
+        players.push(userRef);
+
+        transaction.update(docRef, { players: players })
+
+        const userLeagues = authStore.loggedUserData?.leagues || []
+
+        const leagueExists = userLeagues.some((ref: DocumentReference) => ref.id === docRef.id)
+        if (!leagueExists) {
+          userLeagues.push(docRef)
+          console.log(userLeagues)
+          const userLeagueActualization = {
+            leagues: userLeagues
+          }
+          await authStore.editProfile(userLeagueActualization)
+        }
+      });
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -172,7 +219,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
-    generateUniqueLeagueCode, createLeague, fetchLeagueByCode,
+    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague,
     handleLogout
   }
 })

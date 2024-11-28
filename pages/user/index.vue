@@ -245,7 +245,7 @@ const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
 
 const userData = computed(() => authStore.loggedUserData)
-watch(userData, (olddata, newdata) => {
+watch(userData, async (olddata, newdata) => {
   console.log(userData.value?.favLeagues)
 })
 
@@ -279,12 +279,6 @@ async function fetchNewLeagues() {
   }
 }
 
-// watch((userBetLeagues), async (oldLeagues, newLeagues)  => {
-//   if (userData.value != null) {
-//     await betLeagueStore.fetchUserBetLeagues(userData.value?.leagues)
-//   }
-// })
-
 function getLeagueRoute(ref: string) {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
@@ -316,6 +310,7 @@ function changeCreateLeagueFlag() {
 }
 
 function changeFindLeagueFlag() {
+  fetchNewLeagues() // todo do poprawki 
   showFindLeagueFlag.value = !showFindLeagueFlag.value
 }
 

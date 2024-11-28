@@ -51,6 +51,9 @@
         <v-alert closable elevation="13" v-if="errorMessage.length" type="error">
           {{ $t(`errors.betLeaguesSites.${errorMessage}`) }}</v-alert>
       </v-card-text>
+      <v-card-actions>
+        <v-btn variant="outlined" color="error" @click="close">{{ $t('user.betLeaguesSites.cancel') }}</v-btn>
+      </v-card-actions>
     </v-card>
    </v-dialog>
 </template>
@@ -58,6 +61,7 @@
 <script lang="ts" setup>
 import type { LeagueModel } from '~/models/betLeague';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore'
+import { useAuthStore } from '~/stores/authStore'
 import { codeLengthRule } from '~/composables/rules'
 
 const props = defineProps<{
@@ -67,6 +71,8 @@ const props = defineProps<{
 const { isShow } = toRefs(props)
 
 const betLeagueStore = useBetLeagueStore()
+const authStore = useAuthStore()
+const { loggedUserData } = storeToRefs(authStore)
 
 const leagueCode = ref('')
 const foundLeague = ref<LeagueModel | null>()
@@ -77,6 +83,8 @@ const emit = defineEmits<{
 }>()
 
 function close() {
+  foundLeague.value = null
+  leagueCode.value = ''
   emit('onClose')
 }
 
@@ -89,7 +97,14 @@ async function searchLeague() {
 }
 
 async function joinLeague() {
-
+  try {
+    if (foundLeague.value != undefined) {
+      await betLeagueStore.joinLeague(foundLeague.value)
+      close()
+    }
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 function cancel() { 

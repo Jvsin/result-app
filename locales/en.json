@@ -145,7 +145,7 @@
       "findPublicLeague": "Search public league",
       "join": "Enter",
       "cancel": "Cancel",
-      "players": "Gracze: ",
+      "players": "Players: ",
 
       "editDialog": {
         "leagueName": "Name",
