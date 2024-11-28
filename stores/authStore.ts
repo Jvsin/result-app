@@ -6,6 +6,7 @@ import { type IUser, UserModel } from '~/models/user';
 import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { useBetStore } from './betStore';
 import { useBetLeagueStore } from './betLeaguesStore';
+import { useInvitationStore } from './invitationStore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
   const db = getFirestore();
   const betStore = useBetStore()
   const betLeagueStore = useBetLeagueStore()
+  const invitationStore = useInvitationStore()
 
   const registerWithPassword = async (email: string, password: string, userData: IUser) => {
     loading.value = true;
@@ -230,12 +232,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const fetchUserByCode = async (nick: string): Promise<UserModel[]> => {
+  const fetchUserByCode = async (code: string): Promise<UserModel[]> => {
     try {
       const usersRef = collection(db, 'users')
       const usersQuery = query(
         usersRef,
-        where('userCode', '==', nick)
+        where('userCode', '==', code)
         // where('nick', '>=', nick),
         // where('nick', '<=', nick + '\uf8ff'),
       )
@@ -244,6 +246,10 @@ export const useAuthStore = defineStore('auth', () => {
       const querySnapshot = await getDocs(usersQuery)
       querySnapshot.forEach((doc) => {
         const userData = doc.data() as IUser
+        if (loggedUserData.value?.reference?.id === doc.id) {
+          invitationStore.alertMess = 'cannotInviteYourself'
+          return null
+        }
         console.log(userData)
         const user = new UserModel(userData, doc.ref)
         users.push(user)

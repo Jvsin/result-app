@@ -180,7 +180,8 @@
     },
     "betLeaguesSites": {
       "invitationAlreadySended": "Invitation to this user already sended!",
-      "invitationSendedCorrectly": "User invited!"
+      "invitationSendedCorrectly": "User invited!",
+      "cannotInviteYourself": "You cannot invite yourself!"
     }
   },
   "snackbars": {

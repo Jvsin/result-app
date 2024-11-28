@@ -181,7 +181,8 @@
     },
     "betLeaguesSites": {
       "invitationAlreadySended": "Gracz posiada już zaproszenie!",
-      "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!"
+      "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!",
+      "cannotInviteYourself": "Nie możesz zaprosić samego siebie!"
     }
   },
   "snackbars": {
