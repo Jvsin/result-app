@@ -66,6 +66,32 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const fetchLeagueByCode = async (code: string) => {
+    try {
+      const leaguesRef = collection(db, 'leagues')
+      const leaguesQuery = query(
+        leaguesRef,
+        where('leagueCode', '==', code),
+        where('isPublic', '==', true)
+      )
+      const querySnapshot = await getDocs(leaguesQuery)
+      const leagueDoc = querySnapshot.docs[0]
+      
+      if (leagueDoc) {
+        const leagueData = leagueDoc.data() as ILeague
+        const data = new LeagueModel(leagueData, leagueDoc.ref)
+        return data
+      } else {
+        console.error("League not found")
+        mess.value = 'leagueNotFound'
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching league:", error);
+      return null;
+    }
+  }
+
   const fetchPlayersData = async (playersData: DocumentReference[]) => {
     const players = await authStore.fetchLeaguePlayers(playersData)
     console.log(players)
@@ -146,7 +172,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
-    generateUniqueLeagueCode, createLeague,
+    generateUniqueLeagueCode, createLeague, fetchLeagueByCode,
     handleLogout
   }
 })

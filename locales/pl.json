@@ -142,6 +142,11 @@
       "accuracy": "Skut.",
       "points": "Pkt",
       "manageLeague": "Zarządzaj ligą",
+      "leagueCode": "Kod ligi",
+      "findPublicLeague": "Znajdź ligę za pomocą kodu",
+      "join": "Dołącz",
+      "cancel": "Anuluj",
+      "players": "Players: ",
 
       "editDialog": {
         "leagueName": "Nazwa",
@@ -182,7 +187,8 @@
     "betLeaguesSites": {
       "invitationAlreadySended": "Gracz posiada już zaproszenie!",
       "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!",
-      "cannotInviteYourself": "Nie możesz zaprosić samego siebie!"
+      "cannotInviteYourself": "Nie możesz zaprosić samego siebie!",
+      "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!"
     }
   },
   "snackbars": {

@@ -141,6 +141,11 @@
       "accuracy": "Acc.",
       "points": "Pts",
       "manageLeague": "Manage the league",
+      "leagueCode": "League code",
+      "findPublicLeague": "Search public league",
+      "join": "Enter",
+      "cancel": "Cancel",
+      "players": "Gracze: ",
 
       "editDialog": {
         "leagueName": "Name",
@@ -181,7 +186,8 @@
     "betLeaguesSites": {
       "invitationAlreadySended": "Invitation to this user already sended!",
       "invitationSendedCorrectly": "User invited!",
-      "cannotInviteYourself": "You cannot invite yourself!"
+      "cannotInviteYourself": "You cannot invite yourself!",
+      "leagueNotFound": "League not found or is not public!"
     }
   },
   "snackbars": {

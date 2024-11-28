@@ -201,7 +201,7 @@
                   <v-card-actions>
                     <v-row justify="center" class="py-2">
                       <v-col cols="auto">
-                        <v-btn variant="outlined" color="secondary">{{ $t('user.joinPublicLeague') }}</v-btn>
+                        <v-btn variant="outlined" color="secondary" @click="changeFindLeagueFlag">{{ $t('user.joinPublicLeague') }}</v-btn>
                       </v-col>
                       <v-col cols="auto">
                         <v-btn variant="outlined" color="secondary">{{ $t('user.joinByInvitation')}}</v-btn>
@@ -212,6 +212,7 @@
                     </v-row>
                   </v-card-actions>
                   <createLeagueDialog :is-show="showCreateLeagueFlag" @on-save="fetchNewLeagues" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
+                  <FindPublicLeague :is-show="showFindLeagueFlag" @on-close="changeFindLeagueFlag"></FindPublicLeague>
                 </v-container>
               </v-tabs-window-item>
 
@@ -229,7 +230,8 @@ import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore'
-import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue';
+import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue'
+import FindPublicLeague from '~/components/leagues/findPublicLeague.vue';
 
 definePageMeta({
   middleware: 'auth'
@@ -299,6 +301,7 @@ function getBettingRoute(league: string) {
 const showEditProfileFlag = ref(false)
 const showAddLeaguesFlag = ref(false)
 const showCreateLeagueFlag = ref(false)
+const showFindLeagueFlag = ref(false)
 
 function changeProfileDialogFlag() {
   showEditProfileFlag.value = !showEditProfileFlag.value
@@ -310,6 +313,10 @@ function changeAddLeaguesFlag( ) {
 
 function changeCreateLeagueFlag() {
   showCreateLeagueFlag.value = !showCreateLeagueFlag.value
+}
+
+function changeFindLeagueFlag() {
+  showFindLeagueFlag.value = !showFindLeagueFlag.value
 }
 
 function setLeaguesData(league: string) {
