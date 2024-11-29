@@ -64,6 +64,8 @@ import { useBetLeagueStore } from '~/stores/betLeaguesStore'
 import { useAuthStore } from '~/stores/authStore'
 import { codeLengthRule } from '~/composables/rules'
 
+const router = useRouter()
+
 const props = defineProps<{
   isShow: boolean
 }>()
@@ -100,7 +102,8 @@ async function joinLeague() {
   try {
     if (foundLeague.value != undefined) {
       await betLeagueStore.joinLeague(foundLeague.value)
-      close()
+      // close()
+      router.push(`/user/${foundLeague.value.reference.id}`)
     }
   } catch (e) {
     console.log(e)

@@ -245,7 +245,7 @@ const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
 
 const userData = computed(() => authStore.loggedUserData)
-watch(userData, async (olddata, newdata) => {
+watch(userData, async (olddata, newUserData) => {
   console.log(userData.value?.favLeagues)
 })
 
@@ -310,7 +310,6 @@ function changeCreateLeagueFlag() {
 }
 
 function changeFindLeagueFlag() {
-  fetchNewLeagues() // todo do poprawki 
   showFindLeagueFlag.value = !showFindLeagueFlag.value
 }
 
