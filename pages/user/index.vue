@@ -167,7 +167,7 @@
                   <div v-if="userBetLeagues.length" v-for="card in userBetLeagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
-                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3 py-2"
                           @click="getLeagueRoute(card.reference.id)">
                           <v-row class="d-flex flex-wrap" justify="center">
                             <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">

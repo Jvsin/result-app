@@ -187,7 +187,8 @@
       "invitationAlreadySended": "Invitation to this user already sended!",
       "invitationSendedCorrectly": "User invited!",
       "cannotInviteYourself": "You cannot invite yourself!",
-      "leagueNotFound": "League not found or is not public!"
+      "leagueNotFound": "League not found or is not public!",
+      "alreadyJoinedToLeague": "You already joined to this league!"
     }
   },
   "snackbars": {

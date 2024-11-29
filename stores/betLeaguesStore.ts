@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
 import { getAuth } from 'firebase/auth';
+import { errorMessages } from 'vue/compiler-sfc';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
@@ -96,6 +97,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   const joinLeague = async (league: LeagueModel) => {
     try {
+      mess.value = ''
       const auth = getAuth()
       const userRef = authStore.loggedUserData?.reference
       if (userRef == undefined) {
@@ -115,7 +117,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
         if (userExists) {
           mess.value = "alreadyJoinedToLeague";
-          return;
+          throw new Error("alreadyJoinedToLeague")
         }
 
         players.push(userRef);
@@ -132,6 +134,10 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
             leagues: userLeagues
           }
           await authStore.editProfile(userLeagueActualization)
+        }
+        else {
+          mess.value = "alreadyJoinedToLeague";
+          throw new Error("alreadyJoinedToLeague");
         }
       });
     } catch (e) {

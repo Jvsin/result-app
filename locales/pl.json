@@ -188,7 +188,8 @@
       "invitationAlreadySended": "Gracz posiada już zaproszenie!",
       "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!",
       "cannotInviteYourself": "Nie możesz zaprosić samego siebie!",
-      "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!"
+      "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!",
+      "alreadyJoinedToLeague": "Należysz już do tej ligi!"
     }
   },
   "snackbars": {

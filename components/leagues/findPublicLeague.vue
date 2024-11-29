@@ -102,7 +102,7 @@ async function joinLeague() {
   try {
     if (foundLeague.value != undefined) {
       await betLeagueStore.joinLeague(foundLeague.value)
-      // close()
+      console.log("Przchodzę do strony...")
       router.push(`/user/${foundLeague.value.reference.id}`)
     }
   } catch (e) {
