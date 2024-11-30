@@ -9,6 +9,8 @@
               <!-- <v-avatar v-if="!loading" color="white" :src="leagueIcon"></v-avatar> -->
               <v-card-text class="text-h3">{{ league?.name }}</v-card-text>
               <v-card-subtitle class="text-h6">{{ leagueName }}</v-card-subtitle>
+              <v-card-subtitle class="text-h6">{{ $t('user.betLeaguesSites.established') + ': ' +
+                formatTimestampToDate(league?.created) }}</v-card-subtitle>
               <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
 
               <div v-if="isAuthor" class="py-1">
@@ -155,6 +157,21 @@ onMounted(async () => {
   
   setPlayersTable()
 })
+
+function formatTimestampToDate(timestamp: number | undefined): string {
+  if (timestamp != undefined) {
+    const date = new Date(timestamp * 1000)
+
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}.${month}.${year}`;
+  }
+  else {
+    return 'data zalozenia'
+  }
+}
 
 </script>
 

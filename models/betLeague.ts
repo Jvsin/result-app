@@ -8,7 +8,7 @@ export interface ILeague {
     league: string,
     owner: DocumentReference,
     players: DocumentReference[]
-    created: Number,
+    created: number,
     isPublic: boolean
 }
 
@@ -19,7 +19,7 @@ export class LeagueModel implements ILeague {
     league: string
     owner: DocumentReference
     players: DocumentReference[]
-    created: Number
+    created: number
     isPublic: boolean
 
     reference: DocumentReference
@@ -31,7 +31,7 @@ export class LeagueModel implements ILeague {
         this.name = data?.name || ''
         this.owner = data?.owner || null
         this.players = data?.players || []
-        this.created = data?.created || new Date()
+        this.created = data?.created || 0
         this.isPublic = data?.isPublic || false
 
         this.reference = reference
