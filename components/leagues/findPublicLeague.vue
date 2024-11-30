@@ -83,11 +83,15 @@ const { isShow } = toRefs(props)
 const betLeagueStore = useBetLeagueStore()
 const authStore = useAuthStore()
 const { loggedUserData } = storeToRefs(authStore)
-const { userBetLeagues } = storeToRefs(betLeagueStore)
+const { userBetLeagues, mess } = storeToRefs(betLeagueStore)
 
 const leagueCode = ref('')
 const foundLeague = ref<LeagueModel | null>()
-const errorMessage = computed(() => betLeagueStore.mess)
+const errorMessage = ref('')
+
+watch((mess), async (oldMess, newMess) => {
+  errorMessage.value = mess.value
+})
 
 const isPlayerJoined = ref(false)
 
@@ -96,6 +100,8 @@ const emit = defineEmits<{
 }>()
 
 function close() {
+  errorMessage.value = ''
+  isPlayerJoined.value = false
   foundLeague.value = null
   leagueCode.value = ''
   emit('onClose')
@@ -132,6 +138,7 @@ async function joinLeague() {
 
 function cancel() { 
   foundLeague.value = null
+  isPlayerJoined.value = false
 }
 
 function setLeaguesData(league: string) {
