@@ -18,9 +18,7 @@
                 <v-btn class="mb-2 mx-2" prepend-icon="mdi-table-account" color="secondary" variant="outlined"
                 @click="changeLeagueEditFlag">{{ $t('user.betLeaguesSites.manageLeague') }}</v-btn>
               </div>
-              <div v-else>
-                <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined">Opuść ligę</v-btn>
-              </div>
+              
 
               <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
                 <v-card class="ma-5 d-flex justify-center align-center" variant="text">
@@ -77,10 +75,22 @@
                     </v-col>
                   </v-row>
                 </v-card>
+                <div v-if="!editFlag">
+                  <v-btn v-if="!leaveFlag" class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined" @click="changeLeaveFlag">
+                    {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>
+                  <div v-else>
+                    <v-card-title class="text-h7">{{ $t('user.betLeaguesSites.confirmLeaving') }}</v-card-title>
+                    <v-btn class="mb-2 mx-2" prepend-icon="mdi-close" color="error" variant="outlined" @click="changeLeaveFlag">
+                      {{ $t('user.betLeaguesSites.cancel') }}</v-btn>
+                    <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="secondary" variant="text" @click="leaveLeague">
+                      {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>    
+                  </div>                 
+                </div>
               </v-card>
               <div v-else>
                 <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
+              
               
             </v-col>
             <EditLeagueDialog :players="playersTable" :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
@@ -100,9 +110,30 @@ definePageMeta({
   middleware: 'auth'
 })
 
+const router = useRouter()
+
 const editFlag = ref(false)
 function changeLeagueEditFlag() {
   editFlag.value = !editFlag.value
+}
+
+const leaveFlag = ref(false)
+function changeLeaveFlag() {
+  leaveFlag.value = !leaveFlag.value
+}
+
+async function leaveLeague() {
+  try {
+    if (league.value) {
+      console.log(league.value.reference)
+      await betLeagueStore.leaveLeague(league.value.reference)
+      //dodać snackbar z opuszczeniem ligi
+      router.push('/user/')
+    }
+  }
+  catch (e) {
+    console.log(e)
+  }
 }
 
 const route = useRoute()

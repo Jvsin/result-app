@@ -5,7 +5,8 @@ import {
   type DocumentReference, orderBy, limit,
   getDoc,
   setDoc,
-  runTransaction
+  runTransaction,
+  arrayRemove
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
 import { getAuth } from 'firebase/auth';
@@ -146,6 +147,29 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const leaveLeague = async (leagueRef: DocumentReference) => {
+    try {
+      const userRef = authStore.loggedUserData?.reference
+      if (userRef == undefined) {
+        throw new Error("User fetch error")
+      }
+
+      await updateDoc(leagueRef, {
+        players: arrayRemove(userRef)
+      })
+
+      await updateDoc(userRef, {
+        leagues: arrayRemove(leagueRef)
+      })
+      
+      userBetLeagues.value = userBetLeagues.value.filter(league => league.reference !== leagueRef)
+      console.log("Successfully left the league")
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
   const fetchPlayersData = async (playersData: DocumentReference[]) => {
     const players = await authStore.fetchLeaguePlayers(playersData)
     console.log(players)
@@ -226,7 +250,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
-    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague,
+    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague,
     handleLogout
   }
 })

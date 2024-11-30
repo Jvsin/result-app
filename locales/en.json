@@ -148,6 +148,8 @@
       "players": "Players: ",
       "showLeague": "Show table",
       "established": "Established",
+      "leaveLeague": "Leave league",
+      "confirmLeaving": "Confirm leaving",
 
       "editDialog": {
         "leagueName": "Name",
