@@ -146,6 +146,7 @@
       "join": "Enter",
       "cancel": "Cancel",
       "players": "Players: ",
+      "showLeague": "Show table",
 
       "editDialog": {
         "leagueName": "Name",

@@ -39,9 +39,17 @@
                   {{ $t('user.betLeaguesSites.players') +  foundLeague.players.length }}
                 </v-card-subtitle>
               </v-col>
+              <v-col v-if="isPlayerJoined" cols="12">
+                <v-alert type="info">
+                  {{ $t('errors.betLeaguesSites.alreadyJoinedToLeague') }}
+                </v-alert>
+              </v-col>
               <v-col cols="12">
                 <v-card-actions class="d-flex justify-center">
-                  <v-btn variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="joinLeague">{{ $t('user.betLeaguesSites.join') }}</v-btn>
+                  <v-btn v-if="!isPlayerJoined" variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="joinLeague">
+                    {{ $t('user.betLeaguesSites.join') }}</v-btn>
+                  <v-btn v-else variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="routeToLeague">
+                    {{ $t('user.betLeaguesSites.showLeague') }}</v-btn>
                   <v-btn variant="outlined" color="error" prepend-icon="mdi-cancel" @click="cancel">{{ $t('user.betLeaguesSites.cancel') }}</v-btn>
                 </v-card-actions>
               </v-col>
@@ -75,10 +83,13 @@ const { isShow } = toRefs(props)
 const betLeagueStore = useBetLeagueStore()
 const authStore = useAuthStore()
 const { loggedUserData } = storeToRefs(authStore)
+const { userBetLeagues } = storeToRefs(betLeagueStore)
 
 const leagueCode = ref('')
 const foundLeague = ref<LeagueModel | null>()
 const errorMessage = computed(() => betLeagueStore.mess)
+
+const isPlayerJoined = ref(false)
 
 const emit = defineEmits<{
   (e: 'onClose'): void
@@ -93,9 +104,18 @@ function close() {
 async function searchLeague() {
   try {
     foundLeague.value = await betLeagueStore.fetchLeagueByCode(leagueCode.value)
+    userBetLeagues.value.forEach((league) => {
+      if (league.leagueCode === leagueCode.value) {
+        isPlayerJoined.value = true
+      }
+    })
   } catch (e) {
     console.log(e)
   }
+}
+
+function routeToLeague() {
+  router.push(`/user/${foundLeague.value?.reference.id}`)
 }
 
 async function joinLeague() {
