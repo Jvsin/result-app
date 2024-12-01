@@ -150,6 +150,7 @@
       "established": "Established",
       "leaveLeague": "Leave league",
       "confirmLeaving": "Confirm leaving",
+      "back": "Back",
 
       "editDialog": {
         "leagueName": "Name",

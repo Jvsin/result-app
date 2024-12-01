@@ -1,19 +1,18 @@
 <template>
     <v-layout class="rounded rounded-md">
       <v-main class="d-flex align-center justify-center" style="height: 100vh; overflow: hidden;">
-        <v-img src="/public/english-league.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.6)"
+        <v-img src="/public/eng_background.jpg" cover gradient="to bottom, rgba(0,0,0,.25), rgba(0,0,0,.6)"
           class="text-center w-100 h-100">
           <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
             style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%" rounded>
             <v-col cols="12">
+              <div>
+                <v-btn variant="outlined" prepend-icon="mdi-keyboard-backspace" @click="router.push('/user')">
+                {{ $t('user.betLeaguesSites.back') }}</v-btn>
+              </div>
               <v-card variant="text">
-                <v-row justify="center" class="align-center">
-                  <v-col cols="auto" >
-                    <v-img v-if="league?.league === 'eng'" src="/public/pl.png" aspect-ratio="1/1" width="200" height="200"></v-img>
-                    <v-img v-if="league?.league === 'pol'" src="/public/ekstraklasa.png" width="250" height="250"></v-img>
-                    <v-img v-if="league?.league === 'ucl'" src="/public/ucl.png" width="250" height="250"></v-img>
-                  </v-col>
-                  <v-col cols="auto">
+                <v-row justify="center">
+                 <v-col>
                     <v-card-title class="text-h4">{{ league?.name }}</v-card-title>
                     <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
                     <v-card-subtitle class="text-h7">{{ leagueName }}</v-card-subtitle>
@@ -21,13 +20,16 @@
                         formatTimestampToDate(league?.created) }}</v-card-subtitle>
                   </v-col>
                 </v-row>
+                
+                  <div v-if="isAuthor" class="py-1">
+                    <!-- <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn> -->
+                    <v-btn class="mb-2 mx-2" prepend-icon="mdi-table-account" color="secondary" variant="outlined"
+                    @click="changeLeagueEditFlag">{{ $t('user.betLeaguesSites.manageLeague') }}</v-btn>
+                  </div>
+                
               </v-card>
 
-              <div v-if="isAuthor" class="py-1">
-                <!-- <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn> -->
-                <v-btn class="mb-2 mx-2" prepend-icon="mdi-table-account" color="secondary" variant="outlined"
-                @click="changeLeagueEditFlag">{{ $t('user.betLeaguesSites.manageLeague') }}</v-btn>
-              </div>
+              
               
 
               <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
@@ -231,7 +233,6 @@ function formatTimestampToDate(timestamp: number | undefined): string {
     return 'data zalozenia'
   }
 }
-
 </script>
 
 <style>
