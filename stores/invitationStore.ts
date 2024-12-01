@@ -10,7 +10,7 @@ import { useAuthStore } from './authStore';
 export const useInvitationStore = defineStore('invitations', () => { 
   const db = getFirestore()
 
-  const leagueInvitations = ref<InvitationModel[]>()
+  const allUserInvitations = ref<InvitationModel[]>()
 
   const alertMess = ref('')
   
@@ -29,7 +29,7 @@ export const useInvitationStore = defineStore('invitations', () => {
           invitations.push(new InvitationModel(data, doc.ref));
         });
         
-      leagueInvitations.value = invitations
+      allUserInvitations.value = invitations
     } catch (error) {
         console.error("Error getting documents: ", error);
         throw new Error("Failed to get invitations");
@@ -58,7 +58,7 @@ export const useInvitationStore = defineStore('invitations', () => {
   }
 
   return { 
-    leagueInvitations, alertMess,
+    allUserInvitations, alertMess,
     fetchAllLeagueInvitations, sendInviteToUser
   }
 })

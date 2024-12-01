@@ -170,7 +170,7 @@
                         <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3 py-2"
                           @click="getLeagueRoute(card.reference.id)">
                           <v-row class="d-flex flex-wrap" justify="center">
-                            <v-col cols="12" sm="4" class="d-flex flex-column align-center justify-center">
+                            <v-col cols="12" sm="5" class="d-flex-column align-center align-sm-start justify-center">
                               <v-card-title>
                                 {{ card.name }}
                               </v-card-title>
@@ -181,17 +181,16 @@
                                 {{ setLeaguesData(card.league) }}
                               </v-card-subtitle>
                             </v-col>
-                            <v-col cols="12" sm="2"
-                              class="d-flex flex-column align-center align-sm-start justify-center">
-                              <v-card-subtitle>
-                                {{ $t(`user.betLeaguesSites.editDialog.${card.isPublic}Public`) }}
-                              </v-card-subtitle>
-                            </v-col>
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
                               <v-card-subtitle>
-                                {{'Graczy w lidze: ' +  card.players.length }}
+                                {{$t('user.betLeaguesSites.players') +  card.players.length }}
                               </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="12" sm="1"
+                              class="d-flex flex-column align-sm-center align-center justify-center">
+                              <v-icon v-if="card.isPublic">mdi-lock-open-variant</v-icon>
+                              <v-icon v-else>mdi-lock</v-icon>
                             </v-col>
                           </v-row>
                         </v-card>
@@ -210,7 +209,7 @@
                         <v-btn variant="outlined" color="secondary" @click="changeFindLeagueFlag">{{ $t('user.joinPublicLeague') }}</v-btn>
                       </v-col>
                       <v-col cols="auto">
-                        <v-btn variant="outlined" color="secondary">{{ $t('user.joinByInvitation')}}</v-btn>
+                        <v-btn variant="outlined" color="secondary" @click="changeInvitationsFlag">{{ $t('user.joinByInvitation')}}</v-btn>
                       </v-col>
                       <v-col cols="auto">
                         <v-btn variant="flat" color="primary" @click="changeCreateLeagueFlag">{{ $t('user.createOwnLeague') }}</v-btn>
@@ -219,6 +218,7 @@
                   </v-card-actions>
                   <createLeagueDialog :is-show="showCreateLeagueFlag" @on-save="fetchNewLeagues" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
                   <FindPublicLeague :is-show="showFindLeagueFlag" @on-close="changeFindLeagueFlag"></FindPublicLeague>
+                  <ManageInvitations :is-show="showInvitationsFlag" @on-close="changeInvitationsFlag"></ManageInvitations>
                 </v-container>
               </v-tabs-window-item>
 
@@ -237,6 +237,7 @@ import { useAuthStore } from '~/stores/authStore';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore'
 import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue'
 import FindPublicLeague from '~/components/leagues/findPublicLeague.vue';
+import ManageInvitations from '~/components/leagues/manageInvitations.vue';
 
 definePageMeta({
   middleware: 'auth'
@@ -297,6 +298,7 @@ const showEditProfileFlag = ref(false)
 const showAddLeaguesFlag = ref(false)
 const showCreateLeagueFlag = ref(false)
 const showFindLeagueFlag = ref(false)
+const showInvitationsFlag = ref(false)
 
 function changeProfileDialogFlag() {
   showEditProfileFlag.value = !showEditProfileFlag.value
@@ -312,6 +314,10 @@ function changeCreateLeagueFlag() {
 
 function changeFindLeagueFlag() {
   showFindLeagueFlag.value = !showFindLeagueFlag.value
+}
+
+function changeInvitationsFlag() {
+  showInvitationsFlag.value = !showInvitationsFlag.value
 }
 
 function setLeaguesData(league: string) {
