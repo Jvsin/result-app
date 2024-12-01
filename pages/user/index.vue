@@ -170,7 +170,7 @@
                         <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3 py-2"
                           @click="getLeagueRoute(card.reference.id)">
                           <v-row class="d-flex flex-wrap" justify="center">
-                            <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
+                            <v-col cols="12" sm="4" class="d-flex flex-column align-center justify-center">
                               <v-card-title>
                                 {{ card.name }}
                               </v-card-title>
@@ -179,6 +179,12 @@
                               class="d-flex flex-column align-center align-sm-start justify-center">
                               <v-card-subtitle>
                                 {{ setLeaguesData(card.league) }}
+                              </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="12" sm="2"
+                              class="d-flex flex-column align-center align-sm-start justify-center">
+                              <v-card-subtitle>
+                                {{ $t(`user.betLeaguesSites.editDialog.${card.isPublic}Public`) }}
                               </v-card-subtitle>
                             </v-col>
                             <v-col cols="12" sm="3"
