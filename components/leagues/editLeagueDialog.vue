@@ -228,7 +228,8 @@ async function sendInvite(inviteUserRef: any) {
         leagueCode: league.value.leagueCode,
         user: inviteUserRef,
         creationDate: Timestamp.now(),
-        isAccepted: false
+        isAccepted: false,
+        ownerNick: authStore.loggedUserData?.nick as string  // do poprawy pewnie w przyszłości
       }
       await invitationStore.sendInviteToUser(newInvite)
     }

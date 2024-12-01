@@ -36,6 +36,28 @@ export const useInvitationStore = defineStore('invitations', () => {
     }
   }
 
+  const fetchAllUserInvitations = async (userRef: DocumentReference) => {
+    try {
+      const invitationsRef = collection(db, 'invitations');
+      console.log(invitationsRef)
+      const q = query(invitationsRef, where('user', '==', userRef));
+        
+      const querySnapshot = await getDocs(q);
+      
+      const invitations: InvitationModel[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as IInvitation
+          console.log(data)
+          invitations.push(new InvitationModel(data, doc.ref));
+        });
+        
+      allUserInvitations.value = invitations
+    } catch (error) {
+        console.error("Error getting documents: ", error);
+        throw new Error("Failed to get invitations");
+    }
+  }
+
   const sendInviteToUser = async (invitation: IInvitation) => {
     try {
       const invitationsRef = collection(db, "invitations")
@@ -59,6 +81,6 @@ export const useInvitationStore = defineStore('invitations', () => {
 
   return { 
     allUserInvitations, alertMess,
-    fetchAllLeagueInvitations, sendInviteToUser
+    fetchAllLeagueInvitations, fetchAllUserInvitations, sendInviteToUser
   }
 })

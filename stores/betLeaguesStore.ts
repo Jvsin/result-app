@@ -11,6 +11,7 @@ import {
 import { useAuthStore } from './authStore';
 import { getAuth } from 'firebase/auth';
 import { errorMessages } from 'vue/compiler-sfc';
+import type { InvitationModel } from '~/models/invitation';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
@@ -96,6 +97,29 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
         mess.value = 'leagueNotFound'
         return null;
       }
+    } catch (error) {
+      console.error("Error fetching league:", error);
+      return null;
+    }
+  }
+
+  const fetchLeaguesByInvitations = async (invitations: DocumentReference[]) => {
+    mess.value = ''
+    try {
+      const promises = invitations.map(async (invite) => {
+        console.log(invite)
+        const docRef = doc(db, 'leagues', invite.id)
+        const docSnap = await getDoc(docRef)
+
+        if (docSnap.exists()) {
+            return docSnap.data() as ILeague
+        } else {
+          throw new Error(`Document with reference ${invite} does not exist`);
+        }
+      })
+      const allLeaguesInvitations = await Promise.all(promises)
+      console.log(allLeaguesInvitations)
+      return allLeaguesInvitations
     } catch (error) {
       console.error("Error fetching league:", error);
       return null;
@@ -270,6 +294,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
     generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague,
+    fetchLeaguesByInvitations,
     handleLogout
   }
 })

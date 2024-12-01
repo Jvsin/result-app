@@ -238,6 +238,7 @@ import { useBetLeagueStore } from '~/stores/betLeaguesStore'
 import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue'
 import FindPublicLeague from '~/components/leagues/findPublicLeague.vue';
 import ManageInvitations from '~/components/leagues/manageInvitations.vue';
+import { useInvitationStore } from '~/stores/invitationStore';
 
 definePageMeta({
   middleware: 'auth'
@@ -248,6 +249,7 @@ const router = useRouter();
 
 const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
+const invitationStore = useInvitationStore()
 
 const userData = computed(() => authStore.loggedUserData)
 
@@ -354,6 +356,9 @@ onMounted(async () => {
   await authStore.actualizeUserData()
   if (userData.value && userData.value.leagues.length != userBetLeagues.value.length) {
     await betLeagueStore.fetchUserBetLeagues(userData.value.leagues)
+  }
+  if(userData.value?.reference){
+    await invitationStore.fetchAllUserInvitations(userData.value?.reference)
   }
 })
 </script>
