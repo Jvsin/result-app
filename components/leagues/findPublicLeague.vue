@@ -89,7 +89,7 @@ const leagueCode = ref('')
 const foundLeague = ref<LeagueModel | null>()
 const errorMessage = ref('')
 
-watch((mess), async (oldMess, newMess) => {
+watch((mess), async (oldMess: string, newMess: string) => {
   errorMessage.value = mess.value
 })
 
@@ -110,7 +110,7 @@ function close() {
 async function searchLeague() {
   try {
     foundLeague.value = await betLeagueStore.fetchLeagueByCode(leagueCode.value)
-    userBetLeagues.value.forEach((league) => {
+    userBetLeagues.value.forEach((league: LeagueModel) => {
       if (league.leagueCode === leagueCode.value) {
         isPlayerJoined.value = true
       }

@@ -225,7 +225,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { Timestamp } from 'firebase/firestore';
 import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
@@ -238,16 +237,12 @@ definePageMeta({
 })
 
 const tab = ref(0)
-
 const router = useRouter();
 
 const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
 
 const userData = computed(() => authStore.loggedUserData)
-watch(userData, async (olddata, newUserData) => {
-  console.log(userData.value?.favLeagues)
-})
 
 const nameAndSurname = computed(() => {
   if (!userData.value) return ''
@@ -345,7 +340,7 @@ function formatTimestampToDate(timestamp: any) {
 
 onMounted(async () => {
   await authStore.actualizeUserData()
-  if (userData.value) {
+  if (userData.value && userData.value.leagues.length != userBetLeagues.value.length) {
     await betLeagueStore.fetchUserBetLeagues(userData.value.leagues)
   }
 })

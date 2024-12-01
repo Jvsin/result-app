@@ -31,7 +31,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
         if (leagueSnapshot.exists()) {
           const leagueData = leagueSnapshot.data() as ILeague;
-          if (!userBetLeagues.value.find(l => l.leagueCode === leagueData.leagueCode)) {
+          if (!userBetLeagues.value.find((l: LeagueModel) => l.leagueCode === leagueData.leagueCode)) {
             const data = new LeagueModel(leagueData, leagueSnapshot.ref)
             console.log(data)
             userBetLeagues.value.push(data)
@@ -46,7 +46,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   const fetchLeagueById = async (leagueId: string) => {
     try {
-      const league = userBetLeagues.value.find((l) => l.reference.id === leagueId);
+      const league = userBetLeagues.value.find((l: LeagueModel) => l.reference.id === leagueId);
 
       const docRef = doc(db, "leagues", leagueId);
       const leagueDoc = await getDoc(docRef);
@@ -54,7 +54,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
       if (leagueDoc.exists()) {
         const leagueData = leagueDoc.data() as ILeague
         const data = new LeagueModel(leagueData, leagueDoc.ref)
-        if (!userBetLeagues.value.find(l => l.leagueCode === leagueData.leagueCode)) {
+        if (!userBetLeagues.value.find((l:LeagueModel) => l.leagueCode === leagueData.leagueCode)) {
           console.log(data)
           userBetLeagues.value.push(data)
         }
@@ -162,7 +162,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
         leagues: arrayRemove(leagueRef)
       })
       
-      userBetLeagues.value = userBetLeagues.value.filter(league => league.reference !== leagueRef)
+      userBetLeagues.value = userBetLeagues.value.filter((league: LeagueModel) => league.reference !== leagueRef)
       console.log("Successfully left the league")
     }
     catch (err) {
