@@ -182,7 +182,8 @@ async function editLeague() {
   }
   console.log(leagueData)
   if (await isValid()) {
-    await betLeagueStore.editLeagueData(leagueData, invitationCode.value)
+    await betLeagueStore.editLeagueData(leagueData, league.value?.reference.id)
+    close()
   }
 }
 
@@ -236,7 +237,7 @@ async function sendInvite(inviteUserRef: any) {
   }
 }
 
-watch(isShow, (newVal) => {
+watch(isShow, (newVal:boolean) => {
   isShowRef.value = newVal;
   if (newVal) {
     setData();

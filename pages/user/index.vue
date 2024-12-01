@@ -25,7 +25,7 @@
 
                   <v-row>
                     <v-col cols="12" md="6">
-                      <v-card variant="flat" color="rgba(0, 0, 0, 0)">
+                      <v-card class="justify-center align-center flex-column" variant="flat" color="rgba(0, 0, 0, 0)">
                         <v-avatar color="secondary" size="80">{{ nameAndSurname.charAt(0).toUpperCase() }}</v-avatar>
                         <div class="text-h2 py-3">
                           {{ userData?.nick }}

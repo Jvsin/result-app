@@ -6,12 +6,22 @@
           <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10 px-4" elevation="4"
             style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%" rounded>
             <v-col cols="12">
-              <!-- <v-avatar v-if="!loading" color="white" :src="leagueIcon"></v-avatar> -->
-              <v-card-text class="text-h3">{{ league?.name }}</v-card-text>
-              <v-card-subtitle class="text-h6">{{ leagueName }}</v-card-subtitle>
-              <v-card-subtitle class="text-h6">{{ $t('user.betLeaguesSites.established') + ': ' +
-                formatTimestampToDate(league?.created) }}</v-card-subtitle>
-              <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
+              <v-card variant="text">
+                <v-row justify="center" class="align-center">
+                  <v-col cols="auto" >
+                    <v-img v-if="league?.league === 'eng'" src="/public/pl.png" aspect-ratio="1/1" width="200" height="200"></v-img>
+                    <v-img v-if="league?.league === 'pol'" src="/public/ekstraklasa.png" width="250" height="250"></v-img>
+                    <v-img v-if="league?.league === 'ucl'" src="/public/ucl.png" width="250" height="250"></v-img>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-card-title class="text-h4">{{ league?.name }}</v-card-title>
+                    <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
+                    <v-card-subtitle class="text-h7">{{ leagueName }}</v-card-subtitle>
+                    <v-card-subtitle class="text-h7">{{ $t('user.betLeaguesSites.established') + ': ' +
+                        formatTimestampToDate(league?.created) }}</v-card-subtitle>
+                  </v-col>
+                </v-row>
+              </v-card>
 
               <div v-if="isAuthor" class="py-1">
                 <!-- <v-btn class="mb-2 mx-2" prepend-icon="mdi-pencil" color="secondary" variant="outlined">Edytuj ligę</v-btn> -->
@@ -51,7 +61,10 @@
                 <v-card class="ma-5 d-flex justify-center align-center" v-for="(player,index) in playersTable" variant="text">
                   <v-row class="d-flex align-center">
                     <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
-                      <v-card-title>
+                      <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
+                        {{ index + 1 }}
+                      </v-card-title>
+                      <v-card-title v-else>
                         {{ index + 1 }}
                       </v-card-title>
                     </v-col>
@@ -59,7 +72,10 @@
                       <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
                     </v-col>
                     <v-col class="d-flex flex-column align-center align-sm-start justify-center" cols="5" md="5">
-                      <v-card-title>
+                      <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
+                        {{ player.nick.toUpperCase() }}
+                      </v-card-title>
+                      <v-card-title v-else>
                         {{ player.nick }}
                       </v-card-title>
                     </v-col>
@@ -75,7 +91,7 @@
                     </v-col>
                   </v-row>
                 </v-card>
-                <div v-if="!editFlag">
+                <div v-if="!isAuthor">
                   <v-btn v-if="!leaveFlag" class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined" @click="changeLeaveFlag">
                     {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>
                   <div v-else>
@@ -90,8 +106,6 @@
               <div v-else>
                 <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
-              
-              
             </v-col>
             <EditLeagueDialog :players="playersTable" :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
           </v-sheet>
@@ -139,6 +153,19 @@ async function leaveLeague() {
 const route = useRoute()
 const leagueId = ref(route.params.league as string)
 console.log(leagueId)
+const setIcon = ref('')
+
+function iconSetFunction(league: string) {
+  switch (league) {
+    case "pol":
+      return "/public/ekstraklasa.png"
+    case "eng":
+      return "/public/pl.png"
+    case "ucl":
+      return "/public/ucl.png"
+  }
+  return ''
+}
 
 const isAuthor = ref(false)
 const authStore = useAuthStore()
@@ -179,6 +206,7 @@ onMounted(async () => {
   console.log(league.value)
   // league.value = betLeagueStore.leagueToDisplay
   if (league.value != undefined) {
+    setIcon.value = iconSetFunction(league.value.league)
     leagueName.value = setLeaguesData(league.value.league)
 
     if (loggedUserData.value?.reference?.id === league.value.owner.id) {

@@ -47,23 +47,28 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   const fetchLeagueById = async (leagueId: string) => {
     try {
       const league = userBetLeagues.value.find((l: LeagueModel) => l.reference.id === leagueId);
-
-      const docRef = doc(db, "leagues", leagueId);
-      const leagueDoc = await getDoc(docRef);
-
-      if (leagueDoc.exists()) {
-        const leagueData = leagueDoc.data() as ILeague
-        const data = new LeagueModel(leagueData, leagueDoc.ref)
-        if (!userBetLeagues.value.find((l:LeagueModel) => l.leagueCode === leagueData.leagueCode)) {
-          console.log(data)
-          userBetLeagues.value.push(data)
-        }
-        leagueToDisplay.value = data
-        // return league;
-      } else {
-        console.error("League not found")
-        return null;
+      if (league) {
+        leagueToDisplay.value = league
+        return
       }
+      else {
+        const docRef = doc(db, "leagues", leagueId);
+        const leagueDoc = await getDoc(docRef);
+
+        if (leagueDoc.exists()) {
+          const leagueData = leagueDoc.data() as ILeague
+          const data = new LeagueModel(leagueData, leagueDoc.ref)
+          if (!userBetLeagues.value.find((l: LeagueModel) => l.leagueCode === leagueData.leagueCode)) {
+            console.log(data)
+            userBetLeagues.value.push(data)
+          }
+          leagueToDisplay.value = data
+        } else {
+          console.error("League not found")
+          return null;
+        }
+        // return league;
+      }  
     } catch (error) {
       console.error("Error fetching league:", error);
       return null;
@@ -191,8 +196,22 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
       console.log(userDocRef)
       await updateDoc(userDocRef, data);
       console.log('League updated successfully');
-      await fetchLeagueById(ref)
-      
+
+      const updatedDoc = await getDoc(userDocRef)
+      if (updatedDoc.exists()) {
+        userBetLeagues.value.forEach((league: any) => console.log(league.reference.id))
+        const leagueData = updatedDoc.data() as ILeague
+        const existingIndex = userBetLeagues.value.findIndex((l: any) => l.reference.id === updatedDoc.ref.id)
+        
+        const newData = new LeagueModel(leagueData, updatedDoc.ref)
+        if (!existingIndex) {
+          userBetLeagues.value.push(newData)
+        }
+        else {
+          userBetLeagues.value[existingIndex] = newData
+        }
+        leagueToDisplay.value = newData
+      }
     } catch (error) { 
       console.error('Error updating league data:', error);
     }
