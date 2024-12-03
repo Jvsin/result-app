@@ -5,28 +5,41 @@
         Zaproszenia do prywatnych lig
       </v-card-title>
 
-      <v-card class="py-1 my-3 mx-3" variant="outlined" color="primary" elevation="10" v-for="invite in leagueInvitations">
+      <div v-if="leagueInvitations?.length">
+        <v-card class="py-1 my-3 mx-3" variant="outlined" color="primary" elevation="10" v-for="invite in leagueInvitations">
         <!-- <div>{{ 'Zaproszenie od: ' + invite.ownerNick }}</div> -->
-        <v-row justify="space-around">
-          <div class="d-flex justify-center flex-column align-center text-h6 py-2"> 
-              {{ invite.name }}
+          <v-row justify="space-around">
+            <div class="d-flex justify-center flex-column align-center text-h6 py-2"> 
+                {{ invite.name }}
+              </div>
+            <v-col cols="12" sm="auto" class="d-flex flex-column justify-center align-center" >
+              <div class="text-subtitle-2"> 
+                {{ invitations?.find((inv: InvitationModel) => inv.leagueCode === invite.leagueCode)?.ownerNick }}
+              </div>
+            </v-col>
+            <v-col cols="12" sm="auto" class="align-center flex-column justify-center d-flex">
+              <div class="font-italic">
+                {{ setLeaguesData(invite.league) }}
+              </div>
+            </v-col>
+            <div class="my-2">
+                <v-btn icon="mdi-bookmark-check" color="primary" variant="plain" @click="acceptInvitation(invite)"></v-btn>
+                <v-btn icon="mdi-cancel" color="error" variant="plain" @click="deleteInvitation(invite)"></v-btn>
             </div>
-          <v-col cols="12" sm="auto" class="d-flex flex-column justify-center align-center" >
-            <div class="text-subtitle-2"> 
-              {{ invitations?.find((inv: InvitationModel) => inv.leagueCode === invite.leagueCode)?.ownerNick }}
+          </v-row>
+        </v-card>
+      </div>
+      <div v-else>
+        <v-row justify="center">
+          <v-col>
+            <div class="justify-center align-center d-flex">
+              <v-icon>mdi-email-alert</v-icon>
             </div>
+            <v-card-title class="text-center">Brak zaproszeń</v-card-title>
+            <v-card-text class="text-center">Tutaj będą wyświetlać się zaproszenia do lig</v-card-text>
           </v-col>
-          <v-col cols="12" sm="auto" class="align-center flex-column justify-center d-flex">
-            <div class="font-italic">
-              {{ setLeaguesData(invite.league) }}
-            </div>
-          </v-col>
-          <div class="my-2">
-              <v-btn icon="mdi-bookmark-check" color="primary" variant="plain" @click="acceptInvitation(invite)"></v-btn>
-              <v-btn icon="mdi-cancel" color="error" variant="plain"></v-btn>
-          </div>
         </v-row>
-      </v-card>
+      </div>
 
       <v-card-actions>
         <v-btn variant="outlined" color="error" @click="close">{{ $t('user.betLeaguesSites.cancel') }}</v-btn>
@@ -68,7 +81,6 @@ const leagueInvitations = ref<LeagueModel[] | null>()
 const invitations = computed(() => invitationStore.allUserInvitations)
 
 const userInvitations = computed(() => {
-  // console.log(invitationStore.allUserInvitations)
   const invRefs: DocumentReference[] = []
   invitationStore.allUserInvitations?.forEach((inv: any) => {
     invRefs.push(inv.leagueReference)
@@ -76,14 +88,13 @@ const userInvitations = computed(() => {
   return invRefs
 })
 
+watch((invitations), async (oldInvs, newInvs) => {
+  leagueInvitations.value = await betLeagueStore.fetchLeaguesByInvitations(userInvitations?.value)
+})
+
 async function acceptInvitation(league: LeagueModel) {
   try {
-    console.log(league.reference.id)
     if (invitations.value != undefined) {
-      console.log(invitations.value)
-      invitations.value.forEach((inv: InvitationModel) => {
-        console.log(inv.reference.id)
-      })
       const invitation = invitations.value.find((invite: InvitationModel) => invite.leagueReference.id === league.reference.id)
       console.log(invitation)
 
@@ -93,18 +104,24 @@ async function acceptInvitation(league: LeagueModel) {
         router.push(`/user/${league.reference.id}`)
       }
     }
-    
   }
   catch (e) {
     console.log(e)
   }
 }
 
-async function deleteInvitation() {
-
+async function deleteInvitation(league: LeagueModel) {
+  try {
+    if (invitations.value != undefined) {
+      const invitation = invitations.value.find((invite: InvitationModel) => invite.leagueReference.id === league.reference.id)
+      if (invitation) {
+        await invitationStore.deleteInvitation(invitation.reference)
+      }
+    }
+  } catch (e) {
+    console.log(e)
+  }
 }
-
-
 
 onMounted(async () => {
   try {

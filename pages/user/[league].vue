@@ -17,7 +17,7 @@
                     <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
                     <v-card-subtitle class="text-h7">{{ leagueName }}</v-card-subtitle>
                     <v-card-subtitle class="text-h7">{{ $t('user.betLeaguesSites.established') + ': ' +
-                        formatTimestampToDate(league?.created) }}</v-card-subtitle>
+                        formatTimestampToDate(league?.created)}} </v-card-subtitle>
                   </v-col>
                 </v-row>
                 

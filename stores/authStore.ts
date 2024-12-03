@@ -87,6 +87,7 @@ export const useAuthStore = defineStore('auth', () => {
       
       await betStore.handleLogout()
       await betLeagueStore.handleLogout()
+      await invitationStore.handleLogout()
 
     } catch (err: any) {
       error.value = err.message;

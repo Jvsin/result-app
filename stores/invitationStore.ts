@@ -98,8 +98,9 @@ export const useInvitationStore = defineStore('invitations', () => {
 
   const deleteInvitation = async (invitationRef: DocumentReference) => {
     try {
-      allUserInvitations.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
+      allUserInvitations.value.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
       await deleteDoc(invitationRef)
+      //ustawiać flage na false i zostawiać 
       console.log('Invitation deleted!')
     }
     catch (e) {
@@ -107,9 +108,14 @@ export const useInvitationStore = defineStore('invitations', () => {
     }
   }
 
+  const handleLogout = () => {
+    allUserInvitations.value = null
+  }
+
   return { 
     allUserInvitations, alertMess,
     fetchAllLeagueInvitations, fetchAllUserInvitations, sendInviteToUser,
-    acceptInvitation, deleteInvitation
+    acceptInvitation, deleteInvitation,
+    handleLogout
   }
 })
