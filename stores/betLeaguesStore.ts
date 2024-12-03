@@ -112,7 +112,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
         const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-            return docSnap.data() as ILeague
+            return new LeagueModel(docSnap.data() as ILeague, invite) 
         } else {
           throw new Error(`Document with reference ${invite} does not exist`);
         }

@@ -3,12 +3,16 @@ import { InvitationModel, type IInvitation } from '~/models/invitation';
 import {
   addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where,
   type DocumentReference, orderBy, limit,
-  getDoc
+  getDoc,
+  deleteDoc
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
+import { useBetLeagueStore } from './betLeaguesStore';
+import type { LeagueModel } from '~/models/betLeague';
 
 export const useInvitationStore = defineStore('invitations', () => { 
   const db = getFirestore()
+  const betLeagueStore = useBetLeagueStore()
 
   const allUserInvitations = ref<InvitationModel[]>()
 
@@ -79,8 +83,33 @@ export const useInvitationStore = defineStore('invitations', () => {
     }
   }
 
+  const acceptInvitation = async (league: LeagueModel, invitationRef: DocumentReference) => {
+    try {
+      await betLeagueStore.joinLeague(league)
+      allUserInvitations.value.filter((invite: InvitationModel) => invite.leagueReference.id != league.reference.id)
+      console.log(invitationRef)
+      await deleteDoc(invitationRef)
+      console.log('Invitation accepted correctly!')
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  const deleteInvitation = async (invitationRef: DocumentReference) => {
+    try {
+      allUserInvitations.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
+      await deleteDoc(invitationRef)
+      console.log('Invitation deleted!')
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
   return { 
     allUserInvitations, alertMess,
-    fetchAllLeagueInvitations, fetchAllUserInvitations, sendInviteToUser
+    fetchAllLeagueInvitations, fetchAllUserInvitations, sendInviteToUser,
+    acceptInvitation, deleteInvitation
   }
 })

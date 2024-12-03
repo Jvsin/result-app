@@ -22,7 +22,7 @@
             </div>
           </v-col>
           <div class="my-2">
-              <v-btn icon="mdi-bookmark-check" color="primary" variant="plain"></v-btn>
+              <v-btn icon="mdi-bookmark-check" color="primary" variant="plain" @click="acceptInvitation(invite)"></v-btn>
               <v-btn icon="mdi-cancel" color="error" variant="plain"></v-btn>
           </div>
         </v-row>
@@ -41,6 +41,9 @@ import { useInvitationStore } from '~/stores/invitationStore';
 import { useAuthStore } from '~/stores/authStore';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore';
 import type { InvitationModel } from '~/models/invitation';
+import type { LeagueModel } from '~/models/betLeague';
+
+const router = useRouter()
 
 const props = defineProps<{
   isShow: boolean
@@ -61,6 +64,9 @@ const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
 const { loggedUserData } = storeToRefs(authStore)
 
+const leagueInvitations = ref<LeagueModel[] | null>()
+const invitations = computed(() => invitationStore.allUserInvitations)
+
 const userInvitations = computed(() => {
   // console.log(invitationStore.allUserInvitations)
   const invRefs: DocumentReference[] = []
@@ -70,16 +76,35 @@ const userInvitations = computed(() => {
   return invRefs
 })
 
-async function acceptInvitation() {
+async function acceptInvitation(league: LeagueModel) {
+  try {
+    console.log(league.reference.id)
+    if (invitations.value != undefined) {
+      console.log(invitations.value)
+      invitations.value.forEach((inv: InvitationModel) => {
+        console.log(inv.reference.id)
+      })
+      const invitation = invitations.value.find((invite: InvitationModel) => invite.leagueReference.id === league.reference.id)
+      console.log(invitation)
 
+      if (invitation) {
+        console.log(league.reference.id + ' ' + invitation.reference.id)
+        await invitationStore.acceptInvitation(league, invitation.reference)
+        router.push(`/user/${league.reference.id}`)
+      }
+    }
+    
+  }
+  catch (e) {
+    console.log(e)
+  }
 }
 
 async function deleteInvitation() {
 
 }
 
-const leagueInvitations = ref()
-const invitations = computed(() => invitationStore.allUserInvitations)
+
 
 onMounted(async () => {
   try {
