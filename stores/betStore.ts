@@ -166,6 +166,7 @@ export const useBetStore = defineStore('bets', () => {
 
   const fetchFutureUserBets = async (userRef: DocumentReference, league: string) => {
     const games = await fetchFutureBetsFromFirebase(userRef, league)
+    // console.log(games)
     if (!games.length) {
       return
     }

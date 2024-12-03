@@ -69,9 +69,9 @@
                                   {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
                                 <div no-wrap class="text-center text-h4">
-                                  {{ (pastUserBets.find(bet => bet.matchID === game.id)) ? 
-                                    pastUserBets.find(bet => bet.matchID === game.id)?.home + '-'
-                                    + pastUserBets.find(bet => bet.matchID === game.id)?.away
+                                  {{ (pastUserBets.find((bet: BetModel) => bet.matchID === game.id)) ? 
+                                    pastUserBets.find((bet: BetModel) => bet.matchID === game.id)?.home + '-'
+                                    + pastUserBets.find((bet: BetModel) => bet.matchID === game.id)?.away
                                     : '-' }}
                                 </div>
                             </div>
@@ -81,8 +81,8 @@
                                 {{ $t('user.points') + ":" }}
                               </v-card-subtitle>
                               <div v-if="game.status =='FT'" class="text-h4">
-                                {{ (pastUserBets.find(bet => bet.matchID === game.id)) ? 
-                                  pastUserBets.find(bet => bet.matchID === game.id)?.points : '-' }}
+                                {{ (pastUserBets.find((bet: BetModel) => bet.matchID === game.id)) ? 
+                                  pastUserBets.find((bet: BetModel) => bet.matchID === game.id)?.points : '-' }}
                               </div>
                               <div v-else class="text-h4">
                                 ?

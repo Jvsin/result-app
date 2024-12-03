@@ -5,25 +5,26 @@
         Zaproszenia do prywatnych lig
       </v-card-title>
 
-      <v-card class="py-1" v-for="invite in leagueInvitations">
+      <v-card class="py-1 my-3 mx-3" variant="outlined" color="primary" elevation="10" v-for="invite in leagueInvitations">
         <!-- <div>{{ 'Zaproszenie od: ' + invite.ownerNick }}</div> -->
         <v-row justify="space-around">
-          <v-col cols="auto" class="d-flex justify-center align-center">
-            <v-card-text> 
+          <div class="d-flex justify-center flex-column align-center text-h6 py-2"> 
               {{ invite.name }}
-            </v-card-text>
+            </div>
+          <v-col cols="12" sm="auto" class="d-flex flex-column justify-center align-center" >
+            <div class="text-subtitle-2"> 
+              {{ invitations?.find((inv: InvitationModel) => inv.leagueCode === invite.leagueCode)?.ownerNick }}
+            </div>
           </v-col>
-          <v-col cols="auto" class="d-flex justify-center align-center">
-            <v-card-subtitle>
+          <v-col cols="12" sm="auto" class="align-center flex-column justify-center d-flex">
+            <div class="font-italic">
               {{ setLeaguesData(invite.league) }}
-            </v-card-subtitle>
+            </div>
           </v-col>
-          <v-col cols="auto" class="align-end">
-            <v-card-actions justify-end>
+          <div class="my-2">
               <v-btn icon="mdi-bookmark-check" color="primary" variant="plain"></v-btn>
               <v-btn icon="mdi-cancel" color="error" variant="plain"></v-btn>
-            </v-card-actions>
-          </v-col>
+          </div>
         </v-row>
       </v-card>
 
@@ -68,11 +69,22 @@ const userInvitations = computed(() => {
   })
   return invRefs
 })
+
+async function acceptInvitation() {
+
+}
+
+async function deleteInvitation() {
+
+}
+
 const leagueInvitations = ref()
+const invitations = computed(() => invitationStore.allUserInvitations)
 
 onMounted(async () => {
   try {
     leagueInvitations.value = await betLeagueStore.fetchLeaguesByInvitations(userInvitations?.value)
+    console.log(leagueInvitations)
   } catch (e) {
     console.log(e)
   }
