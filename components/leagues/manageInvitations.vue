@@ -71,13 +71,13 @@ const emit = defineEmits<{
 }>()
 
 function close() {
+  invitationStore.alertMess = ''
   emit('onClose')
 }
 
 const invitationStore = useInvitationStore()
 const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
-const { loggedUserData } = storeToRefs(authStore)
 
 const leagueInvitations = ref<LeagueModel[] | null>()
 const invitations = computed(() => invitationStore.allUserInvitations)

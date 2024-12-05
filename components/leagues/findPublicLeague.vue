@@ -104,6 +104,7 @@ function close() {
   isPlayerJoined.value = false
   foundLeague.value = null
   leagueCode.value = ''
+  betLeagueStore.mess = ''
   emit('onClose')
 }
 
