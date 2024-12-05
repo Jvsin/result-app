@@ -1,8 +1,8 @@
 <template>
-  <v-dialog :model-value="isShow" max-width="600" @update:model-value="close" >
+  <v-dialog :model-value="isShow" max-width="750" @update:model-value="close" >
     <v-card>
       <v-card-title class="align-center justify-center d-flex px-5 py-5">
-        Zaproszenia do prywatnych lig
+        {{ $t('user.betLeaguesSites.privateLeaguesInvitations') }}
       </v-card-title>
 
       <div v-if="leagueInvitations?.length">
@@ -35,11 +35,13 @@
             <div class="justify-center align-center d-flex">
               <v-icon>mdi-email-alert</v-icon>
             </div>
-            <v-card-title class="text-center">Brak zaproszeń</v-card-title>
-            <v-card-text class="text-center">Tutaj będą wyświetlać się zaproszenia do lig</v-card-text>
+            <v-card-title class="text-center">{{ $t('user.betLeaguesSites.noInvitationsTitle') }}</v-card-title>
+            <v-card-text class="text-center">{{ $t('user.betLeaguesSites.noInvitationsText') }}</v-card-text>
           </v-col>
         </v-row>
       </div>
+
+      <v-alert v-if="mess" class="mx-2" closable type="info">{{ $t(`errors.betLeaguesSites.${mess}`) }}</v-alert>
 
       <v-card-actions>
         <v-btn variant="outlined" color="error" @click="close">{{ $t('user.betLeaguesSites.cancel') }}</v-btn>
@@ -79,6 +81,7 @@ const { loggedUserData } = storeToRefs(authStore)
 
 const leagueInvitations = ref<LeagueModel[] | null>()
 const invitations = computed(() => invitationStore.allUserInvitations)
+const mess = computed(() => invitationStore.alertMess)
 
 const userInvitations = computed(() => {
   const invRefs: DocumentReference[] = []

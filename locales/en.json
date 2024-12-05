@@ -151,6 +151,9 @@
       "leaveLeague": "Leave league",
       "confirmLeaving": "Confirm leaving",
       "back": "Back",
+      "privateLeaguesInvitations": "Check your invitations",
+      "noInvitationsTitle": "No invitations",
+      "noInvitationsText": "Invites to private leagues will be displayed here.",
 
       "editDialog": {
         "leagueName": "Name",
@@ -190,10 +193,12 @@
     },
     "betLeaguesSites": {
       "invitationAlreadySended": "Invitation to this user already sended!",
-      "invitationSendedCorrectly": "User invited!",
+      "invitationSendCorrectly": "User invited!",
       "cannotInviteYourself": "You cannot invite yourself!",
       "leagueNotFound": "League not found or is not public!",
-      "alreadyJoinedToLeague": "You already joined to this league!"
+      "alreadyJoinedToLeague": "You already joined to this league!",
+      "invitationAccepted": "Invitation accepted!",
+      "invitationDeleted": "Invitation rejected!"
     }
   },
   "snackbars": {

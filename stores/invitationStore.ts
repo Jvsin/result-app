@@ -86,9 +86,9 @@ export const useInvitationStore = defineStore('invitations', () => {
   const acceptInvitation = async (league: LeagueModel, invitationRef: DocumentReference) => {
     try {
       await betLeagueStore.joinLeague(league)
-      allUserInvitations.value.filter((invite: InvitationModel) => invite.leagueReference.id != league.reference.id)
-      console.log(invitationRef)
+      allUserInvitations.value =allUserInvitations.value.filter((invite: InvitationModel) => invite.leagueReference.id != league.reference.id)
       await deleteDoc(invitationRef)
+      alertMess.value = 'invitationAccepted'
       console.log('Invitation accepted correctly!')
     }
     catch (e) {
@@ -99,8 +99,10 @@ export const useInvitationStore = defineStore('invitations', () => {
   const deleteInvitation = async (invitationRef: DocumentReference) => {
     try {
       alertMess.value = ''
-      allUserInvitations.value.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
+      allUserInvitations.value = allUserInvitations.value.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
+      console.log(allUserInvitations)
       await deleteDoc(invitationRef)
+      alertMess.value = 'invitationDeleted'
       //ustawiać flage na false i zostawiać 
       console.log('Invitation deleted!')
     }

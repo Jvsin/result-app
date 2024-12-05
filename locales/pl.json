@@ -152,6 +152,9 @@
       "leaveLeague": "Opuść ligę",
       "confirmLeaving": "Potwierdź opuszczenie ligi",
       "back": "Cofnij",
+      "privateLeaguesInvitations": "Zarządzaj zaproszeniami",
+      "noInvitationsTitle": "Brak zaproszeń",
+      "noInvitationsText": "Tutaj będą wyświetlać się zaproszenia do prywatnych lig.",
 
       "editDialog": {
         "leagueName": "Nazwa",
@@ -191,10 +194,12 @@
     },
     "betLeaguesSites": {
       "invitationAlreadySended": "Gracz posiada już zaproszenie!",
-      "invitationSendedCorrectly": "Gracz zaproszony pomyślnie!",
+      "invitationSendCorrectly": "Gracz zaproszony pomyślnie!",
       "cannotInviteYourself": "Nie możesz zaprosić samego siebie!",
       "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!",
-      "alreadyJoinedToLeague": "Należysz już do tej ligi!"
+      "alreadyJoinedToLeague": "Należysz już do tej ligi!",
+      "invitationAccepted": "Zaproszenie zaakceptowane!",
+      "invitationDeleted": "Zaproszenie odrzucone!"
     }
   },
   "snackbars": {
