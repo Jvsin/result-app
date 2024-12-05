@@ -15,7 +15,7 @@ export const useBetStore = defineStore('bets', () => {
   // const allUserBets = ref<BetModel[]>([])
 
   const futureUserBets = ref<BetModel[]>([])
-  const futureBetsData = ref<IMatch[]>()
+  const futureBetsData = ref<IMatch[]>([])
 
   const pastUserBets = ref<BetModel[]>([])
   const pastBetsData = ref<IMatch[]>()
@@ -150,15 +150,11 @@ export const useBetStore = defineStore('bets', () => {
     querySnapshot.forEach((doc) => {
       const betData = doc.data() as IBet
       
-      if (!futureUserBets.value.find(b => b.matchID === betData.matchID)) {
+      if (!futureUserBets.value.find((b:BetModel) => b.matchID === betData.matchID)) {
         const betModel = new BetModel(betData, doc.ref)
         futureUserBets.value.push(betModel);
         matchIndexes.push(betData.matchID)
       }
-      // const data = doc.data() as IBet
-      // console.log(data)
-      // matchIndexes.push(data.matchID)
-      // futureUserBets.value.push(data)
     });
     console.log(matchIndexes)
     return matchIndexes;
@@ -237,15 +233,11 @@ export const useBetStore = defineStore('bets', () => {
     const matchIndexes: Number[] = []
     querySnapshot.forEach((doc) => {
       const betData = doc.data() as IBet
-      if (!pastUserBets.value.find(b => b.matchID === betData.matchID)) {
+      if (!pastUserBets.value.find((b:BetModel) => b.matchID === betData.matchID)) {
         const betModel = new BetModel(betData, doc.ref)
         pastUserBets.value.push(betModel);
         matchIndexes.push(betData.matchID)
       }
-      // const data = doc.data() as IBet
-      // console.log(data)
-      // matchIndexes.push(data.matchID)
-      // pastUserBets.value.push(data)
     });
     console.log(matchIndexes)
     return matchIndexes;
@@ -314,7 +306,7 @@ export const useBetStore = defineStore('bets', () => {
       try {
         const userBetsCollection = collection(db, 'users', userRef.id, 'bets');
         // const isBetExist = allUserBets.value.find(b => b.matchID === bet.matchID)
-        const isBetExist = futureUserBets.value.find(b => b.matchID === bet.matchID)
+        const isBetExist = futureUserBets.value.find((b: BetModel) => b.matchID === bet.matchID)
       
         let matchObject: IMatch | undefined
         if (nextGames.value != undefined) {
@@ -335,7 +327,7 @@ export const useBetStore = defineStore('bets', () => {
             league: bet.league
           };
           await updateDoc(betDocRef, betUpdate);
-          const betIndex = futureUserBets.value.findIndex(b => b.matchID === isBetExist.matchID);
+          const betIndex = futureUserBets.value.findIndex((b: BetModel) => b.matchID === isBetExist.matchID);
           if (betIndex !== -1) {
             const newBet = new BetModel(bet, isBetExist.reference)
             // allUserBets.value[betIndex] = newBet;
@@ -347,7 +339,8 @@ export const useBetStore = defineStore('bets', () => {
           // allUserBets.value.push(new BetModel(bet, docRef))
           futureUserBets.value.push(new BetModel(bet, docRef))
 
-          if (futureBetsData.value != undefined && matchObject != undefined) {
+
+          if (matchObject != undefined) {
             futureBetsData.value.push(matchObject)
           }
 
@@ -357,12 +350,6 @@ export const useBetStore = defineStore('bets', () => {
       } catch (e) {
         console.error('Error adding or updating document: ', e);
       }
-
-      // const existingBetQuery = query(userBetsCollection, where('matchID', '==', bet.matchID));
-      // const querySnapshot = await getDocs(existingBetQuery);
-      //   if (!querySnapshot.empty) {
-      //     const existingBetDoc = querySnapshot.docs[0]
-
     }
     
     const fetchAllUserBets = async (userRef: DocumentReference) => {
@@ -380,9 +367,6 @@ export const useBetStore = defineStore('bets', () => {
           const betModel = new BetModel(betData, doc.ref);
           bets.push(betModel);
         });
-
-        // allUserBets.value = bets;
-        // console.log('User bets fetched: ', allUserBets.value);
       } catch (e) {
         console.error('Error fetching user bets: ', e);
       }

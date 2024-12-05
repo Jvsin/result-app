@@ -313,7 +313,7 @@ const futureUserBets = computed(() => {
   return bets.value
 })
 const futureUserBetsData = computed(() => {
-  return betStore.futureBetsData?.filter(bet => bet.league === "eng")
+  return betStore.futureBetsData?.filter((bet: IMatch) => bet.league === "eng")
 })
 
 const loading = ref<Boolean>(false)
@@ -397,7 +397,7 @@ function formatButtonDate(timestamp: number): string {
 }
 
 function setColor(matchID: Number, status: String) {
-  const userBet = pastUserBets.value.find(bet => bet.matchID === matchID);
+  const userBet = pastUserBets.value.find((bet: BetModel) => bet.matchID === matchID);
   if (status == 'FT') {
     if (userBet != undefined) {
       switch (userBet.points) {
