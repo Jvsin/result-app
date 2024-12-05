@@ -200,7 +200,8 @@
       "alreadyJoinedToLeague": "Należysz już do tej ligi!",
       "invitationAccepted": "Zaproszenie zaakceptowane!",
       "invitationDeleted": "Zaproszenie odrzucone!",
-      "userAlreadyInLeague": "Gracz należy już do ligi"
+      "userAlreadyInLeague": "Gracz należy już do ligi",
+      "userDeleted": "Gracz usunięty."
     }
   },
   "snackbars": {

@@ -80,7 +80,7 @@
                     {{ player.nick }}
                   </v-card-title>
                 </v-col>
-                <v-col cols="4" class="d-flex align-center justify-end">
+                <v-col v-if="player.nick != loggedUserData?.nick" cols="4" class="d-flex align-center justify-end">
                   <v-btn v-if="confirmDeleteFlag !== index" variant="plain" color="error" @click="confirmDeleteFlag = index">
                     <v-icon >mdi-account-cancel-outline</v-icon>
                   </v-btn>
@@ -97,6 +97,7 @@
                 </v-col>
               </v-row>
             </v-card>
+            <v-alert v-if="alertMess.length" type="info">{{ $t(`errors.betLeaguesSites.userDeleted`) }}</v-alert>
           </v-container>
         </v-tabs-window-item>
 
@@ -140,6 +141,7 @@ function close() {
   confirmDeleteFlag.value = -1
   copyBtnText.value = t('user.betLeaguesSites.editDialog.copy')
   prependIcon.value = 'mdi-content-copy'
+  betLeagueStore.mess = ''
   resetState()
 }
 
@@ -167,6 +169,7 @@ async function copyToClipboard() {
 }
 
 const authStore = useAuthStore()
+const { loggedUserData } = storeToRefs(authStore)
 const searchUser = ref('')
 const foundUsers = ref<UserModel[]>()
 const alertMess = computed(() => invitationStore.alertMess)
@@ -179,7 +182,6 @@ async function searchPlayer() {
     }
     else foundUsers.value = users 
   })
-  
 }
 
 async function editLeague() {
@@ -194,8 +196,18 @@ async function editLeague() {
   }
 }
 
-function deletePlayer(index: number) {
-  console.log(players.value[index])
+async function deletePlayer(index: number) {
+  // console.log(players.value[index])
+  // console.log(league.value.players)
+
+  try {
+    const userRef = players.value[index].playerRef
+    console.log(userRef)
+    await betLeagueStore.deletePlayerFromLeague(userRef, league.value).then(players.value.splice(index, 1))
+
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 function resetState() {

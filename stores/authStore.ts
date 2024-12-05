@@ -206,7 +206,8 @@ export const useAuthStore = defineStore('auth', () => {
           players.push({
             nick,
             polPoints,
-            betAcc
+            betAcc,
+            playerRef
           });
         }
         console.log(players)

@@ -199,6 +199,49 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const deletePlayerFromLeague = async (userRef: DocumentReference, league: LeagueModel) => {
+    try {
+      await updateDoc(league.reference, {
+        players: arrayRemove(userRef)
+      });
+      await updateDoc(userRef, {
+        leagues: arrayRemove(league.reference)
+      })
+      console.log("User deleted correctly")
+      mess.value = 'userDeleted'
+      await actualizeLeagueData(league.reference)
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
+
+  const actualizeLeagueData = async (leagueId: DocumentReference) => {
+    try {
+      const docRef = doc(db, "leagues", leagueId)
+      const leagueDoc = await getDoc(docRef);
+
+      if (leagueDoc.exists()) {
+        const leagueData = leagueDoc.data() as ILeague
+        const data = new LeagueModel(leagueData, leagueDoc.ref)
+        
+        const leagueToChange = userBetLeagues.value.find((l: LeagueModel) => l.leagueCode === leagueData.leagueCode)
+        if (!leagueToChange) {
+          console.log(data)
+          userBetLeagues.value.push(data)
+        } else {
+          userBetLeagues.value[leagueToChange] = data
+        }
+        leagueToDisplay.value = data
+      } else {
+        console.error("League not found")
+        return null;
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const fetchPlayersData = async (playersData: DocumentReference[]) => {
     const players = await authStore.fetchLeaguePlayers(playersData)
     console.log(players)
@@ -292,8 +335,8 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
-    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, 
-    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague,
+    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, deletePlayerFromLeague, actualizeLeagueData,
+    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague, 
     fetchLeaguesByInvitations,
     handleLogout
   }

@@ -199,7 +199,8 @@
       "alreadyJoinedToLeague": "You already joined to this league!",
       "invitationAccepted": "Invitation accepted!",
       "invitationDeleted": "Invitation rejected!",
-      "userAlreadyInLeague": "User already exist in league!"
+      "userAlreadyInLeague": "User already exist in league!",
+      "userDeleted": "User deleted."
     }
   },
   "snackbars": {
