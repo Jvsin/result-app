@@ -199,7 +199,8 @@
       "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!",
       "alreadyJoinedToLeague": "Należysz już do tej ligi!",
       "invitationAccepted": "Zaproszenie zaakceptowane!",
-      "invitationDeleted": "Zaproszenie odrzucone!"
+      "invitationDeleted": "Zaproszenie odrzucone!",
+      "userAlreadyInLeague": "Gracz należy już do ligi"
     }
   },
   "snackbars": {

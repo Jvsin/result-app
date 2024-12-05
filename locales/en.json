@@ -198,7 +198,8 @@
       "leagueNotFound": "League not found or is not public!",
       "alreadyJoinedToLeague": "You already joined to this league!",
       "invitationAccepted": "Invitation accepted!",
-      "invitationDeleted": "Invitation rejected!"
+      "invitationDeleted": "Invitation rejected!",
+      "userAlreadyInLeague": "User already exist in league!"
     }
   },
   "snackbars": {

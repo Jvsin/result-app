@@ -172,7 +172,14 @@ const foundUsers = ref<UserModel[]>()
 const alertMess = computed(() => invitationStore.alertMess)
 
 async function searchPlayer() {
-  await authStore.fetchUserByCode(searchUser.value).then(users => {foundUsers.value = users})
+  await authStore.fetchUserByCode(searchUser.value).then(users => { 
+    if (players.value.find((p: any) => p.nick === users[0].nick)) {
+      invitationStore.alertMess = 'userAlreadyInLeague'
+      foundUsers.value = undefined
+    }
+    else foundUsers.value = users 
+  })
+  
 }
 
 async function editLeague() {
