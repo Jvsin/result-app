@@ -98,6 +98,7 @@ export const useInvitationStore = defineStore('invitations', () => {
 
   const deleteInvitation = async (invitationRef: DocumentReference) => {
     try {
+      alertMess.value = ''
       allUserInvitations.value.filter((invite: InvitationModel) => invite.reference.id != invitationRef.id)
       await deleteDoc(invitationRef)
       //ustawiać flage na false i zostawiać 
@@ -110,6 +111,7 @@ export const useInvitationStore = defineStore('invitations', () => {
 
   const handleLogout = () => {
     allUserInvitations.value = null
+    alertMess.value = ''
   }
 
   return { 
