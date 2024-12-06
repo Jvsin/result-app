@@ -160,6 +160,7 @@ function close() {
   copyBtnText.value = t('user.betLeaguesSites.editDialog.copy')
   prependIcon.value = 'mdi-content-copy'
   betLeagueStore.mess = ''
+  invitationStore.alertMess = ''
   resetState()
 }
 
@@ -222,6 +223,7 @@ async function deleteLeague() {
     console.log(league.value?.reference)
     await betLeagueStore.deleteLeague(league.value?.reference)
     router.push('/user')
+    close()
   } catch (e) {
     console.log(e)
   }
@@ -232,7 +234,7 @@ async function deletePlayer(index: number) {
     const userRef = players.value[index].playerRef
     console.log(userRef)
     await betLeagueStore.deletePlayerFromLeague(userRef, league.value).then(players.value.splice(index, 1))
-
+    close()
   } catch (e) {
     console.error(e)
   }
