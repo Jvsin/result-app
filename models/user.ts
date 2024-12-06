@@ -15,7 +15,7 @@ export interface IUser {
     uclPoints: Number,
     betAcc: Number,
     established: Date,
-    userCode: String
+    userCode: string
 }
 
 export class UserModel implements IUser {

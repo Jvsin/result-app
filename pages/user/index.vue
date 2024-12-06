@@ -31,6 +31,10 @@
                           {{ userData?.nick }}
                         </div>
                         
+                         <v-card-subtitle color="grey" text-color="white" class="font-weight-bold">
+                          <div class="inv-text text-h6">{{ uniqueCode }}</div>
+                          <v-btn color="secondary" variant="plain" :prepend-icon="prependIcon" @click="copyToClipboard">{{ copyBtnText }}</v-btn>
+                        </v-card-subtitle>
                         <v-text-field v-model="nameAndSurname" :label="$t('user.nameAndSurname')" readonly
                           variant="plain"></v-text-field>
                         <v-text-field v-model="email" label="Email" readonly variant="plain"></v-text-field>
@@ -239,17 +243,28 @@ import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue'
 import FindPublicLeague from '~/components/leagues/findPublicLeague.vue';
 import ManageInvitations from '~/components/leagues/manageInvitations.vue';
 import { useInvitationStore } from '~/stores/invitationStore';
+import { useI18n } from 'vue-i18n'
 
 definePageMeta({
   middleware: 'auth'
 })
 
 const tab = ref(0)
-const router = useRouter();
+const router = useRouter()
+const { t } = useI18n()
 
 const authStore = useAuthStore()
 const betLeagueStore = useBetLeagueStore()
 const invitationStore = useInvitationStore()
+
+const copyBtnText = ref(t('user.betLeaguesSites.editDialog.copy'))
+const prependIcon = ref('mdi-content-copy')
+const uniqueCode = ref()
+async function copyToClipboard() {
+  await navigator.clipboard.writeText(uniqueCode.value);
+  copyBtnText.value = t('user.betLeaguesSites.editDialog.copied')
+  prependIcon.value = 'mdi-check-circle-outline'
+}
 
 const userData = computed(() => authStore.loggedUserData)
 
@@ -359,6 +374,9 @@ onMounted(async () => {
   }
   if(userData.value?.reference){
     await invitationStore.fetchAllUserInvitations(userData.value?.reference)
+  }
+  if (userData.value) {
+    uniqueCode.value = userData.value.userCode
   }
 })
 </script>
