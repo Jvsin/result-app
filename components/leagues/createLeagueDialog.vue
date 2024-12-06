@@ -75,6 +75,7 @@ const props = defineProps<{
 }>()
 
 function close() {
+  betLeagueStore.mess = ''
   // resetState()
   emit('onClose')
 }

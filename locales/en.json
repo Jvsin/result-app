@@ -142,7 +142,7 @@
       "points": "Pts",
       "manageLeague": "Manage the league",
       "leagueCode": "League code",
-      "findPublicLeague": "Search public league",
+      "findPublicLeague": "Search public league or use 8-digit league code:",
       "join": "Enter",
       "cancel": "Cancel",
       "players": "Players: ",

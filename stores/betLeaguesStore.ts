@@ -105,6 +105,47 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const fetchLeaguesByName = async (name: string) => {
+    mess.value = ''
+    try {
+      const leaguesRef = collection(db, 'leagues')
+     const leaguesQuery = query(
+        leaguesRef,
+        where('isPublic', '==', true),
+        where('name', '>=', name),
+        where('name', '<=', name + '\uf8ff')
+      );
+      const querySnapshot = await getDocs(leaguesQuery)
+      if (!querySnapshot.empty) {
+        const leagues = querySnapshot.docs.map(doc => {
+          const leagueData = doc.data() as ILeague;
+          return new LeagueModel(leagueData, doc.ref);
+        });
+        console.log(leagues);
+        return leagues;
+      }
+      else {
+        console.error("League not found")
+        mess.value = 'leagueNotFound'
+        return [];
+      }
+      // const leagueDoc = querySnapshot.docs[0]
+
+      // if (leagueDoc) {
+      //   const leagueData = leagueDoc.data() as ILeague
+      //   const data = new LeagueModel(leagueData, leagueDoc.ref)
+      //   return data
+      // } else {
+      //   console.error("League not found")
+      //   mess.value = 'leagueNotFound'
+      //   return null;
+      // }
+    } catch (error) {
+      console.error("Error fetching league:", error);
+      return null;
+    }
+  }
+
   const fetchLeaguesByInvitations = async (invitations: DocumentReference[]) => {
     mess.value = ''
     try {
@@ -273,7 +314,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   const fetchPlayersData = async (playersData: DocumentReference[], league: string) => {
     const players = await authStore.fetchLeaguePlayers(playersData)
     console.log(players)
-    
+
     let primaryField: keyof UserModel;
     switch (league) {
       case 'pol':
@@ -378,9 +419,9 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
-    fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, deletePlayerFromLeague, actualizeLeagueData,
+    fetchUserBetLeagues, fetchLeagueById, fetchLeaguesByName, fetchPlayersData, editLeagueData, deletePlayerFromLeague, actualizeLeagueData,
     generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague, deleteLeague,
-    fetchLeaguesByInvitations,
+    fetchLeaguesByInvitations, 
     handleLogout
   }
 })
