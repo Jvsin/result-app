@@ -4,7 +4,8 @@ import {
   addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where,
   type DocumentReference, orderBy, limit,
   getDoc,
-  deleteDoc
+  deleteDoc,
+  writeBatch
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
 import { useBetLeagueStore } from './betLeaguesStore';
@@ -116,10 +117,34 @@ export const useInvitationStore = defineStore('invitations', () => {
     alertMess.value = ''
   }
 
+  const deleteInvitationsByLeagueRef = async (leagueRef: DocumentReference) => {
+    try {
+      const invitationsRef = collection(db, 'invitations');
+      const invitationsQuery = query(invitationsRef, where('leagueReference', '==', leagueRef));
+
+      const querySnapshot = await getDocs(invitationsQuery);
+
+      if (!querySnapshot.empty) {
+        const batch = writeBatch(db);
+
+        querySnapshot.forEach((doc) => {
+          batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        console.log('All invitations with the specified leagueRef have been deleted.');
+      } else {
+        console.log('No invitations found with the specified leagueRef.');
+      }
+    } catch (error) {
+      console.error('Error deleting invitations:', error);
+    }
+  };
+
   return { 
     allUserInvitations, alertMess,
     fetchAllLeagueInvitations, fetchAllUserInvitations, sendInviteToUser,
-    acceptInvitation, deleteInvitation,
+    acceptInvitation, deleteInvitation, deleteInvitationsByLeagueRef,
     handleLogout
   }
 })

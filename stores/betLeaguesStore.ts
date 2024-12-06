@@ -14,6 +14,7 @@ import { getAuth } from 'firebase/auth';
 import { errorMessages } from 'vue/compiler-sfc';
 import type { InvitationModel } from '~/models/invitation';
 import type { UserModel } from '~/models/user';
+import { useInvitationStore } from './invitationStore';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
@@ -21,6 +22,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   const leagueToDisplay = ref<LeagueModel>()
 
   const authStore = useAuthStore()
+  const invitationStore = useInvitationStore()
   const playersTable = ref<any>()
 
   const mess = ref('')
@@ -281,6 +283,8 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
         })
       }
       await deleteDoc(leagueRef)
+
+      invitationStore.deleteInvitationsByLeagueRef(leagueRef)
       userBetLeagues.value = userBetLeagues.value.filter((league: LeagueModel) => league.reference != leagueRef)
       leagueToDisplay.value = null
       console.log("League deleted correctly")

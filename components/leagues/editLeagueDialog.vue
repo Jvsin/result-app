@@ -23,10 +23,10 @@
                   <v-btn  color="error" variant="outlined"
                   @click="confirmDeleteLeague = true">{{$t('user.betLeaguesSites.editDialog.deleteLeague')}}</v-btn>
                 </div>
-                <div v-else class="d-flex justify-center align-center">
-                  <v-card-subtitle>
+                <div v-else class="d-flex justify-center align-center ">
+                  <div class="text-center text-wrap">
                     {{$t('user.betLeaguesSites.editDialog.confirmDelete')}}
-                  </v-card-subtitle>
+                  </div>
                   <v-btn color="secondary" class="mx-1" variant="flat"
                     @click="confirmDeleteLeague = false">{{$t('user.betLeaguesSites.editDialog.cancel')}}</v-btn>
                   <v-btn color="error" class="mx-1" variant="outlined"
