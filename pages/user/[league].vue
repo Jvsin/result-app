@@ -86,7 +86,7 @@
                     </v-col>
                     <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
                       <v-card-title>
-                        {{ player.polPoints }}
+                        {{ player[leaguePoints] }}
                       </v-card-title>
                     </v-col>
                   </v-row>
@@ -173,13 +173,17 @@ const authStore = useAuthStore()
 const { loggedUserData } = storeToRefs(authStore)
 
 const leagueName = ref("")
+const leaguePoints = ref('')
 function setLeaguesData(league: string) {
   switch (league) {
     case "eng":
+      leaguePoints.value = 'engPoints'
       return "Premier League"
     case "pol":
+      leaguePoints.value = 'polPoints'
       return "Ekstraklasa"
     case "ucl":
+      leaguePoints.value = 'uclPoints'
       return "Champions League"
   }
   return ""
@@ -189,7 +193,7 @@ const loading = ref(true)
 
 async function setPlayersTable() {
   if (league.value != undefined) {
-    await betLeagueStore.fetchPlayersData(league?.value.players)
+    await betLeagueStore.fetchPlayersData(league?.value.players, league.value?.league)
   }
   console.log(betLeagueStore.playersTable)
   playersTable.value = betLeagueStore.playersTable

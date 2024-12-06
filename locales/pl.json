@@ -204,7 +204,8 @@
       "invitationAccepted": "Zaproszenie zaakceptowane!",
       "invitationDeleted": "Zaproszenie odrzucone!",
       "userAlreadyInLeague": "Gracz należy już do ligi",
-      "userDeleted": "Gracz usunięty."
+      "userDeleted": "Gracz usunięty.",
+      "successfulLeagueCreation": "Liga utworzona!"
     }
   },
   "snackbars": {

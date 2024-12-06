@@ -13,6 +13,7 @@ import { useAuthStore } from './authStore';
 import { getAuth } from 'firebase/auth';
 import { errorMessages } from 'vue/compiler-sfc';
 import type { InvitationModel } from '~/models/invitation';
+import type { UserModel } from '~/models/user';
 
 export const useBetLeagueStore = defineStore('betLeagues', () => {
   const db = getFirestore()
@@ -269,13 +270,28 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
-  const fetchPlayersData = async (playersData: DocumentReference[]) => {
+  const fetchPlayersData = async (playersData: DocumentReference[], league: string) => {
     const players = await authStore.fetchLeaguePlayers(playersData)
     console.log(players)
-
+    
+    let primaryField: keyof UserModel;
+    switch (league) {
+      case 'pol':
+        primaryField = 'polPoints';
+        break;
+      case 'eng':
+        primaryField = 'engPoints';
+        break;
+      case 'ucl':
+        primaryField = 'uclPoints';
+        break;
+      default:
+        throw new Error('Unknown league type');
+    }
+    
     players.sort((a, b) => {
-      if (b.polPoints !== a.polPoints) {
-        return b.polPoints - a.polPoints; 
+      if (b[primaryField] !== a[primaryField]) {
+        return b[primaryField] - a[primaryField]; 
       }
 
       return b.betAcc - a.betAcc; 

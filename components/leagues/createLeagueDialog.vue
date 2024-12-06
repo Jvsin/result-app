@@ -50,7 +50,7 @@
           <v-btn color="error" @click="close">{{ $t('user.profileDialogs.cancel')}}</v-btn>
           <v-btn color="primary" @click="createLeague">{{ $t('user.save') }}</v-btn>
         </v-card-actions>
-        <v-alert v-if="mess?.length"> {{ mess }}</v-alert>
+        <v-alert class="mx-2 my-2" type="info" v-if="mess?.length"> {{ $t(`errors.betLeaguesSites.${mess}`) }}</v-alert>
       </v-card>
       
   </v-dialog>

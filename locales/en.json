@@ -203,7 +203,8 @@
       "invitationAccepted": "Invitation accepted!",
       "invitationDeleted": "Invitation rejected!",
       "userAlreadyInLeague": "User already exist in league!",
-      "userDeleted": "User deleted."
+      "userDeleted": "User deleted.",
+      "successfulLeagueCreation": "League created!"
     }
   },
   "snackbars": {

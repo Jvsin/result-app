@@ -202,10 +202,12 @@ export const useAuthStore = defineStore('auth', () => {
         const playerDoc = await getDoc(playerRef);
 
         if (playerDoc.exists()) {
-          const { nick, polPoints, betAcc } = playerDoc.data();
+          const { nick, polPoints, engPoints, uclPoints, betAcc } = playerDoc.data();
           players.push({
             nick,
             polPoints,
+            engPoints,
+            uclPoints,
             betAcc,
             playerRef
           });
@@ -257,7 +259,7 @@ export const useAuthStore = defineStore('auth', () => {
         users.push(user)
       })
       console.log(users)
-      return users || null
+      return users
     } catch (error) {
       console.error("Error getting documents: ", error);
       throw new Error("Failed to get user");
