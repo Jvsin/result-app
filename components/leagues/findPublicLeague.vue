@@ -100,7 +100,8 @@
               </v-col>
               <v-col cols="12">
                 <v-card-actions class="d-flex justify-center">
-                  <v-btn v-if="!isPlayerJoined" variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="joinLeague">
+                  <v-btn v-if="!isPlayerJoined" variant="outlined" color="primary" prepend-icon="mdi-location-enter" 
+                  @click="joinLeagueByName(foundLeague)">
                     {{ $t('user.betLeaguesSites.join') }}</v-btn>
                   <v-btn v-else variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="routeToLeague">
                     {{ $t('user.betLeaguesSites.showLeague') }}</v-btn>
@@ -205,6 +206,18 @@ async function joinLeague() {
       await betLeagueStore.joinLeague(foundLeague.value)
       console.log("Przchodzę do strony...")
       router.push(`/user/${foundLeague.value.reference.id}`)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function joinLeagueByName(league: LeagueModel) {
+  try {
+    if (league != undefined) {
+      await betLeagueStore.joinLeague(league)
+      console.log("Przchodzę do strony...")
+      router.push(`/user/${league.reference.id}`)
     }
   } catch (e) {
     console.log(e)
