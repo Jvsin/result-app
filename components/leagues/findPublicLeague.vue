@@ -10,7 +10,7 @@
             v-model="searchLeagueName"
             :label="$t('user.betLeaguesSites.editDialog.leagueName')"
             required
-            :rules="[lengthRule()]"
+            :rules="[lengthRuleShort(), requiredRule()]"
           ></v-text-field>
           <v-btn color="primary" class="d-flex ml-2 align-center justify-center"
             variant="plain" icon="mdi-text-search" @click="searchLeagueByName"
@@ -75,25 +75,25 @@
             <v-row justify="center">
               <v-col cols="12">
                 <v-card-title>
-                  {{ foundLeague.name }}
+                  {{ foundLeague.data.name }}
                 </v-card-title>
               </v-col>
               <v-col cols="12">
                 <v-card-subtitle>
-                  {{ foundLeague.description }}
+                  {{ foundLeague.data.description }}
                 </v-card-subtitle>
               </v-col>
               <v-col cols="12">
                 <v-card-subtitle>
-                  {{ setLeaguesData(foundLeague.league) }}
+                  {{ setLeaguesData(foundLeague.data.league) }}
                 </v-card-subtitle>
               </v-col>
               <v-col cols="12">
                 <v-card-subtitle>
-                  {{ $t('user.betLeaguesSites.players') +  foundLeague.players.length }}
+                  {{ $t('user.betLeaguesSites.players') +  foundLeague.data.players.length }}
                 </v-card-subtitle>
               </v-col>
-              <v-col v-if="isPlayerJoined" cols="12">
+              <v-col v-if="foundLeague.isJoined" cols="12">
                 <v-alert type="info">
                   {{ $t('errors.betLeaguesSites.alreadyJoinedToLeague') }}
                 </v-alert>
@@ -125,7 +125,7 @@
 import type { LeagueModel } from '~/models/betLeague';
 import { useBetLeagueStore } from '~/stores/betLeaguesStore'
 import { useAuthStore } from '~/stores/authStore'
-import { codeLengthRule, lengthRule } from '~/composables/rules'
+import { codeLengthRule, requiredRule, lengthRuleShort } from '~/composables/rules'
 
 const router = useRouter()
 
@@ -182,15 +182,23 @@ const leaguesByName = ref()
 const searchLeagueName = ref('')
 async function searchLeagueByName() { 
   try {
-    leaguesByName.value = await betLeagueStore.fetchLeaguesByName(searchLeagueName.value)
-    console.log(leaguesByName)
-    userBetLeagues.value.forEach((league: LeagueModel) => {
-      leaguesByName.value.forEach((foundLeague: LeagueModel) => {
-        if (league.leagueCode === foundLeague.leagueCode) {
-          isPlayerJoined.value = true
-        }
+    const leagues = await betLeagueStore.fetchLeaguesByName(searchLeagueName.value)
+    if (leagues) {
+      leaguesByName.value = leagues.map((leagueData: LeagueModel) => ({
+        data: leagueData,
+        isJoined: false
+      }));
+    }
+    if (leaguesByName != undefined) {
+      userBetLeagues.value.forEach((league: LeagueModel) => {
+        leaguesByName.value.forEach((foundLeague: { data: LeagueModel; isJoined: boolean }) => {
+          const leagueData = foundLeague.data as LeagueModel
+          if (league.leagueCode === leagueData.leagueCode) {
+            foundLeague.isJoined = true
+          }
+        })
       })
-    })
+    }
   } catch (e) {
     console.log(e)
   }

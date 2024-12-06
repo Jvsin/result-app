@@ -80,6 +80,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   const fetchLeagueByCode = async (code: string) => {
     mess.value = ''
+    if(code.length != 8) return null
     try {
       const leaguesRef = collection(db, 'leagues')
       const leaguesQuery = query(
@@ -107,6 +108,9 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
 
   const fetchLeaguesByName = async (name: string) => {
     mess.value = ''
+    if (name.length <= 3) {
+      return []
+    }
     try {
       const leaguesRef = collection(db, 'leagues')
      const leaguesQuery = query(
