@@ -91,7 +91,7 @@ const userInvitations = computed(() => {
   return invRefs
 })
 
-watch((invitations), async (oldInvs, newInvs) => {
+watch((invitations), async (oldInvs:any, newInvs: any) => {
   leagueInvitations.value = await betLeagueStore.fetchLeaguesByInvitations(userInvitations?.value)
 })
 

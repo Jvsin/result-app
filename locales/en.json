@@ -173,7 +173,9 @@
         "searchPlayer": "Search player",
         "mainTab": "Main",
         "inviteTab": "Invite",
-        "playersTab": "Players"
+        "playersTab": "Players",
+        "deleteLeague": "Delete league",
+        "confirmDelete": "Confirm deleting (irreversible process)"
       }
     }
   },

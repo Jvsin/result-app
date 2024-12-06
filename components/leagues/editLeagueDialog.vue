@@ -17,6 +17,23 @@
             <v-text-field readonly disabled :label="$t('user.betLeaguesSites.editDialog.privacy')" v-model="isPublicText" variant="outlined"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.leagueName')" v-model="leagueName" variant="outlined" :rules="[requiredRule(), lengthRuleShort(), leagueNameLengthRule()]"></v-text-field>
             <v-text-field :label="$t('user.betLeaguesSites.editDialog.description')" v-model="description" variant="outlined" :rules="[requiredRule(), descriptionLengthRule()]"></v-text-field>
+            <v-row justify="center">
+              <v-col>
+                <div v-if="!confirmDeleteLeague" class="d-flex justify-center align-center">
+                  <v-btn  color="error" variant="outlined"
+                  @click="confirmDeleteLeague = true">{{$t('user.betLeaguesSites.editDialog.deleteLeague')}}</v-btn>
+                </div>
+                <div v-else class="d-flex justify-center align-center">
+                  <v-card-subtitle>
+                    {{$t('user.betLeaguesSites.editDialog.confirmDelete')}}
+                  </v-card-subtitle>
+                  <v-btn color="secondary" class="mx-1" variant="flat"
+                    @click="confirmDeleteLeague = false">{{$t('user.betLeaguesSites.editDialog.cancel')}}</v-btn>
+                  <v-btn color="error" class="mx-1" variant="outlined"
+                    @click="deleteLeague">{{$t('user.betLeaguesSites.editDialog.deleteLeague')}}</v-btn>
+                </div>
+              </v-col>
+            </v-row>
           </v-form>
 
           <v-card-actions>
@@ -120,6 +137,7 @@ import { useInvitationStore } from '~/stores/invitationStore';
 import type { UserModel } from '~/models/user';
 import type { IInvitation } from '~/models/invitation'
 import { Timestamp } from 'firebase/firestore';
+import { routerKey } from 'vue-router';
 
 const { form, valid, isValid } = formValidation()
 const { t } = useI18n()
@@ -196,10 +214,20 @@ async function editLeague() {
   }
 }
 
-async function deletePlayer(index: number) {
-  // console.log(players.value[index])
-  // console.log(league.value.players)
+const confirmDeleteLeague = ref(false)
+const router = useRouter()
 
+async function deleteLeague() {
+  try {
+    console.log(league.value?.reference)
+    await betLeagueStore.deleteLeague(league.value?.reference)
+    router.push('/user')
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function deletePlayer(index: number) {
   try {
     const userRef = players.value[index].playerRef
     console.log(userRef)

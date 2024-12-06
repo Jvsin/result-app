@@ -6,7 +6,8 @@ import {
   getDoc,
   setDoc,
   runTransaction,
-  arrayRemove
+  arrayRemove,
+  deleteDoc
 } from 'firebase/firestore';
 import { useAuthStore } from './authStore';
 import { getAuth } from 'firebase/auth';
@@ -216,6 +217,32 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
     }
   }
 
+  const deleteLeague = async (leagueRef: DocumentReference) => {
+    try {
+      console.log(leagueRef.id)
+      const docRef = doc(db, 'leagues', leagueRef.id)
+      const leagueDoc = await getDoc(docRef)
+
+      const data = leagueDoc.data()
+      if (data) {
+        const players = data.players
+        console.log(players)
+
+        players.forEach(async (player: DocumentReference) => {
+          await updateDoc(player, {
+            leagues: arrayRemove(leagueRef)
+          });
+        })
+      }
+      await deleteDoc(leagueRef)
+      userBetLeagues.value = userBetLeagues.value.filter((league: LeagueModel) => league.reference != leagueRef)
+      leagueToDisplay.value = null
+      console.log("League deleted correctly")
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const actualizeLeagueData = async (leagueId: DocumentReference) => {
     try {
       const docRef = doc(db, "leagues", leagueId)
@@ -336,7 +363,7 @@ export const useBetLeagueStore = defineStore('betLeagues', () => {
   return {
     userBetLeagues, leagueToDisplay, playersTable, mess,
     fetchUserBetLeagues, fetchLeagueById, fetchPlayersData, editLeagueData, deletePlayerFromLeague, actualizeLeagueData,
-    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague, 
+    generateUniqueLeagueCode, createLeague, fetchLeagueByCode, joinLeague, leaveLeague, deleteLeague,
     fetchLeaguesByInvitations,
     handleLogout
   }

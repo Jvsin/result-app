@@ -174,7 +174,9 @@
         "searchPlayer": "Szukaj gracza",
         "mainTab": "Ogólne",
         "inviteTab": "Zaproś",
-        "playersTab": "Gracze"
+        "playersTab": "Gracze",
+        "deleteLeague": "Usuń ligę",
+        "confirmDelete": "Potwierdź usunięcie ligi (proces nieodwracalny)"
       }
     }
   },
