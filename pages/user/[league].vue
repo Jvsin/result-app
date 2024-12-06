@@ -10,7 +10,7 @@
                 <v-btn variant="outlined" prepend-icon="mdi-keyboard-backspace" @click="router.push('/user')">
                 {{ $t('user.betLeaguesSites.back') }}</v-btn>
               </div>
-              <v-card variant="text">
+              <v-card v-if="!loading" variant="text">
                 <v-row justify="center">
                  <v-col>
                     <v-card-title class="text-h4">{{ league?.name }}</v-card-title>
@@ -18,6 +18,7 @@
                     <v-card-subtitle class="text-h7">{{ leagueName }}</v-card-subtitle>
                     <v-card-subtitle class="text-h7">{{ $t('user.betLeaguesSites.established') + ': ' +
                         formatTimestampToDate(league?.created)}} </v-card-subtitle>
+                    <v-card-subtitle class="text-h7">{{ $t('user.betLeaguesSites.ownerString') + ownerString }}</v-card-subtitle>
                   </v-col>
                 </v-row>
                 
@@ -28,9 +29,6 @@
                   </div>
                 
               </v-card>
-
-              
-              
 
               <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
                 <v-card class="ma-5 d-flex justify-center align-center" variant="text">
@@ -106,7 +104,7 @@
                 </div>
               </v-card>
               <div v-else>
-                <v-alert type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
+                <v-alert class="my-5 px-2" type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
               </div>
             </v-col>
             <EditLeagueDialog :players="playersTable" :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
@@ -170,6 +168,7 @@ function iconSetFunction(league: string) {
 }
 
 const isAuthor = ref(false)
+const ownerString = ref('')
 const authStore = useAuthStore()
 const { loggedUserData } = storeToRefs(authStore)
 
@@ -192,8 +191,10 @@ async function setPlayersTable() {
   if (league.value != undefined) {
     await betLeagueStore.fetchPlayersData(league?.value.players)
   }
-  console.log(betLeagueStore.playersTable.value)
+  console.log(betLeagueStore.playersTable)
   playersTable.value = betLeagueStore.playersTable
+  ownerString.value = playersTable.value.find((player: any) => player.playerRef.id === league.value?.owner.id).nick
+
   loading.value = false
 }
 

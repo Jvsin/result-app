@@ -155,6 +155,7 @@
       "privateLeaguesInvitations": "Zarządzaj zaproszeniami",
       "noInvitationsTitle": "Brak zaproszeń",
       "noInvitationsText": "Tutaj będą wyświetlać się zaproszenia do prywatnych lig.",
+      "ownerString": "Właściciel: ",
 
       "editDialog": {
         "leagueName": "Nazwa",

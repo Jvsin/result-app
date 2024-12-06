@@ -154,6 +154,7 @@
       "privateLeaguesInvitations": "Check your invitations",
       "noInvitationsTitle": "No invitations",
       "noInvitationsText": "Invites to private leagues will be displayed here.",
+      "ownerString": "Owner: ",
 
       "editDialog": {
         "leagueName": "Name",
