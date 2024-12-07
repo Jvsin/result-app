@@ -116,6 +116,67 @@
       "noBetsTitle": "No bets for upcoming matches!",
       "noBetsInfo": "You can bet on matches in the Bet tab.",
       "showMatchesCounter": "Count of upcoming matches:"
+    },
+    "noBetLeaguesTitle": "You do not belong to any betting league!",
+    "noBetLeaguesText": "You can join existing leagues or create your own!",
+    "joinPublicLeague": "Search for a league",
+    "joinByInvitation": "Invitations",
+    "createOwnLeague": "Create a bet league",
+
+    "createLeagueDialog": {
+      "createLeague": "Create your league",
+      "leagueName": "Set your bet league name",
+      "leagueDescription": "What are you going to compete for?",
+      "leaguePicker": "Choose a league to bet on",
+      "publicLeague": "Public",
+      "privateLeague": "Private",
+      "publicLeagueDescription": "Anyone will be able to search and join your league",
+      "privateLeagueDescription": "Players will need your invitation to join"
+    },
+
+    "betLeaguesSites": {
+      "loadingAlert": "Table loading...",
+      "position": "Place",
+      "playerName": "Player",
+      "accuracy": "Acc.",
+      "points": "Pts",
+      "manageLeague": "Manage the league",
+      "leagueCode": "League code",
+      "findPublicLeague": "Search public league or use 8-digit league code:",
+      "join": "Enter",
+      "cancel": "Cancel",
+      "players": "Players: ",
+      "showLeague": "Show table",
+      "established": "Established",
+      "leaveLeague": "Leave league",
+      "confirmLeaving": "Confirm leaving",
+      "back": "Back",
+      "privateLeaguesInvitations": "Check your invitations",
+      "noInvitationsTitle": "No invitations",
+      "noInvitationsText": "Invites to private leagues will be displayed here.",
+      "ownerString": "Owner: ",
+
+      "editDialog": {
+        "leagueName": "Name",
+        "description": "Description",
+        "codeLeague": "invite your friends by code:",
+        "copy": "Copy code",
+        "copied": "Code copied",
+        "cancel": "Cancel",
+        "save": "Save",
+        "chooseDate": "Choose date",
+        "falsePublic": "Private",
+        "truePublic": "Public",
+        "privacy": "Privacy",
+        "leagueToBet": "League",
+        "typeUserCode": "Enter a valid unique 8-character player code:",
+        "searchPlayer": "Search player",
+        "mainTab": "Main",
+        "inviteTab": "Invite",
+        "playersTab": "Players",
+        "deleteLeague": "Delete league",
+        "confirmDelete": "Confirm deleting (irreversible process)"
+      }
     }
   },
   "errors":{
@@ -132,6 +193,18 @@
       "errorLeagueAlreadyExist": "You have already follow this league.",
       "errorWhileEditingProfile": "Error while editing profile, try again later",
       "errorLeaguesNotFound": "No leagues founded."
+    },
+    "betLeaguesSites": {
+      "invitationAlreadySended": "Invitation to this user already sended!",
+      "invitationSendCorrectly": "User invited!",
+      "cannotInviteYourself": "You cannot invite yourself!",
+      "leagueNotFound": "League not found or is not public!",
+      "alreadyJoinedToLeague": "You already joined to this league!",
+      "invitationAccepted": "Invitation accepted!",
+      "invitationDeleted": "Invitation rejected!",
+      "userAlreadyInLeague": "User already exist in league!",
+      "userDeleted": "User deleted.",
+      "successfulLeagueCreation": "League created!"
     }
   },
   "snackbars": {

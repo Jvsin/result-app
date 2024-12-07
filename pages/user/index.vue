@@ -15,7 +15,6 @@
                 <v-tab :key="0" value="0">{{ $t("user.profile") }}</v-tab>
                 <v-tab :key="1" value="1">{{ $t("user.betMatchesView") }}</v-tab>
                 <v-tab :key="2" value="2">{{ $t("user.leaguesView") }}</v-tab>
-                
               </v-tabs>
             </v-col>
           </v-row>
@@ -26,12 +25,16 @@
 
                   <v-row>
                     <v-col cols="12" md="6">
-                      <v-card variant="flat" color="rgba(0, 0, 0, 0)">
+                      <v-card class="justify-center align-center flex-column" variant="flat" color="rgba(0, 0, 0, 0)">
                         <v-avatar color="secondary" size="80">{{ nameAndSurname.charAt(0).toUpperCase() }}</v-avatar>
                         <div class="text-h2 py-3">
                           {{ userData?.nick }}
                         </div>
                         
+                         <v-card-subtitle color="grey" text-color="white" class="font-weight-bold">
+                          <div class="inv-text text-h6">{{ uniqueCode }}</div>
+                          <v-btn color="secondary" variant="plain" :prepend-icon="prependIcon" @click="copyToClipboard">{{ copyBtnText }}</v-btn>
+                        </v-card-subtitle>
                         <v-text-field v-model="nameAndSurname" :label="$t('user.nameAndSurname')" readonly
                           variant="plain"></v-text-field>
                         <v-text-field v-model="email" label="Email" readonly variant="plain"></v-text-field>
@@ -48,6 +51,9 @@
                               {{ $t('user.followLeagues')}}
                             </v-btn>
                           </div>
+                          <!-- <div>
+                            <v-btn @click="router.push('/user/test')">Run Firebase Function</v-btn>
+                          </div> -->
                         </v-row>
                       </v-card>
                     </v-col>
@@ -162,13 +168,13 @@
               <v-tabs-window-item :value="2">
 
                 <v-container>
-                  <div v-for="card in leagues">
+                  <div v-if="userBetLeagues.length" v-for="card in userBetLeagues">
                     <v-hover>
                       <template v-slot:default="{ isHovering, props }">
-                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3"
-                          @click="getLeagueRoute()">
+                        <v-card v-bind="props" :color="isHovering ? 'primary' : undefined" class="mb-3 py-2"
+                          @click="getLeagueRoute(card.reference.id)">
                           <v-row class="d-flex flex-wrap" justify="center">
-                            <v-col cols="12" sm="6" class="d-flex flex-column align-center justify-center">
+                            <v-col cols="12" sm="5" class="d-flex-column align-center align-sm-start justify-center">
                               <v-card-title>
                                 {{ card.name }}
                               </v-card-title>
@@ -176,21 +182,47 @@
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
                               <v-card-subtitle>
-                                {{ card.league }}
+                                {{ setLeaguesData(card.league) }}
                               </v-card-subtitle>
                             </v-col>
                             <v-col cols="12" sm="3"
                               class="d-flex flex-column align-center align-sm-start justify-center">
                               <v-card-subtitle>
-                                {{ 'Pozycja: ' + card.position + '/' + card.players }}
+                                {{$t('user.betLeaguesSites.players') +  card.players.length }}
                               </v-card-subtitle>
+                            </v-col>
+                            <v-col cols="12" sm="1"
+                              class="d-flex flex-column align-sm-center align-center justify-center">
+                              <v-icon v-if="card.isPublic">mdi-lock-open-variant</v-icon>
+                              <v-icon v-else>mdi-lock</v-icon>
                             </v-col>
                           </v-row>
                         </v-card>
                       </template>
                     </v-hover>
                   </div>
-
+                  <div v-else>
+                    <v-card-title class="text-h4 text-center text-wrap">
+                      {{ $t('user.noBetLeaguesTitle') }}
+                    </v-card-title>
+                    <v-card-text class="py-2">{{ $t('user.noBetLeaguesText') }}</v-card-text>
+                  </div>
+                  <v-card-actions>
+                    <v-row justify="center" class="py-2">
+                      <v-col cols="auto">
+                        <v-btn variant="outlined" color="secondary" @click="changeFindLeagueFlag">{{ $t('user.joinPublicLeague') }}</v-btn>
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn variant="outlined" color="secondary" @click="changeInvitationsFlag">{{ $t('user.joinByInvitation')}}</v-btn>
+                      </v-col>
+                      <v-col cols="auto">
+                        <v-btn variant="flat" color="primary" @click="changeCreateLeagueFlag">{{ $t('user.createOwnLeague') }}</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-actions>
+                  <createLeagueDialog :is-show="showCreateLeagueFlag" @on-save="fetchNewLeagues" @on-close="changeCreateLeagueFlag"></createLeagueDialog>
+                  <FindPublicLeague :is-show="showFindLeagueFlag" @on-close="changeFindLeagueFlag"></FindPublicLeague>
+                  <ManageInvitations :is-show="showInvitationsFlag" @on-close="changeInvitationsFlag"></ManageInvitations>
                 </v-container>
               </v-tabs-window-item>
 
@@ -203,35 +235,39 @@
 </template>
 
 <script lang="ts" setup>
-import type { Timestamp } from 'firebase/firestore';
 import AddLeaguesDialog from '~/components/user/addLeaguesDialog.vue';
 import EditProfileDialog from '~/components/user/editProfileDialog.vue';
 import { useAuthStore } from '~/stores/authStore';
+import { useBetLeagueStore } from '~/stores/betLeaguesStore'
+import createLeagueDialog from '~/components/leagues/createLeagueDialog.vue'
+import FindPublicLeague from '~/components/leagues/findPublicLeague.vue';
+import ManageInvitations from '~/components/leagues/manageInvitations.vue';
+import { useInvitationStore } from '~/stores/invitationStore';
+import { useI18n } from 'vue-i18n'
 
 definePageMeta({
   middleware: 'auth'
 })
 
 const tab = ref(0)
-
-const leagues = [
-  { name: "Moja liga testowa", position: 12, players: 24, league: "english-league", icon: "/public/pl.png" },
-  { name: "Liga graczy", position: 2, players: 10, league: "polish-league", icon: "/public/ekstraklasa.png" },
-]
-
-const router = useRouter();
+const router = useRouter()
+const { t } = useI18n()
 
 const authStore = useAuthStore()
-// const userData = authStore.loggedUserData
-// const betAccuracy = computed(() => userData?.betAcc)
+const betLeagueStore = useBetLeagueStore()
+const invitationStore = useInvitationStore()
 
-// const nameAndSurname = computed(() => userData?.name + ' ' + userData?.surname)
-// const email = computed(() => userData?.email)
-// const established = computed(() => formatTimestampToDate(userData?.established))
+const copyBtnText = ref(t('user.betLeaguesSites.editDialog.copy'))
+const prependIcon = ref('mdi-content-copy')
+const uniqueCode = ref()
+async function copyToClipboard() {
+  await navigator.clipboard.writeText(uniqueCode.value);
+  copyBtnText.value = t('user.betLeaguesSites.editDialog.copied')
+  prependIcon.value = 'mdi-check-circle-outline'
+}
+
 const userData = computed(() => authStore.loggedUserData)
-watch(userData, (olddata, newdata) => {
-  console.log(userData.value?.favLeagues)
-})
+
 const nameAndSurname = computed(() => {
   if (!userData.value) return ''
   return `${userData.value?.name} ${userData.value?.surname}`
@@ -252,10 +288,20 @@ const established = computed(() => {
   return formatTimestampToDate(userData.value.established)
 })
 
-function getLeagueRoute() {
+const userBetLeagues = computed(() => {
+  return betLeagueStore.userBetLeagues
+})
+
+async function fetchNewLeagues() {
+  if (userData.value != null) {
+    await betLeagueStore.fetchUserBetLeagues(userData.value?.leagues)
+  }
+}
+
+function getLeagueRoute(ref: string) {
   // console.log('Navigating to /user/' + value);
   // router.push(`/user/${value}`);
-  router.push('/user/table')
+  router.push(`/user/${ref}`)
 }
 
 function getBettingRoute(league: string) {
@@ -267,6 +313,9 @@ function getBettingRoute(league: string) {
 
 const showEditProfileFlag = ref(false)
 const showAddLeaguesFlag = ref(false)
+const showCreateLeagueFlag = ref(false)
+const showFindLeagueFlag = ref(false)
+const showInvitationsFlag = ref(false)
 
 function changeProfileDialogFlag() {
   showEditProfileFlag.value = !showEditProfileFlag.value
@@ -276,13 +325,26 @@ function changeAddLeaguesFlag( ) {
   showAddLeaguesFlag.value = !showAddLeaguesFlag.value
 }
 
-async function handleLogout() {
-  try {
-    await authStore.logout()
-    router.push('/')
-  }
-  catch (err: any) {
-    console.log(err)
+function changeCreateLeagueFlag() {
+  showCreateLeagueFlag.value = !showCreateLeagueFlag.value
+}
+
+function changeFindLeagueFlag() {
+  showFindLeagueFlag.value = !showFindLeagueFlag.value
+}
+
+function changeInvitationsFlag() {
+  showInvitationsFlag.value = !showInvitationsFlag.value
+}
+
+function setLeaguesData(league: string) {
+  switch (league) {
+    case "eng":
+      return "Premier League"
+    case "pol":
+      return "Ekstraklasa"
+    case "ucl":
+      return "Champions League"
   }
 }
 
@@ -307,6 +369,15 @@ function formatTimestampToDate(timestamp: any) {
 
 onMounted(async () => {
   await authStore.actualizeUserData()
+  if (userData.value && userData.value.leagues.length != userBetLeagues.value.length) {
+    await betLeagueStore.fetchUserBetLeagues(userData.value.leagues)
+  }
+  if(userData.value?.reference){
+    await invitationStore.fetchAllUserInvitations(userData.value?.reference)
+  }
+  if (userData.value) {
+    uniqueCode.value = userData.value.userCode
+  }
 })
 </script>
 

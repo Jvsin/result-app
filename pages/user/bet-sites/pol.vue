@@ -19,6 +19,13 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
+
+                  <datePicker v-if="!dateToShow" @onSave="handleDateSave"></datePicker>
+                  <div class="my-2" v-else>
+                    <v-btn prepend-icon="mdi-close-box" variant="outlined" color="error" @click="dateToShow = null">
+                      {{ formatButtonDate(dateToShow) }}</v-btn>
+                  </div>
+
                   <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
@@ -151,7 +158,7 @@
 
                 <v-tabs-window-item :value="2">
                     <v-container class="scrollable-container" v-if="futureUserBetsData?.length" style="background-color: rgba(0, 0, 0, 0);">
-                      <v-card variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
+                      <v-card :color="setBetColor(game.status, game.id)" variant="text" elevation="16" v-for="(game, index) in futureUserBetsData" :key="index"
                         class="mb-5 px-4 py-2">
                         <v-row>
                           <v-col class="justify-center">
@@ -177,7 +184,14 @@
                                 </v-card-subtitle>
                               {{ futureUserBets[game.id]?.home + '-'
                             + futureUserBets[game.id]?.away }}
+                              <div v-if="game.status != 'NS'" class="text-center text-h4">
+                                <v-card-subtitle>
+                                  {{'(' + game.goalsHome + '-'
+                                + game.goalsAway + ')'}}
+                                </v-card-subtitle>
                               </div>
+                            </div>
+
                             <!-- <v-number-input v-model="lastUserBets[game.fixture.id].home" :min="0" reverse controlVariant="stacked" label="" :hideInput="false"
                               :inset="false" variant="outlined"></v-number-input>
                             <v-number-input v-model="lastUserBets[game.fixture.id].away" :min="0" controlVariant="stacked" label="" :hideInput="false" :inset="false"
@@ -192,6 +206,8 @@
                             <v-img max-height="70" :src="game.awayLogo" aspect-ratio="1/1"></v-img>
                           </v-col>
                         </v-row>
+                        <v-progress-linear v-if="game.status !== 'NS'" color="cyan" height="5" class="my-2"
+                          :model-value="game.timeElapsed /90 * 100" striped></v-progress-linear>
                       </v-card>
                     </v-container>
                     <v-container class="py-5 align-stretch" v-else>
@@ -217,6 +233,7 @@ import type { BetModel, IBet } from '~/models/bet';
 import { useBetStore } from '~/stores/betStore';
 import { useAuthStore } from '~/stores/authStore';
 import type { IMatch } from '~/models/match';
+import datePicker from '~/components/user/datePicker.vue'
 
 definePageMeta({
   middleware: 'auth'
@@ -232,11 +249,45 @@ const nextGames = computed(() => {
 })
 const user = computed(() => authStore.loggedUserData)
 
+const dateToShow = ref()
+function handleDateSave(date: Number) {
+  dateToShow.value = date
+}
+
 const pastUserBets = computed(() => {
-  return betStore.pastUserBets.filter((bet: IBet) => bet.league === "pol")
-})
+  if (!dateToShow.value) return betStore.pastUserBets.filter((bet: IBet) => bet.league === "pol")
+
+  const startTimestamp = dateToShow.value;
+  const endTimestamp = startTimestamp + 86400
+
+  console.log(startTimestamp + ' ' + endTimestamp)
+
+  return betStore.pastUserBets.filter((bet: IBet) => {
+    return (
+      bet.league === "pol" &&
+      bet.matchDate >= startTimestamp &&
+      bet.matchDate < endTimestamp
+    );
+  });
+});
+
 const pastUserBetsData = computed(() => {
-  return betStore.pastBetsData?.filter((game: IMatch) => game.league === "pol")
+  if (betStore.pastBetsData) {
+    if (!dateToShow.value) return betStore.pastBetsData.filter((bet: IMatch) => bet.league === "pol")
+
+    const startTimestamp = dateToShow.value;
+    const endTimestamp = startTimestamp + 86400
+
+    console.log(startTimestamp + ' ' + endTimestamp)
+
+    return betStore.pastBetsData.filter((bet: IMatch) => {
+      return (
+        bet.league === "pol" &&
+        bet.timestamp >= startTimestamp &&
+        bet.timestamp < endTimestamp
+      );
+    });
+  }
 })
 
 
@@ -335,6 +386,16 @@ function formatTimestamp(timestamp: number): string {
   return `${day}.${month}.${year}, ${hours}:${minutes}`;
 }
 
+function formatButtonDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+
+  const day = (date.getUTCDate()+1).toString().padStart(2, '0');
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+  const year = date.getUTCFullYear();
+
+  return `${day}.${month}.${year}`
+}
+
 function setColor(matchID: Number, status: String) {
   const userBet = pastUserBets.value.find(bet => bet.matchID === matchID);
   if (status == 'FT') {
@@ -356,6 +417,17 @@ function setColor(matchID: Number, status: String) {
     'white'
   }
 }
+
+function setBetColor(status: String, matchID: number) {
+  const userBet = futureUserBets.value[matchID]
+  switch (status) {
+    case "NS":
+      return 'white'
+    default:
+      return 'cyan'
+  }
+}
+
 
 function makeShortName(name: String) {
   const space = name.indexOf(' ')

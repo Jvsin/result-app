@@ -117,6 +117,67 @@
       "noBetsTitle": "Brak typów na nadchodzące mecze!",
       "noBetsInfo": "Mecze możesz typować w zakładce Typuj",
       "showMatchesCounter": "Pokaż nadchodzące mecze:"
+    },
+    "noBetLeaguesTitle": "Nie należysz do żadnej ligi typerów!",
+    "noBetLeaguesText": "Możesz dołączyć do istniejących lig lub stworzyć własną!",
+    "joinPublicLeague": "Szukaj ligi",
+    "joinByInvitation": "Zaproszenia",
+    "createOwnLeague": "Stwórz ligę typerów",
+
+    "createLeagueDialog": {
+      "createLeague": "Stwórz własną ligę",
+      "leagueName": "Podaj nazwę swojej ligi",
+      "leagueDescription": "O co zamierzacie rywalizować?",
+      "leaguePicker": "Wybierz ligę do typowania",
+      "publicLeague": "Publiczna",
+      "privateLeague": "Prywatna",
+      "publicLeagueDescription": "Każdy będzie mógł wyszukać i dołączyć do ligi",
+      "privateLeagueDescription": "Gracze będą potrzebować Twojego zaproszenia by dołączyć"
+    },
+
+    "betLeaguesSites": {
+      "loadingAlert": "Trwa wczytywanie tabeli...",
+      "position": "Pozycja",
+      "playerName": "Gracz",
+      "accuracy": "Skut.",
+      "points": "Pkt",
+      "manageLeague": "Zarządzaj ligą",
+      "leagueCode": "Kod ligi",
+      "findPublicLeague": "Znajdź ligę wpisując nazwę lub użyj 8 znakowego kodu ligi",
+      "join": "Dołącz",
+      "cancel": "Anuluj",
+      "players": "Gracze: ",
+      "showLeague": "Pokaż ligę",
+      "established": "Założono",
+      "leaveLeague": "Opuść ligę",
+      "confirmLeaving": "Potwierdź opuszczenie ligi",
+      "back": "Cofnij",
+      "privateLeaguesInvitations": "Zarządzaj zaproszeniami",
+      "noInvitationsTitle": "Brak zaproszeń",
+      "noInvitationsText": "Tutaj będą wyświetlać się zaproszenia do prywatnych lig.",
+      "ownerString": "Właściciel: ",
+
+      "editDialog": {
+        "leagueName": "Nazwa",
+        "description": "Opis",
+        "codeLeague": "Zaproś znajomych poprzez kod:",
+        "copy": "Kopiuj kod",
+        "copied": "Skopiowano!",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "chooseDate": "Wybierz datę",
+        "falsePublic": "Prywatna",
+        "truePublic": "Publiczna",
+        "privacy": "Prywatność",
+        "leagueToBet": "Liga",
+        "typeUserCode": "Wpisz poprawny unikalny 8-znakowy kod gracza:",
+        "searchPlayer": "Szukaj gracza",
+        "mainTab": "Ogólne",
+        "inviteTab": "Zaproś",
+        "playersTab": "Gracze",
+        "deleteLeague": "Usuń ligę",
+        "confirmDelete": "Potwierdź usunięcie ligi (proces nieodwracalny)"
+      }
     }
   },
   "errors": {
@@ -133,6 +194,18 @@
       "errorLeagueAlreadyExist": "Obserwujesz już wybraną ligę",
       "errorWhileEditingProfile": "Błąd podczas edycji profilu, spróbuj ponownie",
       "errorLeaguesNotFound": "Nie znaleziono dostępnych lig."
+    },
+    "betLeaguesSites": {
+      "invitationAlreadySended": "Gracz posiada już zaproszenie!",
+      "invitationSendCorrectly": "Gracz zaproszony pomyślnie!",
+      "cannotInviteYourself": "Nie możesz zaprosić samego siebie!",
+      "leagueNotFound": "Nie znaleziono ligi lub jest prywatna!",
+      "alreadyJoinedToLeague": "Należysz już do tej ligi!",
+      "invitationAccepted": "Zaproszenie zaakceptowane!",
+      "invitationDeleted": "Zaproszenie odrzucone!",
+      "userAlreadyInLeague": "Gracz należy już do ligi",
+      "userDeleted": "Gracz usunięty.",
+      "successfulLeagueCreation": "Liga utworzona!"
     }
   },
   "snackbars": {

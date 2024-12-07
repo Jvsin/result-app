@@ -3,8 +3,10 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { type IUser, UserModel } from '~/models/user';
-import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { DocumentReference, getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { useBetStore } from './betStore';
+import { useBetLeagueStore } from './betLeaguesStore';
+import { useInvitationStore } from './invitationStore';
 // import { auth, db } from '@/firebaseConfig';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -16,6 +18,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const db = getFirestore();
   const betStore = useBetStore()
+  const betLeagueStore = useBetLeagueStore()
+  const invitationStore = useInvitationStore()
 
   const registerWithPassword = async (email: string, password: string, userData: IUser) => {
     loading.value = true;
@@ -74,14 +78,17 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logout = async () => {
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
     try {
       await signOut(auth);
       user.value = null;
       loggedUserData.value = null
-      console.log(loggedUserData.value + ' ' + user.value)
+      
       await betStore.handleLogout()
+      await betLeagueStore.handleLogout()
+      await invitationStore.handleLogout()
+
     } catch (err: any) {
       error.value = err.message;
       console.log(error.value)
@@ -166,8 +173,102 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const addNewBetLeague = async (data: DocumentReference) => {
+    try {
+      const userDocRef = doc(db, 'users', loggedUserData.value?.reference?.id)
+
+      if (loggedUserData.value?.leagues != undefined) {
+        const updatedFavLeagues = [...loggedUserData.value?.leagues, data]
+        console.log(updatedFavLeagues)
+        
+        await updateDoc(userDocRef, {
+          leagues: updatedFavLeagues
+        });
+      }
+      
+      console.log('User bet leagues actualized!');
+      await actualizeUserData()
+      console.log(loggedUserData)
+    } catch (error) { 
+      console.error('Error updating user profile:', error);
+    }
+  }
+
+  const fetchLeaguePlayers = async (playerRefs: DocumentReference[]) => {
+    const players = [];
+
+    for (const playerRef of playerRefs) {
+      try {
+        const playerDoc = await getDoc(playerRef);
+
+        if (playerDoc.exists()) {
+          const { nick, polPoints, engPoints, uclPoints, betAcc } = playerDoc.data();
+          players.push({
+            nick,
+            polPoints,
+            engPoints,
+            uclPoints,
+            betAcc,
+            playerRef
+          });
+        }
+        console.log(players)
+      } catch (error) {
+        console.error(`Failed to fetch player data for ref: ${playerRef.id}`, error);
+      }
+    }
+    return players
+  }
+
+  const fetchUserByRef = async (userRef: DocumentReference) => {
+    try {
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as IUser;
+        return userData
+      } else {
+        error.value = "User data not found";
+        return null
+      }
+    } catch (error) {
+        console.error("Error getting documents: ", error);
+        throw new Error("Failed to get user");
+    }
+  }
+
+  const fetchUserByCode = async (code: string): Promise<UserModel[]> => {
+    try {
+      const usersRef = collection(db, 'users')
+      const usersQuery = query(
+        usersRef,
+        where('userCode', '==', code)
+        // where('nick', '>=', nick),
+        // where('nick', '<=', nick + '\uf8ff'),
+      )
+      
+      const users: UserModel[] = []
+      const querySnapshot = await getDocs(usersQuery)
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data() as IUser
+        if (loggedUserData.value?.reference?.id === doc.id) {
+          invitationStore.alertMess = 'cannotInviteYourself'
+          return null
+        }
+        console.log(userData)
+        const user = new UserModel(userData, doc.ref)
+        users.push(user)
+      })
+      console.log(users)
+      return users
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+      throw new Error("Failed to get user");
+    }   
+  }
+
   return {
     user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
-    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague
+    registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague,
+    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode, addNewBetLeague
   };
 });

@@ -32,12 +32,30 @@ export function lengthRuleShort() {
 
 export function lengthRule() {
   return (value: string | string[], textError = 'Nazwa jest za długa') => {
-    return Boolean(value?.length <= 12) || textError
+    return Boolean(value?.length <= 15) || textError
   }
 }
 
 export function surnameLengthRule() {
   return (value: string | string[], textError = 'Nazwisko za długie') => {
     return Boolean(value?.length <= 25) || textError
+  }
+}
+
+export function leagueNameLengthRule() {
+  return (value: string | string[], textError = 'Nazwa jest za długa') => {
+    return Boolean(value?.length <= 25) || textError
+  }
+}
+
+export function descriptionLengthRule() {
+  return (value: string | string[], textError = 'Opis jest za długi') => {
+    return Boolean(value?.length <= 100) || textError
+  }
+}
+
+export function codeLengthRule() {
+  return (value: string | string[], textError = 'Kod musi mieć osiem znaków') => {
+    return Boolean(value?.length === 8) || textError
   }
 }
