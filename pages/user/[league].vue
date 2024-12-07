@@ -13,7 +13,7 @@
               <v-card v-if="!loading" variant="text">
                 <v-row justify="center">
                  <v-col>
-                    <v-card-title class="text-h4">{{ league?.name }}</v-card-title>
+                    <v-card-title class="text-h4 text-wrap">{{ league?.name }}</v-card-title>
                     <v-card-text class="text-h6">{{ league?.description }}</v-card-text>
                     <v-card-subtitle class="text-h7">{{ leagueName }}</v-card-subtitle>
                     <v-card-subtitle class="text-h7">{{ $t('user.betLeaguesSites.established') + ': ' +
@@ -29,83 +29,85 @@
                   </div>
                 
               </v-card>
+              <v-container v-if="!loading" class="scrollable-container">
+                <v-card class="justify-center align-center py-2" variant="text">
+                  <v-card class="d-flex justify-center align-center" variant="text">
+                    <v-row class="d-flex align-center" justify="center">
+                      <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
+                        <v-card-subtitle class="text-center">
+                          #
+                        </v-card-subtitle>
+                      </v-col>
+                      <v-col cols="1" md="2">
 
-              <v-card v-if="!loading" class="justify-center align-center scrollable-container py-2" variant="text">
-                <v-card class="ma-5 d-flex justify-center align-center" variant="text">
-                  <v-row class="d-flex align-center">
-                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
-                      <v-card-subtitle class="text-center">
-                        #
-                      </v-card-subtitle>
-                    </v-col>
-                    <v-col cols="1" md="2">
-
-                    </v-col>
-                    <v-col class="d-flex flex-column align-start justify-center" cols="5" md="5">
-                      <v-card-subtitle class="text-center">
-                        {{ $t('user.betLeaguesSites.playerName') }}
-                      </v-card-subtitle>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
-                      <v-card-subtitle class="text-center">
-                        {{ $t('user.betLeaguesSites.accuracy') }}
-                      </v-card-subtitle>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
-                      <v-card-subtitle class="text-center">
-                        {{ $t('user.betLeaguesSites.points') }}
-                      </v-card-subtitle>
-                    </v-col>
-                  </v-row>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-start justify-center" cols="5" md="5">
+                        <v-card-subtitle class="text-center">
+                          {{ $t('user.betLeaguesSites.playerName') }}
+                        </v-card-subtitle>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
+                        <v-card-subtitle class="text-center">
+                          {{ $t('user.betLeaguesSites.accuracy') }}
+                        </v-card-subtitle>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
+                        <v-card-subtitle class="text-center">
+                          {{ $t('user.betLeaguesSites.points') }}
+                        </v-card-subtitle>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                  <v-card class="d-flex justify-center align-center" v-for="(player,index) in playersTable" variant="text">
+                    <v-row justify="center">
+                      <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
+                        <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
+                          {{ index + 1 }}
+                        </v-card-title>
+                        <v-card-title v-else>
+                          {{ index + 1 }}
+                        </v-card-title>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
+                        <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center align-sm-start justify-center" cols="5" md="5">
+                        <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
+                          {{ player.nick.toUpperCase() }}
+                        </v-card-title>
+                        <v-card-title v-else>
+                          {{ player.nick }}
+                        </v-card-title>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
+                        <v-card-subtitle>
+                          {{ player.betAcc + "%" }}
+                        </v-card-subtitle>
+                      </v-col>
+                      <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
+                        <v-card-title>
+                          {{ player[leaguePoints] }}
+                        </v-card-title>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                  <div v-if="!isAuthor">
+                    <v-btn v-if="!leaveFlag" class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined" @click="changeLeaveFlag">
+                      {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>
+                    <div v-else>
+                      <v-card-title class="text-h7">{{ $t('user.betLeaguesSites.confirmLeaving') }}</v-card-title>
+                      <v-btn class="mb-2 mx-2" prepend-icon="mdi-close" color="error" variant="outlined" @click="changeLeaveFlag">
+                        {{ $t('user.betLeaguesSites.cancel') }}</v-btn>
+                      <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="secondary" variant="text" @click="leaveLeague">
+                        {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>    
+                    </div>                 
+                  </div>
                 </v-card>
-                <v-card class="ma-5 d-flex justify-center align-center" v-for="(player,index) in playersTable" variant="text">
-                  <v-row class="d-flex align-center">
-                    <v-col class="d-flex flex-column align-end align-sm-end justify-center" cols="2" md="1">
-                      <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
-                        {{ index + 1 }}
-                      </v-card-title>
-                      <v-card-title v-else>
-                        {{ index + 1 }}
-                      </v-card-title>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
-                      <v-avatar color="primary">{{ player.nick.charAt(0).toUpperCase() }}</v-avatar>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center align-sm-start justify-center" cols="5" md="5">
-                      <v-card-title v-if="player.nick === loggedUserData?.nick" :style="{ fontWeight: 'bold' }">
-                        {{ player.nick.toUpperCase() }}
-                      </v-card-title>
-                      <v-card-title v-else>
-                        {{ player.nick }}
-                      </v-card-title>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="2" md="1">
-                      <v-card-subtitle>
-                        {{ player.betAcc + "%" }}
-                      </v-card-subtitle>
-                    </v-col>
-                    <v-col class="d-flex flex-column align-center justify-center" cols="1" md="2">
-                      <v-card-title>
-                        {{ player[leaguePoints] }}
-                      </v-card-title>
-                    </v-col>
-                  </v-row>
-                </v-card>
-                <div v-if="!isAuthor">
-                  <v-btn v-if="!leaveFlag" class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="error" variant="outlined" @click="changeLeaveFlag">
-                    {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>
-                  <div v-else>
-                    <v-card-title class="text-h7">{{ $t('user.betLeaguesSites.confirmLeaving') }}</v-card-title>
-                    <v-btn class="mb-2 mx-2" prepend-icon="mdi-close" color="error" variant="outlined" @click="changeLeaveFlag">
-                      {{ $t('user.betLeaguesSites.cancel') }}</v-btn>
-                    <v-btn class="mb-2 mx-2" prepend-icon="mdi-exit-run" color="secondary" variant="text" @click="leaveLeague">
-                      {{ $t('user.betLeaguesSites.leaveLeague') }}</v-btn>    
-                  </div>                 
-                </div>
-              </v-card>
+              </v-container>
               <div v-else>
                 <v-alert class="my-5 px-2" type="warning">{{ $t('user.betLeaguesSites.loadingAlert') }}</v-alert>
-              </div>
+                </div>
+              
             </v-col>
             <EditLeagueDialog :players="playersTable" :league="league" :is-show="editFlag" @on-close="changeLeagueEditFlag"/>
           </v-sheet>
@@ -242,8 +244,7 @@ function formatTimestampToDate(timestamp: number | undefined): string {
 
 <style>
 .scrollable-container {
-  max-height: 700px;
+  max-height: 30vh;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 </style>
