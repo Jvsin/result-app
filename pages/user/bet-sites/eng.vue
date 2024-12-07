@@ -6,8 +6,13 @@
 
         <v-sheet class="d-flex justify-center flex-wrap text-center mx-auto my-10" elevation="4"
           style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
+          
           <v-row>
             <v-col cols="12">
+              <div class="my-2">
+                <v-btn variant="outlined" prepend-icon="mdi-keyboard-backspace" @click="router.push('/user')">
+                {{ $t('user.betLeaguesSites.back') }}</v-btn>
+              </div>
               <v-card-title class="my-2">
                 <v-avatar color="white" image="/public/england.png"></v-avatar>
                 Premier League 
@@ -19,14 +24,14 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-
+                <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
                   <datePicker v-if="!dateToShow" @onSave="handleDateSave"></datePicker>
                   <div class="my-2" v-else>
                     <v-btn prepend-icon="mdi-close-box" variant="outlined" color="error" @click="dateToShow = null">
                       {{ formatButtonDate(dateToShow) }}</v-btn>
                   </div>
 
-                  <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
+                  
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
@@ -242,6 +247,7 @@ definePageMeta({
 
 const tab = ref(0)
 const { mobile } = useDisplay()
+const router = useRouter()
 
 const betStore = useBetStore()
 const authStore = useAuthStore()
@@ -318,7 +324,7 @@ const futureUserBetsData = computed(() => {
 
 const loading = ref<Boolean>(false)
 const matchesNumber = ref<number>(10)
-watch(matchesNumber, async (oldNum, newNum) => {
+watch(matchesNumber, async (oldNum:any, newNum:any) => {
   loading.value = true
   await betStore.fetchNextFixturesData(39, matchesNumber.value)
   setBetsToSave()
@@ -454,7 +460,7 @@ onMounted(async () => {
 
 <style scoped>
 .scrollable-container {
-  max-height: 75vh;
+  max-height: 70vh;
   overflow-y: auto;
 }
 </style>

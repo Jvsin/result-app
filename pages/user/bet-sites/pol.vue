@@ -8,6 +8,10 @@
           style="background-color: rgba(0, 0, 0, 0.5); height: 90%; width: 90%;" rounded>
           <v-row>
             <v-col cols="12">
+              <div class="my-2">
+                <v-btn variant="outlined" prepend-icon="mdi-keyboard-backspace" @click="router.push('/user')">
+                {{ $t('user.betLeaguesSites.back') }}</v-btn>
+              </div>
               <v-card-title class="my-2">
                 <v-avatar color="white" image="/public/poland.png"></v-avatar>
                 Ekstraklasa
@@ -19,14 +23,14 @@
               </v-tabs>
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="0">
-
+                <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
                   <datePicker v-if="!dateToShow" @onSave="handleDateSave"></datePicker>
                   <div class="my-2" v-else>
                     <v-btn prepend-icon="mdi-close-box" variant="outlined" color="error" @click="dateToShow = null">
                       {{ formatButtonDate(dateToShow) }}</v-btn>
                   </div>
 
-                  <v-container v-if="pastUserBetsData?.length" class="scrollable-container" style="background-color: rgba(0, 0, 0, 0); width: 100%;">
+                  
                     <v-card  :color="setColor(game.id, game.status)" 
                     variant="text" elevation="16" v-for="(game, index) in pastUserBetsData"
                       :key="index" class="my-5 px-0">
@@ -69,9 +73,9 @@
                                   {{ $t('user.yourBet') + ":"}}
                                 </v-card-subtitle>
                                 <div no-wrap class="text-center text-h4">
-                                  {{ (pastUserBets.find(bet => bet.matchID === game.id)) ? 
-                                    pastUserBets.find(bet => bet.matchID === game.id)?.home + '-'
-                                    + pastUserBets.find(bet => bet.matchID === game.id)?.away
+                                  {{ (pastUserBets.find((bet:BetModel) => bet.matchID === game.id)) ? 
+                                    pastUserBets.find((bet:BetModel) => bet.matchID === game.id)?.home + '-'
+                                    + pastUserBets.find((bet:BetModel) => bet.matchID === game.id)?.away
                                     : '-' }}
                                 </div>
                             </div>
@@ -81,8 +85,8 @@
                                 {{ $t('user.points') + ":" }}
                               </v-card-subtitle>
                               <div v-if="game.status =='FT'" class="text-h4">
-                                {{ (pastUserBets.find(bet => bet.matchID === game.id)) ? 
-                                  pastUserBets.find(bet => bet.matchID === game.id)?.points : '-' }}
+                                {{ (pastUserBets.find((bet:BetModel) => bet.matchID === game.id)) ? 
+                                  pastUserBets.find((bet:BetModel) => bet.matchID === game.id)?.points : '-' }}
                               </div>
                               <div v-else class="text-h4">
                                 ?
@@ -241,6 +245,7 @@ definePageMeta({
 
 const tab = ref(0)
 const { mobile } = useDisplay()
+const router = useRouter()
 
 const betStore = useBetStore()
 const authStore = useAuthStore()
@@ -312,12 +317,12 @@ const futureUserBets = computed(() => {
   return bets.value
 })
 const futureUserBetsData = computed(() => {
-  return betStore.futureBetsData?.filter(bet => bet.league === "pol")
+  return betStore.futureBetsData?.filter((bet:IMatch) => bet.league === "pol")
 })
 
 const loading = ref<Boolean>(false)
 const matchesNumber = ref<number>(10)
-watch(matchesNumber, async (oldNum, newNum) => {
+watch(matchesNumber, async (oldNum:any, newNum:any) => {
   loading.value = true
   await betStore.fetchNextFixturesData(106, matchesNumber.value)
   setBetsToSave()
@@ -397,7 +402,7 @@ function formatButtonDate(timestamp: number): string {
 }
 
 function setColor(matchID: Number, status: String) {
-  const userBet = pastUserBets.value.find(bet => bet.matchID === matchID);
+  const userBet = pastUserBets.value.find((bet:BetModel) => bet.matchID === matchID);
   if (status == 'FT') {
     if (userBet != undefined) {
       switch (userBet.points) {
@@ -459,7 +464,7 @@ onMounted(async () => {
 
 <style scoped>
 .scrollable-container {
-  max-height: 75vh;
+  max-height: 70vh;
   overflow-y: auto;
 }
 </style>
