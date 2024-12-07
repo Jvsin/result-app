@@ -10,6 +10,7 @@
                 <v-btn variant="outlined" prepend-icon="mdi-keyboard-backspace" @click="router.push('/user')">
                 {{ $t('user.betLeaguesSites.back') }}</v-btn>
               </div>
+              <v-container v-if="!loading" class="scrollable-container">
               <v-card v-if="!loading" variant="text">
                 <v-row justify="center">
                  <v-col>
@@ -29,7 +30,7 @@
                   </div>
                 
               </v-card>
-              <v-container v-if="!loading" class="scrollable-container">
+              
                 <v-card class="justify-center align-center py-2" variant="text">
                   <v-card class="d-flex justify-center align-center" variant="text">
                     <v-row class="d-flex align-center" justify="center">
@@ -244,7 +245,7 @@ function formatTimestampToDate(timestamp: number | undefined): string {
 
 <style>
 .scrollable-container {
-  max-height: 30vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
 </style>
