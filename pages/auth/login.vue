@@ -17,7 +17,7 @@
 
             <v-form class="mx-5 py-2" v-model="valid" @submit.prevent="loginUser">
 
-              <v-text-field v-model="email" :label="$t('auth.login.nickOrEmail')"
+              <v-text-field v-model="email" label="Email"
                 :rules="[requiredRule(), emailRule()]"></v-text-field>
 
               <v-text-field v-model="password" :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"

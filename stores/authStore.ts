@@ -266,9 +266,38 @@ export const useAuthStore = defineStore('auth', () => {
     }   
   }
 
+  const generateUniqueUserCode = async (): Promise<string | undefined> => {
+    let code;
+    let exists = true;
+
+    while (exists) {
+      code = generateCode();
+      exists = await checkIfCodeExists(code);
+    }
+
+    return code
+  }
+
+  const generateCode = (): string => {
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 8; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+    return result;
+  }
+
+  const checkIfCodeExists = async (code: string): Promise<boolean> => {
+    const leaguesRef = collection(db, "users");
+    const q = query(leaguesRef, where("Code", "==", code));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  }
+
   return {
     user, loading, error, loggedUserData, fetchUserData, actualizeUserData,
     registerWithPassword, loginWithPassword, logout, editProfile, deleteFavLeague,
-    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode, addNewBetLeague
+    fetchLeaguePlayers, fetchUserByRef, fetchUserByCode, addNewBetLeague, generateUniqueUserCode
   };
 });

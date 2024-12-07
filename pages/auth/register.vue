@@ -85,7 +85,7 @@ const email = ref('');
 const name = ref('');
 const surname = ref('');
 const password1 = ref('');
-const password2 = ref('');
+const password2 = ref('')
 
 const showPasswords = ref(false);
 const error = ref<string | null>(null);
@@ -108,8 +108,10 @@ async function registerUser() {
     error.value = 'errorPasswordsMismatch';
     return;
   }
+  const userCode = await authStore.generateUniqueUserCode()
+  if (userCode === undefined) return
+  console.log(userCode)
   
-  console.log(await isValid())
   if (await isValid()) {
     const userData: IUser = {
       email: email.value,
@@ -124,7 +126,8 @@ async function registerUser() {
       engPoints: 0,
       uclPoints: 0,
       betAcc: 0,
-      established: new Date()
+      established: new Date(),
+      userCode: userCode
     };
     try {
       await authStore.registerWithPassword(email.value, password1.value, userData);
@@ -140,6 +143,19 @@ async function registerUser() {
     }
   }
 }
+
+async function generateUserCode() {
+  try {
+    const code = authStore.generateUniqueUserCode()
+    if (code !== undefined)
+      return code
+    
+  } catch (e) {
+    console.error(e)
+    return null
+  }
+}
+
 </script>
 
 <style>
