@@ -211,7 +211,7 @@ const playersTable = ref()
 
 onMounted(async () => {
   loading.value = true
-
+  console.log(leagueId)
   await betLeagueStore.fetchLeagueById(leagueId.value)
   console.log(league.value)
   // league.value = betLeagueStore.leagueToDisplay

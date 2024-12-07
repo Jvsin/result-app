@@ -100,10 +100,10 @@
               </v-col>
               <v-col cols="12">
                 <v-card-actions class="d-flex justify-center">
-                  <v-btn v-if="!isPlayerJoined" variant="outlined" color="primary" prepend-icon="mdi-location-enter" 
+                  <v-btn v-if="!foundLeague.isJoined" variant="outlined" color="primary" prepend-icon="mdi-location-enter" 
                   @click="joinLeagueByName(foundLeague)">
                     {{ $t('user.betLeaguesSites.join') }}</v-btn>
-                  <v-btn v-else variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="routeToLeague">
+                  <v-btn v-else variant="outlined" color="primary" prepend-icon="mdi-location-enter" @click="routeToLeague(foundLeague)">
                     {{ $t('user.betLeaguesSites.showLeague') }}</v-btn>
                   <v-btn variant="outlined" color="error" prepend-icon="mdi-cancel" @click="cancel">{{ $t('user.betLeaguesSites.cancel') }}</v-btn>
                 </v-card-actions>
@@ -204,8 +204,9 @@ async function searchLeagueByName() {
   }
 }
 
-function routeToLeague() {
-  router.push(`/user/${foundLeague.value?.reference.id}`)
+function routeToLeague(foundLeague: any) {
+  console.log(foundLeague.data.reference.id)
+  router.push(`/user/${foundLeague.data.reference.id}`)
 }
 
 async function joinLeague() {
@@ -220,12 +221,12 @@ async function joinLeague() {
   }
 }
 
-async function joinLeagueByName(league: LeagueModel) {
+async function joinLeagueByName(foundLeague: any) {
   try {
-    if (league != undefined) {
-      await betLeagueStore.joinLeague(league)
+    if (foundLeague != undefined) {
+      await betLeagueStore.joinLeague(foundLeague.data)
       console.log("Przchodzę do strony...")
-      router.push(`/user/${league.reference.id}`)
+      router.push(`/user/${foundLeague.data.reference.id}`)
     }
   } catch (e) {
     console.log(e)
